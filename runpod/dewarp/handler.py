@@ -2,8 +2,10 @@
 """RunPod serverless handler: dewarp every object under a prefix."""
 from __future__ import annotations
 
+import logging
 import os
 import tempfile
+import time
 from pathlib import Path
 
 import boto3
@@ -11,6 +13,12 @@ import runpod
 from botocore.config import Config
 
 import docpp
+
+logging.basicConfig(
+    level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
+log = logging.getLogger("handler")
 
 _pipeline = None
 
@@ -55,9 +63,14 @@ def handler(job):
     output_prefix = inp["output_prefix"]
     quality = int(inp.get("jpeg_quality", 95))
 
+    started = time.perf_counter()
+    log.info("job started: bucket=%s input=%s output=%s", bucket, input_prefix, output_prefix)
+
     s3 = make_s3(inp)
     keys = list_inputs(s3, bucket, input_prefix)
+    log.info("found %d object(s) under %s", len(keys), input_prefix)
     if not keys:
+        log.warning("nothing to dewarp under %s", input_prefix)
         return {"pages": [], "failed": []}
 
     with tempfile.TemporaryDirectory() as tmp:
@@ -65,13 +78,17 @@ def handler(job):
         out_dir = Path(tmp) / "out"
         in_dir.mkdir()
 
+        t0 = time.perf_counter()
         key_of = {}
         paths = []
+        downloaded = 0
         for key in keys:
             local = in_dir / Path(key).name
             s3.download_file(bucket, key, str(local))
+            downloaded += local.stat().st_size
             key_of[str(local)] = key
             paths.append(local)
+        log.info("downloaded %d page(s), %.1f MB", len(paths), downloaded / (1 << 20))
 
         done = 0
 
@@ -80,6 +97,7 @@ def handler(job):
             done += 1
             runpod.serverless.progress_update(job, f"{done}/{len(paths)} pages")
 
+        t0 = time.perf_counter()
         results = docpp.dewarp_files(
             pipeline(),
             paths,
@@ -88,19 +106,25 @@ def handler(job):
             jpeg_quality=quality,
             on_result=progress,
         )
+        log.info("dewarped %d page(s) in %.1fs", len(results), time.perf_counter() - t0)
 
+        t0 = time.perf_counter()
         pages, failed = [], []
+        uploaded = 0
         for result in results:
             key = key_of.get(result["source"], result["source"])
 
             if result.get("error"):
+                log.warning("page %s failed: %s", key, result["error"])
                 failed.append({"input_key": key, "error": result["error"]})
                 continue
 
             output_key = output_prefix + Path(result["output"]).name
             try:
                 s3.upload_file(result["output"], bucket, output_key)
+                uploaded += Path(result["output"]).stat().st_size
             except Exception as exc:
+                log.error("upload of %s failed: %s", output_key, exc)
                 failed.append({"input_key": key, "error": f"upload failed: {exc}"})
                 continue
 
@@ -111,7 +135,10 @@ def handler(job):
                 "height": result["height"],
                 "angle": result.get("angle"),
             })
+        log.info("uploaded %d page(s), %.1f MB", len(pages), uploaded / (1 << 20))
 
+    log.info("job done: %d page(s), %d failed, %.1fs",
+             len(pages), len(failed), time.perf_counter() - started)
     return {"pages": pages, "failed": failed}
 
 
