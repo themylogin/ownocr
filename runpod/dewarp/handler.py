@@ -20,15 +20,16 @@ logging.basicConfig(
 )
 log = logging.getLogger("handler")
 
-_pipeline = None
+_preprocessor = None
 
 
-def pipeline():
+def preprocessor():
     """The models load once per worker process, not once per job."""
-    global _pipeline
-    if _pipeline is None:
-        _pipeline = docpp.build_pipeline(device=os.environ.get("DOCPP_DEVICE", docpp.DEVICE))
-    return _pipeline
+    global _preprocessor
+    if _preprocessor is None:
+        _preprocessor = docpp.build_pipeline(
+            device=os.environ.get("DOCPP_DEVICE", docpp.DEVICE))
+    return _preprocessor
 
 
 def make_s3(inp):
@@ -99,7 +100,7 @@ def handler(job):
 
         t0 = time.perf_counter()
         results = docpp.dewarp_files(
-            pipeline(),
+            preprocessor(),
             paths,
             out_dir,
             base=in_dir,
@@ -144,5 +145,5 @@ def handler(job):
 
 if __name__ == "__main__":
     # Pay the model load before the first job arrives, not during it.
-    pipeline()
+    preprocessor()
     runpod.serverless.start({"handler": handler})

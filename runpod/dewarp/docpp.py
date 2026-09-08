@@ -13,6 +13,7 @@ import numpy as np
 
 CONFIG = os.environ.get("DOCPP_CONFIG", "/opt/doc_preprocessor.yaml")
 DEVICE = os.environ.get("DOCPP_DEVICE", "gpu:0")
+ORI_MODEL_DIR = "/opt/paddlex/official_models/PP-LCNet_x1_0_doc_ori"
 IMAGE_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"}
 PDF_EXT = {".pdf"}
 
@@ -32,8 +33,25 @@ def parse_args(argv=None):
                    help="Inference device, e.g. gpu:0 or cpu. Default: gpu:0")
     p.add_argument("-b", "--batch-size", type=int, default=4,
                    help="Images per forward pass. Default: 4")
-    p.add_argument("--no-orientation", dest="orientation", action="store_false",
-                   help="Skip the 0/90/180/270 orientation classifier.")
+    p.add_argument("--orientation", choices=("tiles", "whole", "off"), default="tiles",
+                   help="How to decide page rotation. 'tiles' votes the classifier "
+                        "over a 3x3 grid of crops (far more accurate on photos); "
+                        "'whole' is PaddleX's stock single pass over the full frame; "
+                        "'off' never rotates. Default: tiles")
+    p.add_argument("--orientation-grid", type=int, default=3,
+                   help="Grid size for --orientation tiles. Raise it for books with "
+                        "small type: each tile's short side is downscaled to 256px "
+                        "before classification, so grid N gives a "
+                        "(height/N)/256 reduction. Default: 3")
+    p.add_argument("--orientation-keep", type=float, default=0.5,
+                   help="Fraction of tiles to actually classify, the inkiest first. "
+                        "Blank margins vote randomly and dilute the result, so "
+                        "dropping them raises confidence and cuts cost. Default: 0.5")
+    p.add_argument("--no-orientation", dest="orientation", action="store_const", const="off",
+                   help="Alias for --orientation off.")
+    p.add_argument("--exif", choices=("apply", "ignore"), default="apply",
+                   help="Honour the JPEG EXIF Orientation tag, or ignore it and use "
+                        "the stored pixels as-is. Default: apply")
     p.add_argument("--no-unwarp", dest="unwarp", action="store_false",
                    help="Skip UVDoc geometric unwarping.")
     p.add_argument("--jpeg-quality", type=int, default=95,
@@ -55,12 +73,40 @@ def collect(input_path: Path, recursive: bool):
     return sorted(p for p in globber("*") if p.is_file() and p.suffix.lower() in exts)
 
 
-def load(path: Path):
+def load(path: Path, exif: str = "apply"):
     data = np.fromfile(str(path), dtype=np.uint8)
-    img = cv2.imdecode(data, cv2.IMREAD_COLOR)
+    flags = cv2.IMREAD_COLOR
+    if exif == "ignore":
+        flags |= cv2.IMREAD_IGNORE_ORIENTATION
+    img = cv2.imdecode(data, flags)
     if img is None:
         raise ValueError(f"could not decode {path}")
     return img
+
+
+CORRECTIONS = {90: cv2.ROTATE_90_COUNTERCLOCKWISE, 180: cv2.ROTATE_180,
+               270: cv2.ROTATE_90_CLOCKWISE}
+
+
+def texture(tile):
+    small = cv2.cvtColor(cv2.resize(tile, (128, 128)), cv2.COLOR_BGR2GRAY)
+    return float(cv2.Laplacian(small, cv2.CV_32F).var())
+
+
+def tile_orientation(model, img, grid: int, keep: float = 0.5):
+    h, w = img.shape[:2]
+    crops = [img[r * h // grid:(r + 1) * h // grid, c * w // grid:(c + 1) * w // grid]
+             for r in range(grid) for c in range(grid)]
+    if keep < 1.0 and len(crops) > 2:
+        crops.sort(key=texture, reverse=True)
+        crops = crops[:max(2, round(len(crops) * keep))]
+    weights = {}
+    for res in model.predict(crops):
+        i = int(np.argmax(res["scores"]))
+        angle = int(res["label_names"][i])
+        weights[angle] = weights.get(angle, 0.0) + float(res["scores"][i])
+    angle = max(weights, key=weights.get)
+    return angle, weights[angle] / sum(weights.values())
 
 
 def batched(seq, n):
@@ -68,26 +114,56 @@ def batched(seq, n):
         yield seq[i:i + n]
 
 
+class Preprocessor:
+    """The loaded models plus the settings that decide how they run."""
+
+    def __init__(self, pipeline, ori_model, orientation, unwarp, grid, keep):
+        self.pipeline = pipeline
+        self.ori_model = ori_model
+        self.orientation = orientation
+        self.unwarp = unwarp
+        self.grid = grid
+        self.keep = keep
+
+    def predict(self, images):
+        return self.pipeline.predict(
+            input=images,
+            use_doc_orientation_classify=(self.orientation == "whole"),
+            use_doc_unwarping=self.unwarp,
+        )
+
+    def rotate(self, img):
+        """Return the upright image and the angle removed, or (img, None)."""
+        if self.ori_model is None:
+            return img, None
+        angle, _ = tile_orientation(self.ori_model, img, self.grid, self.keep)
+        return (cv2.rotate(img, CORRECTIONS[angle]) if angle else img), angle
+
+
 def build_pipeline(device: str = DEVICE, config: str = CONFIG, warmup: bool = True,
-                   batch_size: int = 2, orientation: bool = True, unwarp: bool = True):
+                   batch_size: int = 2, orientation: str = "tiles", unwarp: bool = True,
+                   grid: int = 3, keep: float = 0.5):
     """Load the models once. A serverless worker reuses the result for every job."""
-    from paddlex import create_pipeline
+    from paddlex import create_model, create_pipeline
 
     pipeline = create_pipeline(pipeline=config, device=device)
+    ori_model = None
+    if orientation == "tiles":
+        ori_model = create_model("PP-LCNet_x1_0_doc_ori", model_dir=ORI_MODEL_DIR,
+                                 device=device)
+
+    preprocessor = Preprocessor(pipeline, ori_model, orientation, unwarp, grid, keep)
 
     if warmup:
         dummy = np.full((1024, 768, 3), 255, dtype=np.uint8)
-        list(pipeline.predict(
-            input=[dummy] * max(1, min(batch_size, 2)),
-            use_doc_orientation_classify=orientation,
-            use_doc_unwarping=unwarp,
-        ))
+        list(preprocessor.predict([dummy] * max(1, min(batch_size, 2))))
+        preprocessor.rotate(dummy)
 
-    return pipeline
+    return preprocessor
 
 
-def dewarp_files(pipeline, files, out_dir, base=None, recursive=False, batch_size=4,
-                 orientation=True, unwarp=True, png=False, jpeg_quality=95,
+def dewarp_files(preprocessor, files, out_dir, base=None, recursive=False, batch_size=4,
+                 exif="apply", png=False, jpeg_quality=95,
                  save_json=False, on_result=None):
     """Dewarp every file into out_dir.
 
@@ -110,23 +186,20 @@ def dewarp_files(pipeline, files, out_dir, base=None, recursive=False, batch_siz
         images, kept = [], []
         for path in chunk:
             if path.suffix.lower() in PDF_EXT:
-                kept.append(path)
+                kept.append((path, None))
                 images.append(str(path))
                 continue
             try:
-                images.append(load(path))
-                kept.append(path)
+                img, angle = preprocessor.rotate(load(path, exif))
+                images.append(img)
+                kept.append((path, angle))
             except Exception as exc:
                 results.append({"source": str(path), "output": None, "error": str(exc)})
         if not images:
             continue
 
         t0 = time.perf_counter()
-        predicted = list(pipeline.predict(
-            input=images,
-            use_doc_orientation_classify=orientation,
-            use_doc_unwarping=unwarp,
-        ))
+        predicted = list(preprocessor.predict(images))
         elapsed = (time.perf_counter() - t0) / max(len(predicted), 1)
 
         idx = -1
@@ -137,7 +210,7 @@ def dewarp_files(pipeline, files, out_dir, base=None, recursive=False, batch_siz
             if key != prev_key or page in (None, 0):
                 idx += 1
                 prev_key = key
-            path = kept[min(idx, len(kept) - 1)]
+            path, own_angle = kept[min(idx, len(kept) - 1)]
 
             rel = path.relative_to(base) if recursive else Path(path.name)
             stem = rel.with_suffix("")
@@ -153,7 +226,7 @@ def dewarp_files(pipeline, files, out_dir, base=None, recursive=False, batch_siz
                 "source": str(path),
                 "output": str(dst),
                 "error": None,
-                "angle": res.get("angle"),
+                "angle": res.get("angle") if own_angle is None else own_angle,
                 "page_index": page,
                 "width": int(img.shape[1]),
                 "height": int(img.shape[0]),
@@ -184,12 +257,14 @@ def main(argv=None) -> int:
         return 2
 
     t_load = time.perf_counter()
-    pipeline = build_pipeline(
+    preprocessor = build_pipeline(
         device=args.device,
         warmup=args.warmup,
         batch_size=args.batch_size,
         orientation=args.orientation,
         unwarp=args.unwarp,
+        grid=args.orientation_grid,
+        keep=args.orientation_keep,
     )
     t_load = time.perf_counter() - t_load
 
@@ -200,14 +275,13 @@ def main(argv=None) -> int:
 
     t_all = time.perf_counter()
     results = dewarp_files(
-        pipeline,
+        preprocessor,
         files,
         out_root,
         base=src_root if src_root.is_dir() else src_root.parent,
         recursive=args.recursive,
         batch_size=args.batch_size,
-        orientation=args.orientation,
-        unwarp=args.unwarp,
+        exif=args.exif,
         png=args.png,
         jpeg_quality=args.jpeg_quality,
         save_json=args.save_json,
