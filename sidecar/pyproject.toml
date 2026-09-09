@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ownocr"
+version = "0.1.0"
+description = "CPU image work for the ownocr backend"
+requires-python = ">=3.13"
+dynamic = ["dependencies"]
+
+# requirements.txt stays the one place the versions live. The Dockerfile
+# installs it first, on its own layer, and then installs this package with
+# --no-deps, so a code edit never reinstalls OpenCV.
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["ownocr*"]

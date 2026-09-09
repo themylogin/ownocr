@@ -1,0 +1,2 @@
+# Reload watching. Without it `uvicorn --reload` falls back to stat polling.
+watchfiles==1.2.0
