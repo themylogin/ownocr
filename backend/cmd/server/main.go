@@ -77,7 +77,7 @@ func run() error {
 
 	workers := river.NewWorkers()
 	river.AddWorker(workers, ingest.NewWorker(store, files, hub, cfg.PDFDPI))
-	river.AddWorker(workers, split.NewWorker(store, files, hub))
+	river.AddWorker(workers, split.NewWorker(store, files, hub, split.NewClient(cfg.SidecarURL)))
 	river.AddWorker(workers, dewarp.NewWorker(store, files, hub, objects, dewarp.Settings{
 		Settings: objectstore.Settings(cfg.S3),
 		APIURL:   cfg.Dewarp.APIURL,

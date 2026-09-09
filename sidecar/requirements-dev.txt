@@ -1,2 +1,8 @@
 # Reload watching. Without it `uvicorn --reload` falls back to stat polling.
 watchfiles==1.2.0
+
+# The tests. httpx2 backs the FastAPI test client, which drives the real routes
+# rather than the handler functions behind them. Starlette deprecates the
+# original httpx for this.
+pytest==8.4.2
+httpx2==2.12.0

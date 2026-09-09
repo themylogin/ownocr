@@ -110,7 +110,7 @@ func clearStorageEnv(t *testing.T) {
 	t.Helper()
 	for _, name := range []string{
 		"AWS_ENDPOINT_URL", "AWS_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY",
-		"AWS_BUCKET", "DEWARP_API_URL", "DEWARP_API_TOKEN",
+		"AWS_BUCKET", "DEWARP_API_URL", "DEWARP_API_TOKEN", "SIDECAR_URL",
 	} {
 		t.Setenv(name, "")
 	}
@@ -157,6 +157,28 @@ func TestDewarpComplete(t *testing.T) {
 	}
 	if cfg.Dewarp.APIURL != "https://api.runpod.ai/v2/abc" {
 		t.Errorf("APIURL = %q, want the trailing slash removed", cfg.Dewarp.APIURL)
+	}
+}
+
+func TestSidecarURL(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://localhost/test")
+	setStorageEnv(t)
+
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.SidecarURL != defaultSidecarURL {
+		t.Errorf("SidecarURL = %q, want %q", cfg.SidecarURL, defaultSidecarURL)
+	}
+
+	t.Setenv("SIDECAR_URL", "http://elsewhere:9000/")
+	cfg, err = Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.SidecarURL != "http://elsewhere:9000" {
+		t.Errorf("SidecarURL = %q, want the trailing slash removed", cfg.SidecarURL)
 	}
 }
 

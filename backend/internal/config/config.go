@@ -14,6 +14,7 @@ const (
 	defaultMaxUploadBytes = 2 << 30
 	defaultPDFDPI         = 300
 	defaultRegion         = "us-east-1"
+	defaultSidecarURL     = "http://sidecar:8000"
 )
 
 type Config struct {
@@ -26,6 +27,7 @@ type Config struct {
 	PDFDPI         int
 	S3             S3
 	Dewarp         Dewarp
+	SidecarURL     string
 }
 
 type S3 struct {
@@ -63,6 +65,7 @@ func Load() (Config, error) {
 			APIURL:   strings.TrimRight(e.require("DEWARP_API_URL"), "/"),
 			APIToken: e.require("DEWARP_API_TOKEN"),
 		},
+		SidecarURL: strings.TrimRight(e.orElse("SIDECAR_URL", defaultSidecarURL), "/"),
 	}
 
 	if err := e.err(); err != nil {

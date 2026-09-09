@@ -33,10 +33,13 @@ services:
       AWS_BUCKET: ${AWS_BUCKET}
       DEWARP_API_URL: ${DEWARP_API_URL}
       DEWARP_API_TOKEN: ${DEWARP_API_TOKEN}
+      SIDECAR_URL: ${SIDECAR_URL:-http://sidecar:8000}
     volumes:
       - book_data:/data
     depends_on:
       postgres:
+        condition: service_healthy
+      sidecar:
         condition: service_healthy
     restart: unless-stopped
 
