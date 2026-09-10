@@ -26,7 +26,8 @@ type Config struct {
 	MaxUploadBytes int64
 	PDFDPI         int
 	S3             S3
-	Dewarp         Dewarp
+	Dewarp         Endpoint
+	OCR            Endpoint
 	SidecarURL     string
 }
 
@@ -38,7 +39,8 @@ type S3 struct {
 	Bucket          string
 }
 
-type Dewarp struct {
+// Endpoint names a RunPod serverless endpoint and the token that opens it.
+type Endpoint struct {
 	APIURL   string
 	APIToken string
 }
@@ -61,9 +63,13 @@ func Load() (Config, error) {
 			SecretAccessKey: e.require("AWS_SECRET_ACCESS_KEY"),
 			Bucket:          e.require("AWS_BUCKET"),
 		},
-		Dewarp: Dewarp{
+		Dewarp: Endpoint{
 			APIURL:   strings.TrimRight(e.require("DEWARP_API_URL"), "/"),
 			APIToken: e.require("DEWARP_API_TOKEN"),
+		},
+		OCR: Endpoint{
+			APIURL:   strings.TrimRight(e.require("PADDLEOCR_VL_API_URL"), "/"),
+			APIToken: e.require("PADDLEOCR_VL_API_TOKEN"),
 		},
 		SidecarURL: strings.TrimRight(e.orElse("SIDECAR_URL", defaultSidecarURL), "/"),
 	}

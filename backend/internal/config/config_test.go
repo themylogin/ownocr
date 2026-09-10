@@ -102,6 +102,8 @@ func setStorageEnv(t *testing.T) {
 	t.Setenv("AWS_BUCKET", "ownocr")
 	t.Setenv("DEWARP_API_URL", "https://api.runpod.ai/v2/abc/")
 	t.Setenv("DEWARP_API_TOKEN", "token")
+	t.Setenv("PADDLEOCR_VL_API_URL", "https://api.runpod.ai/v2/def/")
+	t.Setenv("PADDLEOCR_VL_API_TOKEN", "ocr-token")
 }
 
 // Makes the test independent of the environment the test runner happens to hold.
@@ -110,7 +112,8 @@ func clearStorageEnv(t *testing.T) {
 	t.Helper()
 	for _, name := range []string{
 		"AWS_ENDPOINT_URL", "AWS_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY",
-		"AWS_BUCKET", "DEWARP_API_URL", "DEWARP_API_TOKEN", "SIDECAR_URL",
+		"AWS_BUCKET", "DEWARP_API_URL", "DEWARP_API_TOKEN",
+		"PADDLEOCR_VL_API_URL", "PADDLEOCR_VL_API_TOKEN", "SIDECAR_URL",
 	} {
 		t.Setenv(name, "")
 	}
@@ -160,6 +163,22 @@ func TestDewarpComplete(t *testing.T) {
 	}
 }
 
+func TestOCRComplete(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://localhost/test")
+	setStorageEnv(t)
+
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.OCR.APIToken != "ocr-token" {
+		t.Errorf("APIToken = %q", cfg.OCR.APIToken)
+	}
+	if cfg.OCR.APIURL != "https://api.runpod.ai/v2/def" {
+		t.Errorf("APIURL = %q, want the trailing slash removed", cfg.OCR.APIURL)
+	}
+}
+
 func TestSidecarURL(t *testing.T) {
 	t.Setenv("DATABASE_URL", "postgres://localhost/test")
 	setStorageEnv(t)
@@ -203,6 +222,7 @@ func TestLoadRequiresEveryStorageVariable(t *testing.T) {
 	for _, name := range []string{
 		"AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_BUCKET",
 		"DEWARP_API_URL", "DEWARP_API_TOKEN",
+		"PADDLEOCR_VL_API_URL", "PADDLEOCR_VL_API_TOKEN",
 	} {
 		t.Run(name, func(t *testing.T) {
 			t.Setenv("DATABASE_URL", "postgres://localhost/test")

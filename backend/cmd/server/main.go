@@ -22,6 +22,7 @@ import (
 	"github.com/themylogin/ownocr/backend/internal/httpapi"
 	"github.com/themylogin/ownocr/backend/internal/ingest"
 	"github.com/themylogin/ownocr/backend/internal/objectstore"
+	"github.com/themylogin/ownocr/backend/internal/ocr"
 	"github.com/themylogin/ownocr/backend/internal/queue"
 	"github.com/themylogin/ownocr/backend/internal/split"
 	"github.com/themylogin/ownocr/backend/internal/ws"
@@ -82,6 +83,11 @@ func run() error {
 		Settings: objectstore.Settings(cfg.S3),
 		APIURL:   cfg.Dewarp.APIURL,
 		APIToken: cfg.Dewarp.APIToken,
+	}))
+	river.AddWorker(workers, ocr.NewWorker(store, files, hub, objects, ocr.Settings{
+		Settings: objectstore.Settings(cfg.S3),
+		APIURL:   cfg.OCR.APIURL,
+		APIToken: cfg.OCR.APIToken,
 	}))
 
 	queueClient, err := queue.New(pool, workers, cfg.Workers)

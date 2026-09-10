@@ -33,6 +33,8 @@ services:
       AWS_BUCKET: ${AWS_BUCKET}
       DEWARP_API_URL: ${DEWARP_API_URL}
       DEWARP_API_TOKEN: ${DEWARP_API_TOKEN}
+      PADDLEOCR_VL_API_URL: ${PADDLEOCR_VL_API_URL}
+      PADDLEOCR_VL_API_TOKEN: ${PADDLEOCR_VL_API_TOKEN}
       SIDECAR_URL: ${SIDECAR_URL:-http://sidecar:8000}
     volumes:
       - book_data:/data
