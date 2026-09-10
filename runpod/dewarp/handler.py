@@ -23,6 +23,35 @@ log = logging.getLogger("handler")
 _preprocessor = None
 
 
+@runpod.serverless.register_fitness_check
+def require_gpu():
+    device = os.environ.get("DOCPP_DEVICE", docpp.DEVICE)
+    if not device.lower().startswith("gpu"):
+        return
+
+    import glob
+    import paddle
+
+    if paddle.device.cuda.device_count() > 0:
+        return
+
+    detail = {
+        "paddle": paddle.__version__,
+        "compiled_with_cuda": paddle.device.is_compiled_with_cuda(),
+        "device_count": paddle.device.cuda.device_count(),
+        "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES", "<unset>"),
+        "NVIDIA_VISIBLE_DEVICES": os.environ.get("NVIDIA_VISIBLE_DEVICES", "<unset>"),
+        "libcuda": glob.glob("/usr/lib/x86_64-linux-gnu/libcuda.so*") or "MISSING",
+        "dev_nodes": sorted(glob.glob("/dev/nvidia*")) or "MISSING",
+    }
+    for k, v in detail.items():
+        log.error("gpu check: %s = %s", k, v)
+    raise RuntimeError(
+        f"DOCPP_DEVICE={device} but Paddle sees 0 CUDA devices; refusing to run on "
+        f"CPU. libcuda={detail['libcuda']} dev_nodes={detail['dev_nodes']}"
+    )
+
+
 def preprocessor():
     """The models load once per worker process, not once per job."""
     global _preprocessor

@@ -40,7 +40,7 @@ ENV HF_HUB_OFFLINE=1 \
 
 ENV PADDLE_PDX_CACHE_HOME=/tmp/paddlex
 
-ARG RUNPOD_VERSION=1.7.7
+ARG RUNPOD_VERSION=1.12.0
 RUN pip install --no-cache-dir "runpod==${RUNPOD_VERSION}" boto3
 
 COPY doc_preprocessor.yaml /opt/doc_preprocessor.yaml
