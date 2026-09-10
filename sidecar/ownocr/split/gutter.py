@@ -36,6 +36,11 @@ MIN_BANDS = 6
 
 OVERLAP = 0.005
 
+# A spread is wider than it is tall. The threshold is not `width > height`: a
+# page photographed with a little of the desk on either side is wider by a few
+# percent, and cutting that one in two would be wrong.
+LANDSCAPE_RATIO = 1.2
+
 
 class UnreadableImage(Exception):
     def __init__(self, path: str):
@@ -55,7 +60,7 @@ def columns(image: np.ndarray) -> tuple[int, int] | None:
     height, width = image.shape[:2]
     curve = _gutter(image)
     if curve is None:
-        return None
+        return _middle(width, height)
 
     positions = np.polyval(curve, np.arange(height, dtype=float))
     margin = round(OVERLAP * width)
@@ -70,6 +75,16 @@ def columns(image: np.ndarray) -> tuple[int, int] | None:
 
 def _clamp(value: int, width: int) -> int:
     return max(0, min(value, width))
+
+
+# A landscape image the detector finds no gutter in still holds two pages: its
+# shape says so. Both numbers are the middle column, because there is no curve
+# to follow here, and a margin would only put one strip in both pages.
+def _middle(width: int, height: int) -> tuple[int, int] | None:
+    if width < LANDSCAPE_RATIO * height:
+        return None
+    half = width // 2
+    return half, half
 
 
 def _gutter(image: np.ndarray):

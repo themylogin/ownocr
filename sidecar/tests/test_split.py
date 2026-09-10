@@ -7,6 +7,7 @@ from ownocr import split
 from ownocr.app import app
 
 WIDTH, HEIGHT = 1200, 900
+SINGLE_WIDTH, SINGLE_HEIGHT = 900, 1200
 PAPER = 235
 INK = 40
 GUTTER = 90
@@ -31,6 +32,28 @@ def page(gutter_at=None, gutter_rows=None, lean=0):
     return image
 
 
+# A page that is taller than it is wide, which the landscape rule leaves whole.
+# The canvas of `page` is 1200 by 900, so the rule reads it as a spread whatever
+# is drawn on it.
+def single(band_rows=None):
+    """A portrait page of one block of text rows, and an optional dark band."""
+    image = np.full((SINGLE_HEIGHT, SINGLE_WIDTH, 3), PAPER, np.uint8)
+    for y in range(120, SINGLE_HEIGHT - 120, 24):
+        image[y:y + 8, 80:SINGLE_WIDTH - 80] = INK
+
+    if band_rows is None:
+        return image
+
+    for y in band_rows:
+        image[y, SINGLE_WIDTH // 2 - 6:SINGLE_WIDTH // 2 + 6] = GUTTER
+    return image
+
+
+def blank(width, height):
+    """A page with nothing on it, so the detector can find no gutter."""
+    return np.full((height, width, 3), PAPER, np.uint8)
+
+
 def write(tmp_path, name, image):
     path = tmp_path / name
     assert cv2.imwrite(str(path), image)
@@ -42,7 +65,7 @@ def test_spread_returns_a_pair():
 
 
 def test_single_page_returns_none():
-    assert split.columns(page()) is None
+    assert split.columns(single()) is None
 
 
 def test_columns_overlap_and_lie_inside_the_image():
@@ -68,8 +91,46 @@ def test_a_leaning_gutter_widens_the_gap():
 # The cover of a real book scores high on gutter strength but carries that
 # strength over a fraction of its height. Coverage is what rejects it.
 def test_a_strong_mark_over_part_of_the_height_is_not_a_gutter():
-    partial = page(gutter_at=WIDTH // 2, gutter_rows=range(HEIGHT // 3))
+    partial = single(band_rows=range(SINGLE_HEIGHT // 3))
     assert split.columns(partial) is None
+
+
+# A landscape image holds two pages whatever the detector makes of its gutter,
+# so a miss answers the middle rather than nothing.
+def test_a_landscape_image_with_no_gutter_is_cut_at_its_middle():
+    assert split.columns(blank(1600, 1200)) == (800, 800)
+
+
+def test_the_two_middle_pages_meet():
+    width = 1600
+    left, right = split.columns(blank(width, 1200))
+
+    assert left == right
+    assert left + (width - right) == width
+
+
+def test_a_found_gutter_beats_the_middle():
+    off_centre = round(WIDTH * 0.4)
+    left, right = split.columns(page(gutter_at=off_centre))
+
+    assert right <= off_centre <= left
+    assert left < WIDTH // 2
+
+
+def test_an_image_just_wide_enough_is_cut():
+    assert split.columns(blank(1200, 1000)) == (600, 600)
+
+
+def test_an_image_not_quite_wide_enough_is_whole():
+    assert split.columns(blank(1100, 1000)) is None
+
+
+def test_a_square_image_is_whole():
+    assert split.columns(blank(1000, 1000)) is None
+
+
+def test_a_portrait_image_with_no_gutter_is_whole():
+    assert split.columns(blank(1200, 1600)) is None
 
 
 def test_cut_columns_refuses_a_missing_path(tmp_path):
@@ -78,10 +139,10 @@ def test_cut_columns_refuses_a_missing_path(tmp_path):
 
 
 def test_split_answers_one_entry_per_image(tmp_path):
-    single = write(tmp_path, "single.jpg", page())
+    whole = write(tmp_path, "single.jpg", single())
     spread = write(tmp_path, "spread.jpg", page(gutter_at=WIDTH // 2))
 
-    response = client.post("/split", json=[single, spread])
+    response = client.post("/split", json=[whole, spread])
 
     assert response.status_code == 200
     answer = response.json()
@@ -95,7 +156,7 @@ def test_split_keeps_the_order(tmp_path):
     paths, spreads = [], []
     for index in range(20):
         is_spread = index % 3 == 0
-        image = page(gutter_at=WIDTH // 2) if is_spread else page()
+        image = page(gutter_at=WIDTH // 2) if is_spread else single()
         paths.append(write(tmp_path, f"page{index:02d}.jpg", image))
         spreads.append(is_spread)
 
