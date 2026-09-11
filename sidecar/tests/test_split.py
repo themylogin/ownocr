@@ -12,13 +12,26 @@ PAPER = 235
 INK = 40
 GUTTER = 90
 
+# A gutter this pale measures 1.94 grey levels per row where the test draws it,
+# between the floor of 0.5 and the 2.199 of the weakest real gutter whose page
+# the middle column cannot cut.
+FAINT_GUTTER = 231
+
+RIGHT_BLOCK = (680, 1120)
+
+# Scanner grain is what makes a false gutter appear. On a clean canvas the
+# opening erases every text row, the search band holds nothing, and the detector
+# answers the middle for the right reason rather than the wrong one.
+GRAIN = 16
+GRAIN_SEED = 7
+
 client = TestClient(app)
 
 
-def page(gutter_at=None, gutter_rows=None, lean=0):
+def page(gutter_at=None, gutter_rows=None, lean=0, grey=GUTTER):
     """A light page with two blocks of text rows and an optional dark gutter."""
     image = np.full((HEIGHT, WIDTH, 3), PAPER, np.uint8)
-    for start, end in ((80, 520), (680, 1120)):
+    for start, end in ((80, 520), RIGHT_BLOCK):
         for y in range(120, HEIGHT - 120, 24):
             image[y:y + 8, start:end] = INK
 
@@ -28,8 +41,19 @@ def page(gutter_at=None, gutter_rows=None, lean=0):
     rows = gutter_rows if gutter_rows is not None else range(HEIGHT)
     for y in rows:
         centre = gutter_at + round(lean * (y - HEIGHT / 2.0))
-        image[y, max(0, centre - 6):centre + 6] = GUTTER
+        image[y, max(0, centre - 6):centre + 6] = grey
     return image
+
+
+def blank_facing_page():
+    """A grainy spread with no gutter, whose left page carries nothing."""
+    start, end = RIGHT_BLOCK
+    image = np.full((HEIGHT, WIDTH, 3), PAPER, np.uint8)
+    for y in range(120, HEIGHT - 120, 24):
+        image[y:y + 8, start:end] = INK
+
+    grain = np.random.default_rng(GRAIN_SEED).integers(-GRAIN, GRAIN + 1, image.shape)
+    return np.clip(image.astype(np.int16) + grain, 0, 255).astype(np.uint8)
 
 
 # A page that is taller than it is wide, which the landscape rule leaves whole.
@@ -93,6 +117,30 @@ def test_a_leaning_gutter_widens_the_gap():
 def test_a_strong_mark_over_part_of_the_height_is_not_a_gutter():
     partial = single(band_rows=range(SINGLE_HEIGHT // 3))
     assert split.columns(partial) is None
+
+
+# The gutter of a flat scan can leave no trace at all. The residue of the one
+# block of text then wins the search band, and the detector cuts the page that
+# carries it. Pages 5 and 41 of book 6 failed this way, at 0.16 and 0.13 grey
+# levels per row against a block that fills the same share of the width as this
+# one does.
+def test_a_spread_with_a_blank_facing_page_is_cut_at_its_middle():
+    left, right = split.columns(blank_facing_page())
+
+    assert (left, right) == (WIDTH // 2, WIDTH // 2)
+    assert left < RIGHT_BLOCK[0]
+
+
+# The floor rejects a weak peak, so it must stand below a real gutter that is
+# merely pale. This is the ceiling of the window the floor sits in. The gutter
+# lies away from the middle, because a rejected gutter answers the middle and an
+# assertion around the middle would hold either way.
+def test_a_faint_gutter_on_a_flat_book_is_still_a_gutter():
+    off_centre = round(WIDTH * 0.4)
+    left, right = split.columns(page(gutter_at=off_centre, grey=FAINT_GUTTER))
+
+    assert right <= off_centre <= left
+    assert left < WIDTH // 2
 
 
 # A landscape image holds two pages whatever the detector makes of its gutter,

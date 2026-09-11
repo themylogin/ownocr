@@ -34,6 +34,17 @@ MIN_COVERAGE = 0.5
 MIN_PROMINENCE = 3.0
 MIN_BANDS = 6
 
+# Coverage alone lets a paragraph pass: the residue a block of text leaves behind
+# covers every band that block covers. A gutter is also an absolute amount of
+# contrast, so this floor counts grey levels per row of the work image. It is not
+# a ratio, because the strongest column of a page is often a dark scanner border
+# rather than its gutter.
+#
+# Measured over 181 pages of four books. The three false gutters score 0.129 to
+# 0.164. The weakest true gutter whose page the middle column cannot cut scores
+# 2.199. This floor sits between them.
+MIN_ENERGY_PER_ROW = 0.5
+
 OVERLAP = 0.005
 
 # A spread is wider than it is tall. The threshold is not `width > height`: a
@@ -95,12 +106,14 @@ def _gutter(image: np.ndarray):
     gray = cv2.cvtColor(work, cv2.COLOR_BGR2GRAY)
 
     energy = _energy(gray)
-    angle, centre, prominence = _coarse_line(energy)
+    angle, centre, prominence, peak = _coarse_line(energy)
     points = _band_centroids(energy, angle, centre)
 
     if len(points) / float(BANDS) < MIN_COVERAGE or len(points) < MIN_BANDS:
         return None
     if prominence < MIN_PROMINENCE:
+        return None
+    if peak / energy.shape[0] < MIN_ENERGY_PER_ROW:
         return None
 
     curve = _fit(points)
@@ -120,7 +133,7 @@ def _energy(gray: np.ndarray) -> np.ndarray:
     return cv2.morphologyEx(deviation, cv2.MORPH_OPEN, kernel)
 
 
-def _coarse_line(energy: np.ndarray) -> tuple[float, int, float]:
+def _coarse_line(energy: np.ndarray) -> tuple[float, int, float, float]:
     height, width = energy.shape
     lo, hi = int(SEARCH_LO * width), int(SEARCH_HI * width)
     centre = (width / 2.0, height / 2.0)
@@ -138,7 +151,7 @@ def _coarse_line(energy: np.ndarray) -> tuple[float, int, float]:
             best_x, best_profile = int(np.argmax(band)) + lo, profile
 
     band = best_profile[lo:hi]
-    return best_angle, best_x, float(band.max() / (np.median(band) + 1e-6))
+    return best_angle, best_x, float(band.max() / (np.median(band) + 1e-6)), best_peak
 
 
 def _band_centroids(energy: np.ndarray, angle: float, x_centre: int) -> list:
