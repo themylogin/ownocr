@@ -1,0 +1,533 @@
+{
+ "book": 4015,
+ "page": 432,
+ "note": "The lines fall by most of a row across the column, and v6 broke seven of the fifteen rows of the first block into a left box and a right box. It read neither half of eight rows of that block. Its box tops therefore run 44 to 46 pixels apart against a pitch of 46, so tops alone place a row mate and the row below it at the same height.",
+ "v6": {
+  "lines": [
+   {
+    "bbox": [
+     188,
+     221,
+     1219,
+     292
+    ],
+    "text": "tematización descriptiva (por ejemplo: el estudio",
+    "score": 0.9877815842628479
+   },
+   {
+    "bbox": [
+     183,
+     269,
+     1129,
+     340
+    ],
+    "text": "«propiedades químicas», la taxonomía vegetal",
+    "score": 0.9804514050483704
+   },
+   {
+    "bbox": [
+     1411,
+     298,
+     1608,
+     381
+    ],
+    "text": "tenga una",
+    "score": 0.9983471632003784
+   },
+   {
+    "bbox": [
+     179,
+     360,
+     1236,
+     435
+    ],
+    "text": "ejemplo, «la ciencia» tiene más o menos implícita",
+    "score": 0.9952214956283569
+   },
+   {
+    "bbox": [
+     1331,
+     380,
+     1607,
+     469
+    ],
+    "text": "tiene en todo",
+    "score": 0.9566124677658081
+   },
+   {
+    "bbox": [
+     183,
+     412,
+     1205,
+     475
+    ],
+    "text": "caso) la seguridad de que todo lo que constituye",
+    "score": 0.9942724108695984
+   },
+   {
+    "bbox": [
+     1336,
+     427,
+     1607,
+     510
+    ],
+    "text": "de un animal",
+    "score": 0.9990217685699463
+   },
+   {
+    "bbox": [
+     179,
+     458,
+     1205,
+     523
+    ],
+    "text": "sería en último análisis una maraña de procesos",
+    "score": 0.9885936379432678
+   },
+   {
+    "bbox": [
+     1186,
+     456,
+     1609,
+     558
+    ],
+    "text": "fisico-químicos, y de",
+    "score": 0.9747536182403564
+   },
+   {
+    "bbox": [
+     174,
+     809,
+     1620,
+     920
+    ],
+    "text": "(aquello que es a la vez su norma, su estructura y su lenguaje) es la",
+    "score": 0.9701897501945496
+   },
+   {
+    "bbox": [
+     188,
+     882,
+     433,
+     921
+    ],
+    "text": "matemática.",
+    "score": 0.9961452484130859
+   },
+   {
+    "bbox": [
+     218,
+     905,
+     1614,
+     1001
+    ],
+    "text": "La «sociología» de Comte sigue siendo una especie de «fisica» (cuyo",
+    "score": 0.9807001352310181
+   },
+   {
+    "bbox": [
+     176,
+     952,
+     1614,
+     1043
+    ],
+    "text": "carácter de tal es concebido de un modo más o menos confuso). Si una",
+    "score": 0.9968312382698059
+   },
+   {
+    "bbox": [
+     176,
+     997,
+     1614,
+     1089
+    ],
+    "text": "consideración positivista de la historia es posible, la ausencia de tal",
+    "score": 0.9997521042823792
+   },
+   {
+    "bbox": [
+     176,
+     1045,
+     1616,
+     1133
+    ],
+    "text": "consideración en Comte se hace patente en el hecho de que, cuando",
+    "score": 0.9943719506263733
+   },
+   {
+    "bbox": [
+     179,
+     1095,
+     1614,
+     1172
+    ],
+    "text": "Comte habla de algo así como la historia, emplea nociones que de",
+    "score": 0.9955124855041504
+   },
+   {
+    "bbox": [
+     176,
+     1141,
+     1614,
+     1214
+    ],
+    "text": "«positivismo» no tienen otra cosa que la banalidad que sin duda tienen:",
+    "score": 0.9995664358139038
+   },
+   {
+    "bbox": [
+     179,
+     1186,
+     1614,
+     1259
+    ],
+    "text": "el «progreso», el «perfeccionamiento» de la humanidad y «creciente",
+    "score": 0.9913676977157593
+   },
+   {
+    "bbox": [
+     183,
+     1233,
+     1614,
+     1304
+    ],
+    "text": "predominio de las tendencias más nobles de nuestra naturaleza», etc.,",
+    "score": 0.9940083622932434
+   },
+   {
+    "bbox": [
+     183,
+     1279,
+     1614,
+     1349
+    ],
+    "text": "todo ello cosas que no son en absoluto de naturaleza «positiva» y que",
+    "score": 0.9956189393997192
+   },
+   {
+    "bbox": [
+     186,
+     1338,
+     1292,
+     1377
+    ],
+    "text": "son simplemente producto de una metafísica barata.",
+    "score": 0.9917194843292236
+   },
+   {
+    "bbox": [
+     225,
+     1375,
+     1605,
+     1427
+    ],
+    "text": "Sin embargo, a mediados del siglo xix, y precisamente en Alemania",
+    "score": 0.998902440071106
+   },
+   {
+    "bbox": [
+     180,
+     1419,
+     1611,
+     1473
+    ],
+    "text": "el ideal positivista penetra en campos que, al menos en principio, no",
+    "score": 0.9893394112586975
+   },
+   {
+    "bbox": [
+     186,
+     1468,
+     1611,
+     1515
+    ],
+    "text": "son el de «la naturaleza». Es por entonces cuando G. Th. Fechner",
+    "score": 0.9959865212440491
+   },
+   {
+    "bbox": [
+     183,
+     1507,
+     1611,
+     1562
+    ],
+    "text": "funda la psicología experimental; pero lo que Fechner fundamental-",
+    "score": 0.9997752904891968
+   },
+   {
+    "bbox": [
+     183,
+     1551,
+     1611,
+     1608
+    ],
+    "text": "mente hace es establecer, sobre la base de ciertos convenios, una ma-",
+    "score": 0.9879801869392395
+   },
+   {
+    "bbox": [
+     180,
+     1596,
+     1611,
+     1653
+    ],
+    "text": "nera coherente de atribuir cantidad a las sensaciones; por lo tanto,",
+    "score": 0.9902591705322266
+   },
+   {
+    "bbox": [
+     176,
+     1635,
+     1616,
+     1704
+    ],
+    "text": "su obra se sitúa en el camino de la reducción de toda ciencia al modo",
+    "score": 0.9940929412841797
+   },
+   {
+    "bbox": [
+     179,
+     1681,
+     1619,
+     1748
+    ],
+    "text": "de objetividad regido por la matemática. Mucha más importancia",
+    "score": 0.9998871088027954
+   },
+   {
+    "bbox": [
+     179,
+     1726,
+     1619,
+     1793
+    ],
+    "text": "(desde el punto de vista de lo que ahora nos ocupa) tiene la aparición",
+    "score": 0.9946389198303223
+   },
+   {
+    "bbox": [
+     183,
+     1765,
+     1619,
+     1844
+    ],
+    "text": "de una especie de positivismo en la investigación histórica; es la lla-",
+    "score": 0.9986320734024048
+   },
+   {
+    "bbox": [
+     179,
+     1811,
+     1622,
+     1889
+    ],
+    "text": "mada «escuela histórica» (citemos a Leopold von Ranke), cuya at-",
+    "score": 0.9914940595626831
+   },
+   {
+    "bbox": [
+     186,
+     1871,
+     684,
+     1925
+    ],
+    "text": "mósfera respira Dilthey.",
+    "score": 0.9997078776359558
+   },
+   {
+    "bbox": [
+     222,
+     1897,
+     1622,
+     1979
+    ],
+    "text": "El propio Dilthey pertenece en cierta manera al ámbito del positi-",
+    "score": 0.9994931221008301
+   },
+   {
+    "bbox": [
+     179,
+     1945,
+     1622,
+     2024
+    ],
+    "text": "vismo; más exactamente: pertenece sólo en la medida en que se siente",
+    "score": 0.9998047947883606
+   },
+   {
+    "bbox": [
+     183,
+     1990,
+     1622,
+     2072
+    ],
+    "text": "liberado, gracias al positivismo, de las cadenas metafísicas que hasta",
+    "score": 0.9967257976531982
+   },
+   {
+    "bbox": [
+     186,
+     2044,
+     1487,
+     2111
+    ],
+    "text": "entonces hacían imposible una verdadera ciencia histórica; así:",
+    "score": 0.9919310808181763
+   },
+   {
+    "bbox": [
+     228,
+     2102,
+     1622,
+     2182
+    ],
+    "text": "1. Dilthey rechaza toda «metafisica de la historia», entendiendo por",
+    "score": 0.998379111289978
+   },
+   {
+    "bbox": [
+     186,
+     2151,
+     1622,
+     2226
+    ],
+    "text": "tal toda noción de un «sentido último» de la historia, no importa que",
+    "score": 0.9980510473251343
+   },
+   {
+    "bbox": [
+     179,
+     2190,
+     1624,
+     2277
+    ],
+    "text": "ese «sentido último» tenga el carácter de un «fin» o el de un proceso",
+    "score": 0.9859738349914551
+   },
+   {
+    "bbox": [
+     188,
+     2255,
+     991,
+     2311
+    ],
+    "text": "subyacente o el de cualquier otra cosa.",
+    "score": 0.9999004006385803
+   },
+   {
+    "bbox": [
+     222,
+     2288,
+     1622,
+     2376
+    ],
+    "text": "2. Dilthey rechaza la aplicación a la historia de nociones suprahis-",
+    "score": 0.9903994202613831
+   },
+   {
+    "bbox": [
+     182,
+     2333,
+     1624,
+     2423
+    ],
+    "text": "tóricas. Si se admite, por ejemplo, «la naturaleza humana» como algo",
+    "score": 0.9734258055686951
+   },
+   {
+    "bbox": [
+     182,
+     2377,
+     1628,
+     2474
+    ],
+    "text": "que tiene que ser común al hombre del siglo xix, al griego arcaico y al",
+    "score": 0.9567165374755859
+   },
+   {
+    "bbox": [
+     191,
+     2496,
+     303,
+     2564
+    ],
+    "text": "432",
+    "score": 0.999980628490448
+   }
+  ]
+ },
+ "vl": {
+  "parsing_res_list": [
+   {
+    "block_bbox": [
+     182,
+     235,
+     1614,
+     942
+    ],
+    "block_label": "text",
+    "block_content": "tematización descriptiva (por ejemplo: el estudio experimental de las «propiedades químicas», la taxonomía vegetal y animal, etc.) tenga una entidad muy considerable y unas exigencias técnicas propias. Así, por ejemplo, «la ciencia» tiene más o menos implícita (pero tiene en todo caso) la seguridad de que todo lo que constituye la vida de un animal sería en último análisis una maraña de procesos físico-químicos, y de que los procesos químicos serían físico-matemáticamente explicables en cuanto se llegase a un refinamiento suficiente del análisis (como de hecho ha ocurrido en cuanto los procesos químicos han podido ser tratados a escala atómica, bien que ello ha provocado una modificación en las estructuras de la propia física matemática). Por todo esto, podemos adoptar la palabra «Física» como denominación de la ciencia de la naturaleza en su conjunto; la constitución esencial de esa ciencia (aquello que es a la vez su norma, su estructura y su lenguaje) es la matemática."
+   },
+   {
+    "block_bbox": [
+     180,
+     927,
+     1615,
+     1384
+    ],
+    "block_label": "text",
+    "block_content": "La «sociología» de Comte sigue siendo una especie de «física» (cuyo carácter de tal es concebido de un modo más o menos confuso). Si una consideración positivista de la historia es posible, la ausencia de tal consideración en Comte se hace patente en el hecho de que, cuando Comte habla de algo así como la historia, emplea nociones que de «positivismo» no tienen otra cosa que la banalidad que sin duda tienen: el «progreso», el «perfeccionamiento» de la humanidad y «creciente predominio de las tendencias más nobles de nuestra naturaleza», etc., todo ello cosas que no son en absoluto de naturaleza «positiva» y que son simplemente producto de una metafísica barata."
+   },
+   {
+    "block_bbox": [
+     179,
+     1381,
+     1621,
+     1923
+    ],
+    "block_label": "text",
+    "block_content": "Sin embargo, a mediados del siglo XIX, y precisamente en Alemania, el ideal positivista penetra en campos que, al menos en principio, no son el de «la naturaleza». Es por entonces cuando G. Th. Fechner funda la psicología experimental; pero lo que Fechner fundamentalmente hace es establecer, sobre la base de ciertos convenios, una manera coherente de atribuir cantidad a las sensaciones; por lo tanto, su obra se sitúa en el camino de la reducción de toda ciencia al modo de objetividad regido por la matemática. Mucha más importancia (desde el punto de vista de lo que ahora nos ocupa) tiene la aparición de una especie de positivismo en la investigación histórica; es la llamada «escuela histórica» (citemos a Leopold von Ranke), cuya atmosfera respira Dilthey."
+   },
+   {
+    "block_bbox": [
+     186,
+     1915,
+     1622,
+     2108
+    ],
+    "block_label": "text",
+    "block_content": "El propio Dilthey pertenece en cierta manera al ámbito del positivismo; más exactamente: pertenece sólo en la medida en que se siente liberado, gracias al positivismo, de las cadenas metafísicas que hasta entonces hacían imposible una verdadera ciencia histórica; así:"
+   },
+   {
+    "block_bbox": [
+     189,
+     2117,
+     1623,
+     2309
+    ],
+    "block_label": "text",
+    "block_content": "1. Dilthey rechaza toda «metafísica de la historia», entendiendo por tal toda noción de un «sentido último» de la historia, no importa quase «sentido último» tenga el carácter de un «fin» o el de un proceso subyacente o el de cualquier otra cosa."
+   },
+   {
+    "block_bbox": [
+     190,
+     2305,
+     1626,
+     2456
+    ],
+    "block_label": "text",
+    "block_content": "2. Dilthey rechaza la aplicación a la historia de nociones suprahistóricas. Si se admite, por ejemplo, «la naturaleza humana» como algo que tiene que ser común al hombre del siglo XIX, al griego arcaico y al"
+   },
+   {
+    "block_bbox": [
+     199,
+     2508,
+     301,
+     2559
+    ],
+    "block_label": "number",
+    "block_content": "432"
+   }
+  ]
+ }
+}

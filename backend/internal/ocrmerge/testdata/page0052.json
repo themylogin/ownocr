@@ -1,0 +1,323 @@
+{
+ "book": 3313,
+ "page": 52,
+ "note": "v6 detected 27 of the 32 lines: two above the first line of the text block, three inside it, and the first line of the footnote. VL read every one. The page is a left half of a spread the dewarp left curved.",
+ "v6": {
+  "lines": [
+   {
+    "bbox": [
+     410,
+     152,
+     485,
+     217
+    ],
+    "text": "52",
+    "score": 0.9999933838844299
+   },
+   {
+    "bbox": [
+     999,
+     157,
+     1388,
+     215
+    ],
+    "text": "LA COSA Y EL RELATO",
+    "score": 0.9973663687705994
+   },
+   {
+    "bbox": [
+     425,
+     415,
+     2025,
+     520
+    ],
+    "text": "ellas con gracia (kháris), con la mayor flexibilidad o versati-",
+    "score": 0.9917035102844238
+   },
+   {
+    "bbox": [
+     420,
+     709,
+     2028,
+     806
+    ],
+    "text": "su irreductibilidad, esto es, en su ser; y también aquí aflora",
+    "score": 0.9852948188781738
+   },
+   {
+    "bbox": [
+     422,
+     783,
+     2027,
+     879
+    ],
+    "text": "el que precisamente ese reconocimiento genera un espacio",
+    "score": 0.9999408721923828
+   },
+   {
+    "bbox": [
+     418,
+     858,
+     2025,
+     953
+    ],
+    "text": "uniforme, por lo tanto un ilimitado y la tendencia reduc-",
+    "score": 0.9999440312385559
+   },
+   {
+    "bbox": [
+     420,
+     937,
+     2024,
+     1022
+    ],
+    "text": "tora; y también aquí esto, como el substraerse que es inhe-",
+    "score": 0.9935110211372375
+   },
+   {
+    "bbox": [
+     417,
+     997,
+     2032,
+     1104
+    ],
+    "text": "rente a la comparecencia o tener lugar de lo siempre ya",
+    "score": 0.9999732971191406
+   },
+   {
+    "bbox": [
+     423,
+     1086,
+     2029,
+     1167
+    ],
+    "text": "supuesto, se expresa, como ya desde el comienzo mismo del",
+    "score": 0.9972565174102783
+   },
+   {
+    "bbox": [
+     420,
+     1149,
+     2028,
+     1245
+    ],
+    "text": "presente discurso de Pericles (cfr. nuestro capítulo 4),",
+    "score": 0.9998788833618164
+   },
+   {
+    "bbox": [
+     418,
+     1221,
+     2032,
+     1318
+    ],
+    "text": "mediante la contraposición de érgon a lógos (II, 41, 2), incluso",
+    "score": 0.9910358190536499
+   },
+   {
+    "bbox": [
+     420,
+     1295,
+     2031,
+     1395
+    ],
+    "text": "empleando de nuevo cierto recurso ya antes asociado a esa",
+    "score": 0.998481273651123
+   },
+   {
+    "bbox": [
+     419,
+     1377,
+     2025,
+     1461
+    ],
+    "text": "contraposición y que ya conocemos: en efecto, el que la",
+    "score": 0.9892259836196899
+   },
+   {
+    "bbox": [
+     421,
+     1449,
+     2018,
+     1533
+    ],
+    "text": "cuestión escapa a la determinación y tiene que ver con espa-",
+    "score": 0.9958181381225586
+   },
+   {
+    "bbox": [
+     420,
+     1521,
+     2019,
+     1605
+    ],
+    "text": "cio uniforme y con tendencia a la ilimitación se expresa",
+    "score": 0.9992295503616333
+   },
+   {
+    "bbox": [
+     417,
+     1597,
+     2014,
+     1678
+    ],
+    "text": "remitiendo de lógos a otro término, diciendo, pues, que lo",
+    "score": 0.9884940385818481
+   },
+   {
+    "bbox": [
+     413,
+     1665,
+     2011,
+     1757
+    ],
+    "text": "peculiar o atrevido de ello no es hinchazón o énfasis (kómpos,",
+    "score": 0.9881693124771118
+   },
+   {
+    "bbox": [
+     417,
+     1740,
+     2010,
+     1831
+    ],
+    "text": "ibid.) dentro del propio ámbito lógoi, sino que es lo otro, lo",
+    "score": 0.998069167137146
+   },
+   {
+    "bbox": [
+     416,
+     1806,
+     2010,
+     1907
+    ],
+    "text": "cual, además de ser caracterizado como el ámbito érga, es",
+    "score": 0.999518871307373
+   },
+   {
+    "bbox": [
+     418,
+     1885,
+     2002,
+     1981
+    ],
+    "text": "designado como alétheia (ibid.), tal como ya ocurría -y así lo",
+    "score": 0.9921759366989136
+   },
+   {
+    "bbox": [
+     412,
+     1956,
+     1997,
+     2058
+    ],
+    "text": "vimos— en el comienzo del mismo discurso de Pericles y pre-",
+    "score": 0.9889273047447205
+   },
+   {
+    "bbox": [
+     414,
+     2041,
+     1995,
+     2130
+    ],
+    "text": "cisamente a propósito de la cuestión de si procedía decir un",
+    "score": 0.9980262517929077
+   },
+   {
+    "bbox": [
+     413,
+     2111,
+     1992,
+     2207
+    ],
+    "text": "decir en vez de remitir todo a érga. Nuevo, en comparación",
+    "score": 0.9966909885406494
+   },
+   {
+    "bbox": [
+     411,
+     2189,
+     1987,
+     2278
+    ],
+    "text": "con la presencia anterior de esto mismo en el mismo dis-",
+    "score": 0.999984860420227
+   },
+   {
+    "bbox": [
+     408,
+     2260,
+     1985,
+     2359
+    ],
+    "text": "curso de Pericles, es el que ahora con ello se relaciona expre-",
+    "score": 0.9999772310256958
+   },
+   {
+    "bbox": [
+     400,
+     2334,
+     1984,
+     2445
+    ],
+    "text": "samente lo que en nuestra precedente exposición ha apare-",
+    "score": 0.9927384853363037
+   },
+   {
+    "bbox": [
+     446,
+     2664,
+     1490,
+     2771
+    ],
+    "text": "cular capítulo 4 con referencia a los capítulos 1 y 2.",
+    "score": 0.9996092319488525
+   }
+  ]
+ },
+ "vl": {
+  "parsing_res_list": [
+   {
+    "block_bbox": [
+     413,
+     159,
+     484,
+     213
+    ],
+    "block_label": "number",
+    "block_content": "52"
+   },
+   {
+    "block_bbox": [
+     992,
+     160,
+     1396,
+     219
+    ],
+    "block_label": "header",
+    "block_content": "LA COSA Y EL RELATO"
+   },
+   {
+    "block_bbox": [
+     397,
+     272,
+     2037,
+     2443
+    ],
+    "block_label": "text",
+    "block_content": "aspecto, es entre nosotros (i. e.: en Atenas) donde el mismo hombre puede en mayor diversidad de formas, y en todas ellas con gracia (kháris)², con la mayor flexibilidad o versatilidad mostrar su cuerpo de manera autónoma» (II,41,1). Nuevamente estamos ante la alusión a un espacio que deja aparecer cada cosa que aparece, y precisamente cada cosa en su irreductibilidad, esto es, en su ser; y también aquí afora el que precisamente ese reconocimiento genera un espacio uniforme, por lo tanto un ilimitado y la tendencia reductora; y también aquí esto, como el substraerse que es inherentente a la comparecencia o tener lugar de lo siempre ya supuesto, se expresa, como ya desde el comienzo mismo del presente discurso de Pericles (cfr. nuestro capítulo 4), mediante la contraposición de érgon a lógos (II,41,2), incluso empleando de nuevo cierto recurso ya antes asociado a esa contraposición y que ya conocemos: en efecto, el que la cuestión escapa a la determinación y tiene que ver con espacio uniforme y con tendencia a la ilimitación se expresa remitiendo de lógos a otro término, diciendo, pues, que lo peculiar o atrevido de ello no es hinchazón o énfasis (kómpos, ibid.) dentro del propio ámbito lógoi, sino que es lo otro, lo cual, además de ser caracterizado como el ámbito érgos, es designado como alétheia (ibid.), tal como ya ocurria -y así lo vimos- en el comienzo del mismo discurso de Pericles y precisamente a propósito de la cuestión de si procedía decir un decir en vez de remitir todo a érgos. Nuevo, en comparación con la presencia anterior de esto mismo en el mismo discurso de Pericles, es el que ahora con ello se relaciona expresamente lo que en nuestra precedente exposición ha apare-"
+   },
+   {
+    "block_bbox": [
+     366,
+     2608,
+     1960,
+     2776
+    ],
+    "block_label": "footnote",
+    "block_content": "22 A propósito de las conexiones de esta palabra, cfr. mi El decir griego, en particular capítulo 4 con referencia a los capítulos 1 y 2."
+   }
+  ]
+ }
+}

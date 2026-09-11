@@ -1,0 +1,423 @@
+{
+ "book": 17,
+ "page": 116,
+ "note": "v6 read two nearly full width footnote rows as 12 and 9 runes of noise, `4mbe,a,dlSd,` and `auEll Mdr`, while VL read both correctly. The length gate measures a piece against the runes v6 got out of the line, so on a line v6 failed at it refuses the reading that is right.",
+ "v6": {
+  "lines": [
+   {
+    "bbox": [
+     262,
+     158,
+     368,
+     253
+    ],
+    "text": "II6",
+    "score": 0.8248688578605652
+   },
+   {
+    "bbox": [
+     887,
+     161,
+     1273,
+     233
+    ],
+    "text": "LA COSA Y EL RELATO",
+    "score": 0.9951127767562866
+   },
+   {
+    "bbox": [
+     267,
+     317,
+     1880,
+     443
+    ],
+    "text": "una con la citada secuencia de «géneros» y dentro de ella, a",
+    "score": 0.9849241971969604
+   },
+   {
+    "bbox": [
+     273,
+     399,
+     1885,
+     532
+    ],
+    "text": "saber, la historíe, de la que ya ha quedado claro que ni es la",
+    "score": 0.9890946745872498
+   },
+   {
+    "bbox": [
+     275,
+     481,
+     1887,
+     618
+    ],
+    "text": "«historia» ni es tampoco algo tal que pudiese ser casual el",
+    "score": 0.9947914481163025
+   },
+   {
+    "bbox": [
+     275,
+     569,
+     1582,
+     684
+    ],
+    "text": "que de su nombre deriven tanto history como story.",
+    "score": 0.9999762177467346
+   },
+   {
+    "bbox": [
+     355,
+     644,
+     1889,
+     774
+    ],
+    "text": "Con todo ello, sin duda, se ha estado hablando de una",
+    "score": 0.9998701810836792
+   },
+   {
+    "bbox": [
+     275,
+     730,
+     1887,
+     849
+    ],
+    "text": "«distancia» que a la vez es todo lo contrario de tener alguna",
+    "score": 0.9650879502296448
+   },
+   {
+    "bbox": [
+     278,
+     818,
+     1887,
+     929
+    ],
+    "text": "otra parte en la que estar. Por otro lado, se ofreció también",
+    "score": 0.9470071196556091
+   },
+   {
+    "bbox": [
+     278,
+     898,
+     1883,
+     1004
+    ],
+    "text": "una manera de entender desde estas consideraciones lo espe-",
+    "score": 0.9907842874526978
+   },
+   {
+    "bbox": [
+     282,
+     980,
+     1894,
+     1090
+    ],
+    "text": "cíficamente moderno, entendiendo que la imposibilidad",
+    "score": 0.9992338418960571
+   },
+   {
+    "bbox": [
+     278,
+     1048,
+     1900,
+     1187
+    ],
+    "text": "de documentar definitivamente especial conexión alguna de",
+    "score": 0.9927461743354797
+   },
+   {
+    "bbox": [
+     282,
+     1134,
+     1894,
+     1260
+    ],
+    "text": "algo con algo es a la vez la experiencia del vínculo de todo",
+    "score": 0.9978416562080383
+   },
+   {
+    "bbox": [
+     282,
+     1216,
+     1894,
+     1342
+    ],
+    "text": "con todo, y que, por lo tanto, el inmediato sentir y vivir en la",
+    "score": 0.9228886961936951
+   },
+   {
+    "bbox": [
+     282,
+     1293,
+     1883,
+     1421
+    ],
+    "text": "soledad irremediable de cada punto es la única certeza posi-",
+    "score": 0.9895330667495728
+   },
+   {
+    "bbox": [
+     286,
+     1379,
+     1883,
+     1498
+    ],
+    "text": "ble de uno-todo, en cuanto que precisamente esa inmediatez",
+    "score": 0.9809773564338684
+   },
+   {
+    "bbox": [
+     286,
+     1459,
+     1871,
+     1576
+    ],
+    "text": "comporta distancia frente al contenido tematizable, de",
+    "score": 0.9993988275527954
+   },
+   {
+    "bbox": [
+     278,
+     1534,
+     1867,
+     1660
+    ],
+    "text": "manera que el retorno a esa inmediatez desde la tematización",
+    "score": 0.9228756427764893
+   },
+   {
+    "bbox": [
+     278,
+     1609,
+     1865,
+     1739
+    ],
+    "text": "de contenidos (la «impresión de reflexión») comporta",
+    "score": 0.9912480711936951
+   },
+   {
+    "bbox": [
+     280,
+     1695,
+     1858,
+     1814
+    ],
+    "text": "posibilidades que en su lugar se describenDentro de lo",
+    "score": 0.9546949863433838
+   },
+   {
+    "bbox": [
+     280,
+     1770,
+     1856,
+     1889
+    ],
+    "text": "que en esta línea se encuentra, es especialmente importante",
+    "score": 0.8911138772964478
+   },
+   {
+    "bbox": [
+     275,
+     1843,
+     1858,
+     1977
+    ],
+    "text": "en nuesro actual contet la relecra que allí se ecede",
+    "score": 0.7067508697509766
+   },
+   {
+    "bbox": [
+     275,
+     1924,
+     1849,
+     2066
+    ],
+    "text": "rasgo matemático-experimental (en cierta manera en con-",
+    "score": 0.9984757900238037
+   },
+   {
+    "bbox": [
+     280,
+     2006,
+     1849,
+     2145
+    ],
+    "text": "ic cn émimo, ya que etender es disancia), relectura",
+    "score": 0.7805968523025513
+   },
+   {
+    "bbox": [
+     280,
+     2088,
+     1843,
+     2231
+    ],
+    "text": "en la que la uniformidad (cualquier punto es en principio",
+    "score": 0.9956446290016174
+   },
+   {
+    "bbox": [
+     282,
+     2178,
+     1836,
+     2302
+    ],
+    "text": "igual que cualquier otro, etcétera) no interesa como posi-",
+    "score": 0.9989477396011353
+   },
+   {
+    "bbox": [
+     282,
+     2258,
+     1834,
+     2384
+    ],
+    "text": "ción, de la cual pudiesen derivar postulados, sino única-",
+    "score": 0.9995233416557312
+   },
+   {
+    "bbox": [
+     282,
+     2346,
+     1827,
+     2463
+    ],
+    "text": "mente como desvinculación y, en este sentido, como consu-",
+    "score": 0.997042715549469
+   },
+   {
+    "bbox": [
+     289,
+     2430,
+     770,
+     2527
+    ],
+    "text": "mación de la sképsis.",
+    "score": 0.9996293187141418
+   },
+   {
+    "bbox": [
+     284,
+     2699,
+     1812,
+     2836
+    ],
+    "text": "4mbé,a,dlSd,",
+    "score": 0.5541970729827881
+   },
+   {
+    "bbox": [
+     375,
+     2768,
+     536,
+     2838
+    ],
+    "text": "2008).",
+    "score": 0.9999138712882996
+   },
+   {
+    "bbox": [
+     284,
+     2812,
+     1803,
+     2964
+    ],
+    "text": "auEll Mdr",
+    "score": 0.5476389527320862
+   },
+   {
+    "bbox": [
+     373,
+     2885,
+     538,
+     2953
+    ],
+    "text": "2009).",
+    "score": 0.9990962147712708
+   },
+   {
+    "bbox": [
+     289,
+     2936,
+     560,
+     3013
+    ],
+    "text": "51 Cfr. ibid.",
+    "score": 0.9589390158653259
+   }
+  ]
+ },
+ "vl": {
+  "parsing_res_list": [
+   {
+    "block_bbox": [
+     275,
+     180,
+     363,
+     244
+    ],
+    "block_label": "number",
+    "block_content": "116"
+   },
+   {
+    "block_bbox": [
+     886,
+     177,
+     1277,
+     231
+    ],
+    "block_label": "header",
+    "block_content": "LA COSA Y EL RELATO"
+   },
+   {
+    "block_bbox": [
+     274,
+     334,
+     1884,
+     667
+    ],
+    "block_label": "text",
+    "block_content": "una con la citada secuencia de «géneros» y dentro de ella, a saber, la historíe, de la que ya ha quedado claro que ni es la «historia» ni es tampoco algo tal que pudiese ser casual el que de su nombre deriven tanto history como story."
+   },
+   {
+    "block_bbox": [
+     276,
+     665,
+     1889,
+     2532
+    ],
+    "block_label": "text",
+    "block_content": "Con todo ello, sin duda, se ha estado hablando de una «distancia» que a la vez es todo lo contrario de tener alguna otra parte en la que estar $ ^{49} $. Por otro lado, se ofreció también una manera de entender desde estas consideraciones lo específicamente moderno, entendiendo que la imposibilidad de documentar definitivamente especial conexión alguna de algo con algo es a la vez la experiencia del vínculo de todo con todo, y que, por lo tanto, el inmediato sentir y vivir en la soledad irremediable de cada punto es la única certeza posible de uno-todo, en cuanto que precisamente esa inmediatez comporta distancia frente al contenido tematizable, de manera que el retorno a esa inmediatez desde la tematización de contenidos (la «impresión de reflexión») comporta posibilidades que en su lugar se describen $ ^{50} $. Dentro de lo que en esta línea se encuentra, es especialmente importante en nuestro actual contexto la relectura que allí se ofrece $ ^{51} $ del rasgo matemático-experimental (en cierta manera en conflicto con él mismo, ya que entender es distancia), relectura en la que la uniformidad (cualquier punto es en principio igual que cualquier otro, etcétera) no interesa como posición, de la cual pudiesen derivar postulados, sino únicamente como desvinculación y, en este sentido, como consumación de la sképsis."
+   },
+   {
+    "block_bbox": [
+     296,
+     2713,
+     1810,
+     2875
+    ],
+    "block_label": "footnote",
+    "block_content": "49 Ctr. también, a este respecto, mi El concepto de lo civil (Santiago de Chile, 2008)."
+   },
+   {
+    "block_bbox": [
+     297,
+     2832,
+     1804,
+     2999
+    ],
+    "block_label": "footnote",
+    "block_content": "5º Cfr. para todo ello mi Pasión tranquila (Ensayo sobre la filosofía de Hume) (Madrid, 2009)."
+   },
+   {
+    "block_bbox": [
+     303,
+     2948,
+     558,
+     3012
+    ],
+    "block_label": "footnote",
+    "block_content": "51 Cfr. ibid."
+   }
+  ]
+ }
+}
