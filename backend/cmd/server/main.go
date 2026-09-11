@@ -84,11 +84,13 @@ func run() error {
 		APIURL:   cfg.Dewarp.APIURL,
 		APIToken: cfg.Dewarp.APIToken,
 	}))
-	river.AddWorker(workers, ocr.NewWorker(store, files, hub, objects, ocr.Settings{
+	ocrSettings := ocr.Settings{
 		Settings: objectstore.Settings(cfg.S3),
 		APIURL:   cfg.OCR.APIURL,
 		APIToken: cfg.OCR.APIToken,
-	}))
+	}
+	river.AddWorker(workers, ocr.NewWorker(store, files, hub, objects, ocrSettings))
+	river.AddWorker(workers, ocr.NewRescanWorker(store, files, hub, objects, ocrSettings))
 
 	queueClient, err := queue.New(pool, workers, cfg.Workers)
 	if err != nil {
