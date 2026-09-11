@@ -1,0 +1,991 @@
+{
+ "book": 17,
+ "page": 102,
+ "note": "a footnote of two rows, whose own two anchors stand 24 pixels apart where its print stands 60 apart, so its own rows can measure no pitch",
+ "v6": {
+  "lines": [
+   {
+    "bbox": [
+     302,
+     185,
+     411,
+     252
+    ],
+    "text": "102",
+    "score": 0.9878354668617249
+   },
+   {
+    "bbox": [
+     905,
+     143,
+     1304,
+     231
+    ],
+    "text": "LA COSA Y EL RELATO",
+    "score": 0.9773594737052917
+   },
+   {
+    "bbox": [
+     317,
+     293,
+     1899,
+     412
+    ],
+    "text": "decimos que «relata» o «cuenta» y que es «en prosa».",
+    "score": 0.9866985082626343
+   },
+   {
+    "bbox": [
+     314,
+     371,
+     1905,
+     491
+    ],
+    "text": "Esto, ciertamente, no lo dice en sí misma la palabra historie,",
+    "score": 0.9838739633560181
+   },
+   {
+    "bbox": [
+     317,
+     456,
+     1905,
+     567
+    ],
+    "text": "pero ya anteriormente se había expuesto cómo esta palabra,",
+    "score": 0.9804168343544006
+   },
+   {
+    "bbox": [
+     320,
+     535,
+     1908,
+     633
+    ],
+    "text": "en virtud de lo que ella misma sí dice, expresa en cierto con-",
+    "score": 0.9925455451011658
+   },
+   {
+    "bbox": [
+     323,
+     613,
+     1914,
+     703
+    ],
+    "text": "texto lo que sí es un momento esencial en la problemática",
+    "score": 0.9896814227104187
+   },
+   {
+    "bbox": [
+     323,
+     689,
+     1914,
+     778
+    ],
+    "text": "del decir relevante39, y ahora, en el presente libro, nuestro",
+    "score": 0.9978032112121582
+   },
+   {
+    "bbox": [
+     323,
+     759,
+     1917,
+     857
+    ],
+    "text": "esfuerzo se ha centrado en cómo lo propio del decir rele-",
+    "score": 0.9999725222587585
+   },
+   {
+    "bbox": [
+     317,
+     825,
+     1918,
+     935
+    ],
+    "text": "vante se cumple en Heródoto y Tucídides en el modo de algo",
+    "score": 0.9894957542419434
+   },
+   {
+    "bbox": [
+     323,
+     898,
+     1924,
+     1014
+    ],
+    "text": "que en nuestra manera de hablar se describe como el relato",
+    "score": 0.9930012226104736
+   },
+   {
+    "bbox": [
+     326,
+     973,
+     1924,
+     1087
+    ],
+    "text": "de una guerra. La diferencia de Heródoto a Tucídides, en la",
+    "score": 0.9974057078361511
+   },
+   {
+    "bbox": [
+     326,
+     1041,
+     1930,
+     1168
+    ],
+    "text": "que hemos insistido, se traduce no sólo en que la guerra sea",
+    "score": 0.9976814389228821
+   },
+   {
+    "bbox": [
+     326,
+     1111,
+     1927,
+     1244
+    ],
+    "text": "distinta y el decir en su relación con ella lo sea igualmente,",
+    "score": 0.9963046312332153
+   },
+   {
+    "bbox": [
+     329,
+     1189,
+     1927,
+     1307
+    ],
+    "text": "sino también en que el ceñirse a la guerra misma, que en",
+    "score": 0.9958226084709167
+   },
+   {
+    "bbox": [
+     334,
+     1270,
+     1918,
+     1366
+    ],
+    "text": "Tucídides es ya inmediato, culmina en Heródoto una habi-",
+    "score": 0.9995719790458679
+   },
+   {
+    "bbox": [
+     331,
+     1345,
+     1705,
+     1445
+    ],
+    "text": "tación de la distancia y del espacio de peregrinaje4o.",
+    "score": 0.9888732433319092
+   },
+   {
+    "bbox": [
+     402,
+     1413,
+     1921,
+     1528
+    ],
+    "text": "Si determinados títulos anacrónicos, que tenemos que",
+    "score": 0.9922255873680115
+   },
+   {
+    "bbox": [
+     334,
+     1496,
+     1911,
+     1593
+    ],
+    "text": "emplear sin perder de vista que lo son, se emplean en cambio",
+    "score": 0.9876235723495483
+   },
+   {
+    "bbox": [
+     331,
+     1567,
+     1905,
+     1663
+    ],
+    "text": "con carácter positivo, esto es, asumiendo como criterios los",
+    "score": 0.9999840259552002
+   },
+   {
+    "bbox": [
+     329,
+     1634,
+     1899,
+     1741
+    ],
+    "text": "significados que ciertas palabras en abstracto tienen en nues-",
+    "score": 0.9998829960823059
+   },
+   {
+    "bbox": [
+     332,
+     1707,
+     1890,
+     1820
+    ],
+    "text": "tras lenguas, entonces lo hasta aquí dicho tropieza con obje-",
+    "score": 0.994328498840332
+   },
+   {
+    "bbox": [
+     332,
+     1779,
+     1890,
+     1893
+    ],
+    "text": "ciones tan obvias como, por ejemplo, la de que el relato en",
+    "score": 0.9966326355934143
+   },
+   {
+    "bbox": [
+     335,
+     1855,
+     1883,
+     1968
+    ],
+    "text": "cuanto género poético es en principio relato «de ficción»",
+    "score": 0.9925106763839722
+   },
+   {
+    "bbox": [
+     335,
+     1927,
+     1880,
+     2054
+    ],
+    "text": "(o, al menos, su condición permite que lo sea), mientras que",
+    "score": 0.993540346622467
+   },
+   {
+    "bbox": [
+     335,
+     2006,
+     1877,
+     2127
+    ],
+    "text": "a Heródoto y Tucídides los valoramos (en su caso los discu-",
+    "score": 0.9995866417884827
+   },
+   {
+    "bbox": [
+     335,
+     2085,
+     1880,
+     2212
+    ],
+    "text": "timos) como autores que pretenderían relatar «lo que en",
+    "score": 0.9996634125709534
+   },
+   {
+    "bbox": [
+     335,
+     2163,
+     1877,
+     2287
+    ],
+    "text": "verdad ocurrió». La objeción es interesante porque nos",
+    "score": 0.9917163848876953
+   },
+   {
+    "bbox": [
+     335,
+     2239,
+     1877,
+     2366
+    ],
+    "text": "obliga a recordar expresamente cosas ya muchas veces dichas y",
+    "score": 0.9999808073043823
+   },
+   {
+    "bbox": [
+     335,
+     2311,
+     1874,
+     2447
+    ],
+    "text": "desarrolladas y en las cuales está implicado que un concepto",
+    "score": 0.9998182654380798
+   },
+   {
+    "bbox": [
+     335,
+     2379,
+     1874,
+     2534
+    ],
+    "text": "de «ficción», y por lo tanto un correspondiente concepto de",
+    "score": 0.9993805885314941
+   },
+   {
+    "bbox": [
+     341,
+     2641,
+     1410,
+     2782
+    ],
+    "text": "39 Cfr. mi El decir griego, ya citado, en especial capítulo 8.",
+    "score": 0.9990367889404297
+   },
+   {
+    "bbox": [
+     341,
+     2701,
+     592,
+     2769
+    ],
+    "text": "40 Cfr. ibid.",
+    "score": 0.995756983757019
+   }
+  ],
+  "raw": {
+   "dt_polys": [
+    [
+     [
+      302.3999938964844,
+      185.9759979248047
+     ],
+     [
+      411.2640075683594,
+      185.9759979248047
+     ],
+     [
+      411.2640075683594,
+      252.50401306152344
+     ],
+     [
+      302.3999938964844,
+      252.50401306152344
+     ]
+    ],
+    [
+     [
+      905.6880493164062,
+      164.80799865722656
+     ],
+     [
+      1301.83203125,
+      143.63999938964844
+     ],
+     [
+      1304.8560791015625,
+      210.16799926757812
+     ],
+     [
+      910.2239990234375,
+      231.3360137939453
+     ]
+    ],
+    [
+     [
+      317.52001953125,
+      311.4720153808594
+     ],
+     [
+      1899.072021484375,
+      293.3280029296875
+     ],
+     [
+      1899.072021484375,
+      393.1200256347656
+     ],
+     [
+      319.0320129394531,
+      412.7760009765625
+     ]
+    ],
+    [
+     [
+      314.4960021972656,
+      381.0240173339844
+     ],
+     [
+      1905.1201171875,
+      371.9519958496094
+     ],
+     [
+      1905.1201171875,
+      482.3280029296875
+     ],
+     [
+      316.00799560546875,
+      491.4000244140625
+     ]
+    ],
+    [
+     [
+      317.52001953125,
+      470.2320251464844
+     ],
+     [
+      1905.1201171875,
+      456.6240234375
+     ],
+     [
+      1905.1201171875,
+      554.9039916992188
+     ],
+     [
+      319.0320129394531,
+      567.0
+     ]
+    ],
+    [
+     [
+      320.54400634765625,
+      545.83203125
+     ],
+     [
+      1908.14404296875,
+      535.2479858398438
+     ],
+     [
+      1908.14404296875,
+      622.9440307617188
+     ],
+     [
+      322.0559997558594,
+      633.5280151367188
+     ]
+    ],
+    [
+     [
+      323.5680236816406,
+      613.8720092773438
+     ],
+     [
+      1914.1920166015625,
+      613.8720092773438
+     ],
+     [
+      1914.1920166015625,
+      703.0800170898438
+     ],
+     [
+      323.5680236816406,
+      703.0800170898438
+     ]
+    ],
+    [
+     [
+      323.5680236816406,
+      689.4720458984375
+     ],
+     [
+      1914.1920166015625,
+      689.4720458984375
+     ],
+     [
+      1914.1920166015625,
+      778.6799926757812
+     ],
+     [
+      323.5680236816406,
+      778.6799926757812
+     ]
+    ],
+    [
+     [
+      323.5680236816406,
+      759.0240478515625
+     ],
+     [
+      1917.216064453125,
+      759.0240478515625
+     ],
+     [
+      1917.216064453125,
+      857.3040161132812
+     ],
+     [
+      323.5680236816406,
+      857.3040161132812
+     ]
+    ],
+    [
+     [
+      319.0320129394531,
+      825.552001953125
+     ],
+     [
+      1918.72802734375,
+      837.6480102539062
+     ],
+     [
+      1917.216064453125,
+      935.9280395507812
+     ],
+     [
+      317.52001953125,
+      922.3200073242188
+     ]
+    ],
+    [
+     [
+      325.08001708984375,
+      898.1280517578125
+     ],
+     [
+      1924.7760009765625,
+      913.248046875
+     ],
+     [
+      1923.2640380859375,
+      1014.552001953125
+     ],
+     [
+      323.5680236816406,
+      997.9200439453125
+     ]
+    ],
+    [
+     [
+      328.10400390625,
+      973.72802734375
+     ],
+     [
+      1924.7760009765625,
+      988.8480224609375
+     ],
+     [
+      1923.2640380859375,
+      1087.1280517578125
+     ],
+     [
+      326.5920104980469,
+      1070.4959716796875
+     ]
+    ],
+    [
+     [
+      328.10400390625,
+      1041.76806640625
+     ],
+     [
+      1930.8240966796875,
+      1058.4000244140625
+     ],
+     [
+      1929.31201171875,
+      1168.7760009765625
+     ],
+     [
+      326.5920104980469,
+      1152.14404296875
+     ]
+    ],
+    [
+     [
+      328.10400390625,
+      1111.320068359375
+     ],
+     [
+      1927.800048828125,
+      1134.0
+     ],
+     [
+      1926.2880859375,
+      1244.3759765625
+     ],
+     [
+      326.5920104980469,
+      1221.696044921875
+     ]
+    ],
+    [
+     [
+      331.1280212402344,
+      1189.944091796875
+     ],
+     [
+      1927.800048828125,
+      1212.6240234375
+     ],
+     [
+      1926.2880859375,
+      1307.8800048828125
+     ],
+     [
+      329.6159973144531,
+      1285.2000732421875
+     ]
+    ],
+    [
+     [
+      334.1520080566406,
+      1270.080078125
+     ],
+     [
+      1918.72802734375,
+      1276.1280517578125
+     ],
+     [
+      1917.216064453125,
+      1366.8480224609375
+     ],
+     [
+      334.1520080566406,
+      1360.800048828125
+     ]
+    ],
+    [
+     [
+      331.1280212402344,
+      1345.6800537109375
+     ],
+     [
+      1705.5360107421875,
+      1345.6800537109375
+     ],
+     [
+      1705.5360107421875,
+      1445.4720458984375
+     ],
+     [
+      331.1280212402344,
+      1445.4720458984375
+     ]
+    ],
+    [
+     [
+      402.1920166015625,
+      1413.7200927734375
+     ],
+     [
+      1921.7520751953125,
+      1421.280029296875
+     ],
+     [
+      1920.2401123046875,
+      1528.632080078125
+     ],
+     [
+      402.1920166015625,
+      1521.072021484375
+     ]
+    ],
+    [
+     [
+      334.1520080566406,
+      1496.8800048828125
+     ],
+     [
+      1911.1680908203125,
+      1496.8800048828125
+     ],
+     [
+      1911.1680908203125,
+      1593.6480712890625
+     ],
+     [
+      334.1520080566406,
+      1593.6480712890625
+     ]
+    ],
+    [
+     [
+      331.1280212402344,
+      1567.944091796875
+     ],
+     [
+      1905.1201171875,
+      1575.5040283203125
+     ],
+     [
+      1905.1201171875,
+      1663.2000732421875
+     ],
+     [
+      331.1280212402344,
+      1657.152099609375
+     ]
+    ],
+    [
+     [
+      331.1280212402344,
+      1634.4720458984375
+     ],
+     [
+      1899.072021484375,
+      1645.0560302734375
+     ],
+     [
+      1899.072021484375,
+      1741.8240966796875
+     ],
+     [
+      329.6159973144531,
+      1732.7520751953125
+     ]
+    ],
+    [
+     [
+      334.1520080566406,
+      1707.048095703125
+     ],
+     [
+      1890.0,
+      1729.72802734375
+     ],
+     [
+      1888.488037109375,
+      1820.447998046875
+     ],
+     [
+      332.6400146484375,
+      1797.76806640625
+     ]
+    ],
+    [
+     [
+      334.1520080566406,
+      1779.6240234375
+     ],
+     [
+      1890.0,
+      1805.3280029296875
+     ],
+     [
+      1888.488037109375,
+      1893.0240478515625
+     ],
+     [
+      332.6400146484375,
+      1867.320068359375
+     ]
+    ],
+    [
+     [
+      337.1759948730469,
+      1855.2239990234375
+     ],
+     [
+      1883.9520263671875,
+      1880.9281005859375
+     ],
+     [
+      1882.4400634765625,
+      1968.6240234375
+     ],
+     [
+      335.66400146484375,
+      1942.9200439453125
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      1927.800048828125
+     ],
+     [
+      1880.9281005859375,
+      1965.60009765625
+     ],
+     [
+      1879.416015625,
+      2054.80810546875
+     ],
+     [
+      335.66400146484375,
+      2015.49609375
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      2006.424072265625
+     ],
+     [
+      1877.904052734375,
+      2041.2000732421875
+     ],
+     [
+      1876.39208984375,
+      2127.384033203125
+     ],
+     [
+      335.66400146484375,
+      2091.095947265625
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      2085.048095703125
+     ],
+     [
+      1880.9281005859375,
+      2124.360107421875
+     ],
+     [
+      1879.416015625,
+      2212.05615234375
+     ],
+     [
+      335.66400146484375,
+      2172.744140625
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      2163.672119140625
+     ],
+     [
+      1877.904052734375,
+      2209.031982421875
+     ],
+     [
+      1876.39208984375,
+      2287.656005859375
+     ],
+     [
+      335.66400146484375,
+      2242.296142578125
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      2239.27197265625
+     ],
+     [
+      1877.904052734375,
+      2281.608154296875
+     ],
+     [
+      1876.39208984375,
+      2366.280029296875
+     ],
+     [
+      335.66400146484375,
+      2323.944091796875
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      2311.84814453125
+     ],
+     [
+      1874.8800048828125,
+      2360.232177734375
+     ],
+     [
+      1871.8560791015625,
+      2447.927978515625
+     ],
+     [
+      335.66400146484375,
+      2399.544189453125
+     ]
+    ],
+    [
+     [
+      338.6880187988281,
+      2379.88818359375
+     ],
+     [
+      1874.8800048828125,
+      2435.83203125
+     ],
+     [
+      1871.8560791015625,
+      2534.112060546875
+     ],
+     [
+      335.66400146484375,
+      2478.16796875
+     ]
+    ],
+    [
+     [
+      346.2480163574219,
+      2641.464111328125
+     ],
+     [
+      1410.696044921875,
+      2707.9921875
+     ],
+     [
+      1406.1600341796875,
+      2782.080078125
+     ],
+     [
+      341.7120056152344,
+      2717.06396484375
+     ]
+    ],
+    [
+     [
+      344.73602294921875,
+      2701.944091796875
+     ],
+     [
+      592.7040405273438,
+      2712.528076171875
+     ],
+     [
+      591.1920166015625,
+      2769.984130859375
+     ],
+     [
+      341.7120056152344,
+      2759.400146484375
+     ]
+    ]
+   ]
+  }
+ },
+ "vl": {
+  "parsing_res_list": [
+   {
+    "block_bbox": [
+     309,
+     198,
+     410,
+     248
+    ],
+    "block_label": "number",
+    "block_content": "102"
+   },
+   {
+    "block_bbox": [
+     912,
+     161,
+     1307,
+     227
+    ],
+    "block_label": "header",
+    "block_content": "LA COSA Y EL RELATO"
+   },
+   {
+    "block_bbox": [
+     319,
+     310,
+     1928,
+     1433
+    ],
+    "block_label": "text",
+    "block_content": "decimos que «relata» o «cuenta» y que es «en prosa». Esto, ciertamente, no lo dice en sí misma la palabra historie, pero ya anteriormente se había expuesto cómo esta palabra, en virtud de lo que ella misma sí dice, expresa en cierto contexto lo que sí es un momento esencial en la problemática del decir relevante $ ^{39} $, y ahora, en el presente libro, nuestro esfuerzo se ha centrado en cómo lo propio del decir relevante se cumple en Heródoto y Tucídides en el modo de algo que en nuestra manera de hablar se describe como el relato de una guerra. La diferencia de Heródoto a Tucídides, en la que hemos insistido, se traduce no sólo en que la guerra sea distinta y el decir en su relación con ella lo sea igualmente, sino también en que el ceñirse a la guerra misma, que en Tucídides es ya inmediato, culmina en Heródoto una habitación de la distancia y del espacio de peregrinaje $ ^{40} $."
+   },
+   {
+    "block_bbox": [
+     330,
+     1430,
+     1907,
+     2530
+    ],
+    "block_label": "text",
+    "block_content": "Si determinados títulos anacrónicos, que tenemos que emplear sin perder de vista que lo son, se emplean en cambio con carácter positivo, esto es, asumiendo como criterios los significados que ciertas palabras en abstracto tienen en nuestras lenguas, entonces lo hasta aquí dicho tropieza con objeciones tan obvias como, por ejemplo, la de que el relato en cuanto género poético es en principio relato «de ficción» (o, al menos, su condición permite que lo sea), mientras que a Heródoto y Tucídides los valoramos (en su caso los discutimos) como autores que pretenderían relatar «lo que en verdad ocurrió». La objeción es interesante porque nos obliga a recordar expresamente cosas ya muchas veces dichas y desarrolladas y en las cuales está implicado que un concepto de «ficción», y por lo tanto un correspondiente concepto de"
+   },
+   {
+    "block_bbox": [
+     343,
+     2654,
+     1412,
+     2797
+    ],
+    "block_label": "footnote",
+    "block_content": "39 Cfr. mi El decir griego, ya citado, en especial capítulo 8.\n40 Cfr. ibid."
+   }
+  ]
+ }
+}

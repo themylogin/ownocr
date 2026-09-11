@@ -1,7 +1,6 @@
 package ocrmerge
 
 import (
-	"sort"
 	"strings"
 	"unicode/utf8"
 )
@@ -16,23 +15,14 @@ import (
 // A pitch it cannot measure is zero, and a zero pitch fills nothing.
 type filler struct{ pitch int }
 
-// newFiller measures the pitch from row to row, each row through its anchor. Two
-// boxes of one row are no step and never reach the sample, so a page the detector
-// broke in half measures the same pitch as a page it read whole.
+// newFiller measures the pitch over every block of a page. Merge builds its own
+// filler from a reference that leaves the unusable blocks out.
 func newFiller(lines []Line, groups map[int][]int) filler {
-	var steps []int
-	for _, owner := range sortedKeys(groups) {
-		rows := rowsOf(lines, groups[owner])
-		for at := 1; at < len(rows); at++ {
-			steps = append(steps,
-				centreOf(anchorOf(lines, rows[at]))-centreOf(anchorOf(lines, rows[at-1])))
-		}
+	rows := make(map[int][][]int, len(groups))
+	for owner, members := range groups {
+		rows[owner] = rowsOf(lines, members)
 	}
-	if len(steps) < minPitchSamples {
-		return filler{}
-	}
-	sort.Ints(steps)
-	return filler{pitch: steps[len(steps)/2]}
+	return filler{pitch: measure(lines, rows, nil).pitch}
 }
 
 // between answers the centre of every line that fits in the gap between two lines
@@ -111,6 +101,73 @@ func (f filler) inside(block Box, centre, height int) bool {
 // merge knows the column the line stands in and not where its text stops.
 func box(block Box, centre, height int) Box {
 	return Box{block[0], centre - height/2, block[2], centre + height/2}
+}
+
+// gapBox answers a box for the ink standing between two boxes of one printed row.
+//
+// The row stands where its two known boxes stand, so the centre of the gap is
+// read off theirs, weighted by how near each one lies. The height is the shorter
+// of the two, because a box stands taller than its ink by the rise of its line
+// over its own width and the gap is narrower than either neighbour.
+func gapBox(left, right Box) Box {
+	height := min(left[3]-left[1], right[3]-right[1])
+	centre := centreOf(left)
+
+	from, to := (left[0]+left[2])/2, (right[0]+right[2])/2
+	if to > from {
+		at := (left[2] + right[0]) / 2
+		centre += (centreOf(right) - centreOf(left)) * (at - from) / (to - from)
+	}
+	return Box{left[2], centre - height/2, right[0], centre + height/2}
+}
+
+// shareAcrossGap divides the piece of a box between that box and the ink the box
+// engine left uncovered between it and the next box of its row. It answers the
+// text of each, and whether there is a gap to divide across at all.
+//
+// Three things have to hold. The gap has room for characters, which the space
+// between two words does not. The gap is no wider than the box beside it. And the
+// piece holds more than that box was drawn around, which a piece that fits its
+// box does not.
+//
+// Each side takes the share of the text that its width is of the two together,
+// which holds only where the ink runs at one density across both. A gap wider
+// than the box it is measured from carries no such measurement, and the contents
+// page of book 18 is what says so: its gaps are rows of leader dots, sparse ink
+// over 1011 pixels beside a box of 189, and dividing by width there moves three
+// letters of a title into the dots.
+//
+// Under those three the split falls where it falls, mid-word included, because
+// the ink in the gap is mid-word: the row this exists for reads `otro—, tiene`
+// over a box holding `otro—,`, a gap holding `tien`, and a box holding
+// `e deseos costosos`.
+func shareAcrossGap(text string, box, next Box, room int, density float64) (string, string, bool) {
+	gap := next[0] - box[2]
+	width := box[2] - box[0]
+	if density <= 0 || room <= 0 || width <= 0 {
+		return "", "", false
+	}
+	if float64(gap)*density < minGapChars || gap > width {
+		return "", "", false
+	}
+
+	held := utf8.RuneCountInString(text)
+	if float64(held) < minGapOverflow*float64(room) {
+		return "", "", false
+	}
+
+	total := width + gap
+	mine := (held*width + total - 1) / total
+	if mine < 1 || mine >= held {
+		return "", "", false
+	}
+
+	runes := []rune(text)
+	head, tail := collapseSpace(string(runes[:mine])), collapseSpace(string(runes[mine:]))
+	if !hasText(head) || !hasText(tail) {
+		return "", "", false
+	}
+	return head, tail, true
 }
 
 func centreOf(b Box) int { return (b[1] + b[3]) / 2 }

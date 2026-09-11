@@ -43,47 +43,60 @@ func TestEveryTextEngineRuneIsAccountedFor(t *testing.T) {
 }
 
 // TestTheAnswerFollowsTheBoxEngine holds the merge to the lines it was given.
-// Taking the filled lines out of the answer has to leave the box engine lines,
-// in order, with the box and the score they came with.
+// Taking the lines the merge placed itself out of the answer has to leave the box
+// engine lines, in order, with the box and the score they came with.
+//
+// The merge may leave a line out, and only for a block whose boxes say nothing
+// about where its printed rows are. So the answer is a subsequence of the input
+// rather than the whole of it, and the lines it skips have to be exactly as many
+// as the counts report discarded.
 func TestTheAnswerFollowsTheBoxEngine(t *testing.T) {
 	for _, f := range loadFixtures(t) {
 		in := f.input()
 		result := Merge(in)
 
 		read := readLines(result)
-		if len(read) != len(in.Lines) {
-			t.Fatalf("page %d: %d lines answered for %d box engine lines",
-				f.Page, len(read), len(in.Lines))
+		if len(read)+result.Counts.Discarded != len(in.Lines) {
+			t.Fatalf("page %d: %d lines answered and %d discarded, for %d box engine lines",
+				f.Page, len(read), result.Counts.Discarded, len(in.Lines))
 		}
-		for i, line := range read {
-			if line.Box != in.Lines[i].Box {
-				t.Errorf("page %d line %d: box %v, want %v",
-					f.Page, i, line.Box, in.Lines[i].Box)
-			}
-			if line.Score != in.Lines[i].Score {
-				t.Errorf("page %d line %d: score %v, want %v",
-					f.Page, i, line.Score, in.Lines[i].Score)
-			}
-			if line.Source != in.BoxEngine && line.Source != in.TextEngine {
-				t.Errorf("page %d line %d: source %q names neither engine",
-					f.Page, i, line.Source)
-			}
-			if strings.TrimSpace(in.Lines[i].Text) != "" && line.Text == "" {
-				t.Errorf("page %d line %d: came out empty for %q",
-					f.Page, i, in.Lines[i].Text)
+
+		at := 0
+		for i, given := range in.Lines {
+			if at < len(read) && read[at].Box == given.Box {
+				line := read[at]
+				at++
+				if line.Score != given.Score {
+					t.Errorf("page %d line %d: score %v, want %v",
+						f.Page, i, line.Score, given.Score)
+				}
+				if line.Source != in.BoxEngine && line.Source != in.TextEngine {
+					t.Errorf("page %d line %d: source %q names neither engine",
+						f.Page, i, line.Source)
+				}
+				if strings.TrimSpace(given.Text) != "" && line.Text == "" {
+					t.Errorf("page %d line %d: came out empty for %q",
+						f.Page, i, given.Text)
+				}
 			}
 		}
+		if at != len(read) {
+			t.Errorf("page %d: %d answered lines follow no box engine line, so the order broke",
+				f.Page, len(read)-at)
+		}
+
 		if result.Counts.Lines != len(result.Lines) {
 			t.Errorf("page %d: counts report %d lines, want %d",
 				f.Page, result.Counts.Lines, len(result.Lines))
 		}
-		if result.Counts.FromText+result.Counts.FromBoxes != len(in.Lines) {
-			t.Errorf("page %d: counts %+v do not add up to %d box engine lines",
-				f.Page, result.Counts, len(in.Lines))
+		kept := len(in.Lines) - result.Counts.Discarded
+		if result.Counts.FromText+result.Counts.FromBoxes != kept {
+			t.Errorf("page %d: counts %+v do not add up to the %d box engine lines kept",
+				f.Page, result.Counts, kept)
 		}
-		if result.Counts.Estimated != len(result.Lines)-len(in.Lines) {
-			t.Errorf("page %d: counts report %d filled lines, want %d",
-				f.Page, result.Counts.Estimated, len(result.Lines)-len(in.Lines))
+		if result.Counts.Estimated != len(result.Lines)-kept {
+			t.Errorf("page %d: counts report %d placed lines, want %d",
+				f.Page, result.Counts.Estimated, len(result.Lines)-kept)
 		}
 	}
 }
@@ -230,13 +243,16 @@ func TestNoRenderedLineIsFarLongerThanTheRoomItsBoxHas(t *testing.T) {
 		in := f.input()
 		result := Merge(in)
 
-		groups := groupLines(in.Lines, in.Blocks)
-		room := make(map[int]int, len(in.Lines))
-		for owner, members := range groups {
-			_ = owner
+		// Keyed by box and not by index, because the merge may leave a line out
+		// and the answer is then no longer index for index with the input.
+		room := make(map[Box]int, len(in.Lines))
+		for _, line := range in.Lines {
+			room[line.Box] = len([]rune(line.Text))
+		}
+		for _, members := range groupLines(in.Lines, in.Blocks) {
 			density := blockDensity(in.Lines, members)
 			for _, index := range members {
-				room[index] = roomIn(in.Lines[index], density)
+				room[in.Lines[index].Box] = roomIn(in.Lines[index], density)
 			}
 		}
 
@@ -244,10 +260,7 @@ func TestNoRenderedLineIsFarLongerThanTheRoomItsBoxHas(t *testing.T) {
 			if line.Source != in.TextEngine {
 				continue
 			}
-			held, owned := room[i]
-			if !owned {
-				held = len([]rune(in.Lines[i].Text))
-			}
+			held := room[line.Box]
 			if got := len([]rune(line.Text)); got > maxPieceRatio*held+pieceSlack {
 				t.Errorf("%s line %d: rendered %d runes for a box with room for %d",
 					f.Name, i, got, held)

@@ -20,6 +20,9 @@ type fixture struct {
 	Note string `json:"note"`
 	V6   struct {
 		Lines []Line `json:"lines"`
+		Raw   struct {
+			Polys [][][]float64 `json:"dt_polys"`
+		} `json:"raw"`
 	} `json:"v6"`
 	VL struct {
 		Blocks []struct {
@@ -28,6 +31,15 @@ type fixture struct {
 			Text  string `json:"block_content"`
 		} `json:"parsing_res_list"`
 	} `json:"vl"`
+}
+
+// The fixtures that carry no `raw.dt_polys`. Their lines report no corners, so
+// every one of them counts as level and the merge reads them as it did before it
+// read corners at all. They are the guard on that path.
+var cornerlessFixtures = map[string]bool{
+	"page0052":         true,
+	"page0432":         true,
+	"book0017page0116": true,
 }
 
 // What each fixture page is there to prove.
@@ -40,6 +52,21 @@ var fixturePurpose = map[string]string{
 	"page0119":         "the text engine answers too little",
 	"page0432":         "lines that fall across the column, broken in half by v6, with eight rows missing",
 	"book0017page0116": "v6 read two footnote rows as noise, and the length gate refused the reading that is right",
+	"book0017page0087": "the top block slopes past its row spacing, so no box top names its own row",
+	"book0017page0085": "one row broken into three boxes, which slopes too little to be unusable",
+	"book0018page0036": "the text engine collapsed, so the boxes are the good reading",
+	"book0017page0090": "a sloping footnote ending in a short line, which is no broken row",
+	"book0017page0102": "a footnote of two rows, too few to measure a pitch on",
+	"book0017page0103": "three whole rows sloping past a pitch of the width of their block",
+}
+
+// The blocks these fixtures hold looked unusable to a criterion that measured the
+// width of a block, or the pitch of the block's own rows. Every one of them merges
+// correctly, and replacing any would throw away boxes that are right.
+var falselySuspectFixtures = []string{
+	"book0017page0090",
+	"book0017page0102",
+	"book0017page0103",
 }
 
 func (f fixture) input() Input {
@@ -47,7 +74,22 @@ func (f fixture) input() Input {
 	for i, b := range f.VL.Blocks {
 		blocks[i] = Block{Box: b.Box, Text: b.Text}
 	}
-	return Input{Lines: f.V6.Lines, Blocks: blocks, BoxEngine: "v6", TextEngine: "vl"}
+	return Input{
+		Lines:      WithCorners(f.V6.Lines, f.V6.Raw.Polys),
+		Blocks:     blocks,
+		BoxEngine:  "v6",
+		TextEngine: "vl",
+	}
+}
+
+// cornerless answers the fixture without the quads, so a test can hold the merge
+// to what it answered before it read them.
+func (f fixture) cornerless() Input {
+	in := f.input()
+	for i := range in.Lines {
+		in.Lines[i].Corners = nil
+	}
+	return in
 }
 
 func loadFixtures(t *testing.T) []fixture {

@@ -32,8 +32,36 @@ func Merge(in Input) Result {
 	}
 
 	groups := groupLines(in.Lines, in.Blocks)
-	fill := newFiller(in.Lines, groups)
-	added := make(map[int]*insert)
+
+	// The rows of every block, and the blocks whose rows are not the rows of the
+	// page, both before any block is cut. A block the merge cannot order must not
+	// reach the pitch that the filler and the interpolation stand on, and the
+	// pitch cannot be measured until every block has been judged.
+	rows := make(map[int][][]int, len(groups))
+	for owner, members := range groups {
+		rows[owner] = rowsOf(in.Lines, members)
+	}
+
+	// The pitch of the page is needed to judge a block, and the judgement is
+	// needed to measure the page. The cycle breaks on the pitch measured over
+	// every block: a block whose rows are wrong reports steps shorter than the
+	// page, and shorter steps do not move a median that rests on every block.
+	pitch := measure(in.Lines, rows, nil).pitch
+	unusable := make(map[int]bool, len(groups))
+	for owner, members := range groups {
+		if hasText(in.Blocks[owner].Text) &&
+			unusableBoxes(in.Lines, members, in.Blocks[owner], pitch) {
+			unusable[owner] = true
+		}
+	}
+
+	ref := measure(in.Lines, rows, unusable)
+	fill := filler{pitch: ref.pitch}
+	plan := laid{
+		around:  map[int]*insert{},
+		instead: map[int][]MergedLine{},
+		drop:    map[int]bool{},
+	}
 
 	for _, owner := range sortedKeys(groups) {
 		block := in.Blocks[owner]
@@ -41,8 +69,13 @@ func Merge(in Input) Result {
 			continue
 		}
 
-		rows := rowsOf(in.Lines, groups[owner])
-		members := flatten(rows, len(groups[owner]))
+		if unusable[owner] {
+			result.Dropped = replaceBlock(&plan, in, ref, owner, groups[owner], result.Dropped)
+			continue
+		}
+
+		blockRows := rows[owner]
+		members := flatten(blockRows, len(groups[owner]))
 		pieces, ok := cutBlock(in.Lines, members, block.Text)
 		if !ok {
 			result.Dropped = append(result.Dropped, Dropped{block.Text, ReasonUnaligned})
@@ -52,7 +85,7 @@ func Merge(in Input) Result {
 		height := medianHeightOf(in.Lines, members)
 		density := blockDensity(in.Lines, members)
 		at := 0
-		for r, row := range rows {
+		for r, row := range blockRows {
 			for k, index := range row {
 				piece := pieces[at]
 				at++
@@ -69,7 +102,7 @@ func Merge(in Input) Result {
 					above = fill.before(block.Box, anchorOf(in.Lines, row), height)
 				}
 				if k == len(row)-1 {
-					under = fill.below(block.Box, in.Lines, rows, r, height)
+					under = fill.below(block.Box, in.Lines, blockRows, r, height)
 				}
 
 				// Three things say the piece holds more than its own line. A lead
@@ -89,7 +122,7 @@ func Merge(in Input) Result {
 						height, room, in.TextEngine, piece); filled != nil {
 						result.Lines[index].Text = filled.own
 						result.Lines[index].Source = in.TextEngine
-						added[index] = filled.insert
+						plan.around[index] = filled.insert
 						continue
 					}
 				}
@@ -98,6 +131,27 @@ func Merge(in Input) Result {
 					result.Dropped = append(result.Dropped, Dropped{piece.text, ReasonLine})
 					continue
 				}
+
+				// A box the box engine drew short of the next box of its row leaves
+				// ink between the two that no box covers. The cut hands that text to
+				// the box before the gap, which then holds more than it was drawn
+				// around, and a renderer squeezes it in.
+				if k+1 < len(row) {
+					beside := in.Lines[row[k+1]].Box
+					if head, tail, ok := shareAcrossGap(piece.text, in.Lines[index].Box,
+						beside, room, density); ok {
+						result.Lines[index].Text = head
+						result.Lines[index].Source = in.TextEngine
+						plan.around[index] = &insert{after: []MergedLine{{
+							Box:       gapBox(in.Lines[index].Box, beside),
+							Text:      tail,
+							Source:    in.TextEngine,
+							Estimated: true,
+						}}}
+						continue
+					}
+				}
+
 				result.Lines[index].Text = collapseSpace(piece.text)
 				result.Lines[index].Source = in.TextEngine
 			}
@@ -110,24 +164,73 @@ func Merge(in Input) Result {
 		}
 	}
 
-	result.Lines = spliceIn(result.Lines, added)
-	result.Counts = countOf(result, in.TextEngine)
+	result.Lines = spliceIn(result.Lines, plan)
+	result.Counts = countOf(result, in.TextEngine, len(plan.drop))
 	return result
 }
 
 // insert holds the lines the filler placed around one line of the box engine.
 type insert struct{ before, after []MergedLine }
 
-// spliceIn lays the filled lines around the lines they belong to. The lines of
-// the box engine keep their order, so the answer still reads as that engine read
-// the page.
-func spliceIn(lines []MergedLine, added map[int]*insert) []MergedLine {
-	if len(added) == 0 {
+// laid is what the merge decided to do with the lines of the box engine.
+//
+// around holds the lines the filler placed around one of them. instead holds the
+// lines that stand in place of a whole block, keyed by the first line of that
+// block. drop holds the lines that leave the answer, which are the lines of every
+// block the interpolation replaced.
+type laid struct {
+	around  map[int]*insert
+	instead map[int][]MergedLine
+	drop    map[int]bool
+}
+
+// replaceBlock puts the text of a block whose boxes cannot say where its printed
+// rows are into rows of the merge's own, and takes the boxes of that block away.
+//
+// It answers the dropped text it added. A block the page cannot count the rows of
+// keeps its boxes and its box engine text, and its text reaches no line: once the
+// merge knows the order is wrong, cutting the block in that order would write the
+// text of one printed row into the box of another on purpose.
+func replaceBlock(plan *laid, in Input, ref reference, owner int, members []int,
+	dropped []Dropped) []Dropped {
+	block := in.Blocks[owner]
+
+	var placed []MergedLine
+	if rows, ok := rowCount(ref, block.Box, blockSlope(in.Lines, members),
+		block.Text); ok {
+		placed = interpolate(block, rows, in.TextEngine)
+	}
+	if placed == nil {
+		return append(dropped, Dropped{block.Text, ReasonUnordered})
+	}
+
+	// members comes from groupLines, which walks the lines in order, so its first
+	// entry is the first line of the block. The replacement stands where that line
+	// stood, and every line of the block leaves the answer.
+	plan.instead[members[0]] = placed
+	for _, index := range members {
+		plan.drop[index] = true
+	}
+	return dropped
+}
+
+// spliceIn lays the filled lines around the lines they belong to, puts a
+// replacement where the block it replaces stood, and leaves out the lines of a
+// replaced block. The lines of the box engine that survive keep their order, so
+// the answer still reads as that engine read the page.
+func spliceIn(lines []MergedLine, plan laid) []MergedLine {
+	if len(plan.around) == 0 && len(plan.instead) == 0 {
 		return lines
 	}
-	laid := make([]MergedLine, 0, len(lines)+2*len(added))
+	laid := make([]MergedLine, 0, len(lines)+2*len(plan.around))
 	for i, line := range lines {
-		if at, ok := added[i]; ok {
+		if at, ok := plan.instead[i]; ok {
+			laid = append(laid, at...)
+		}
+		if plan.drop[i] {
+			continue
+		}
+		if at, ok := plan.around[i]; ok {
 			laid = append(laid, at.before...)
 			laid = append(laid, line)
 			laid = append(laid, at.after...)
@@ -414,8 +517,8 @@ func blockDensity(lines []Line, members []int) float64 {
 	return rates[len(rates)/2]
 }
 
-func countOf(result Result, textEngine string) Counts {
-	counts := Counts{Lines: len(result.Lines)}
+func countOf(result Result, textEngine string, discarded int) Counts {
+	counts := Counts{Lines: len(result.Lines), Discarded: discarded}
 	for _, line := range result.Lines {
 		switch {
 		case line.Estimated:

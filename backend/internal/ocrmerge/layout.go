@@ -153,6 +153,55 @@ func sortByLeft(lines []Line, row []int) []int {
 	return row
 }
 
+// lineSlope answers how far the bottom edge of a line rises over its own length,
+// and whether the line reports the corners to measure it from.
+//
+// The bottom edge and not the top, because it follows the baseline of the print.
+// The top edge follows the tallest glyph of the line, which moves with what the
+// line happens to say.
+func lineSlope(line Line) (float64, bool) {
+	if len(line.Corners) != 4 {
+		return 0, false
+	}
+	left, right := line.Corners[3], line.Corners[2]
+	run := right[0] - left[0]
+	if run == 0 {
+		return 0, false
+	}
+	return float64(right[1]-left[1]) / float64(run), true
+}
+
+// blockSlope answers how far the lines of a block slope, as the median over its
+// full-width lines of how far each one rises over its own length.
+//
+// It keeps the sign, because which end of a box stands highest follows from it.
+//
+// Full-width lines only, because a narrow fragment reports a slope of its own
+// that has nothing to do with the page. A block whose lines report no corners
+// counts as level.
+func blockSlope(lines []Line, members []int) float64 {
+	widest := 0
+	for _, index := range members {
+		widest = max(widest, lines[index].Box[2]-lines[index].Box[0])
+	}
+
+	slopes := make([]float64, 0, len(members))
+	for _, index := range members {
+		width := lines[index].Box[2] - lines[index].Box[0]
+		if float64(width) < fullWidthShare*float64(widest) {
+			continue
+		}
+		if slope, ok := lineSlope(lines[index]); ok {
+			slopes = append(slopes, slope)
+		}
+	}
+	if len(slopes) == 0 {
+		return 0
+	}
+	sort.Float64s(slopes)
+	return slopes[len(slopes)/2]
+}
+
 func medianHeight(lines []Line, members []int) int {
 	heights := make([]int, len(members))
 	for i, index := range members {

@@ -1,0 +1,1037 @@
+{
+ "book": 17,
+ "page": 103,
+ "note": "a block of three whole rows sloping 0.066 across 1540 pixels, which is more than a pitch of the width of the block and still names every one of its rows",
+ "v6": {
+  "lines": [
+   {
+    "bbox": [
+     861,
+     133,
+     1106,
+     189
+    ],
+    "text": "16. TRÁNSITO",
+    "score": 0.9936311841011047
+   },
+   {
+    "bbox": [
+     1626,
+     133,
+     1756,
+     223
+    ],
+    "text": "103",
+    "score": 0.9970930218696594
+   },
+   {
+    "bbox": [
+     140,
+     287,
+     1738,
+     374
+    ],
+    "text": "«realidad», es inadecuado para el ámbito histórico del que",
+    "score": 0.9945584535598755
+   },
+   {
+    "bbox": [
+     127,
+     355,
+     1744,
+     462
+    ],
+    "text": "nos ocupamos (incluido, por ejemplo, Platón y en cierta",
+    "score": 0.9970594048500061
+   },
+   {
+    "bbox": [
+     133,
+     436,
+     1741,
+     535
+    ],
+    "text": "manera también Aristóteles). Hay que insistir, en efecto, en",
+    "score": 0.996717095375061
+   },
+   {
+    "bbox": [
+     137,
+     517,
+     1738,
+     613
+    ],
+    "text": "recordar que el poieîn del poietés no es producir una represen-",
+    "score": 0.9965888261795044
+   },
+   {
+    "bbox": [
+     146,
+     595,
+     1738,
+     692
+    ],
+    "text": "tación o discurso o en general cosa alguna que pudiese con-",
+    "score": 0.9963342547416687
+   },
+   {
+    "bbox": [
+     149,
+     680,
+     1741,
+     768
+    ],
+    "text": "certar o no con la cosa, sino que la elección del verbo poieîn y",
+    "score": 0.9939419031143188
+   },
+   {
+    "bbox": [
+     152,
+     752,
+     1735,
+     843
+    ],
+    "text": "del nombre poietés tiene que ver con que en principio la refe-",
+    "score": 0.9999324083328247
+   },
+   {
+    "bbox": [
+     149,
+     822,
+     1741,
+     926
+    ],
+    "text": "rencia griega de «decir» (el ámbito implicado en el recono-",
+    "score": 0.9905407428741455
+   },
+   {
+    "bbox": [
+     158,
+     901,
+     1741,
+     996
+    ],
+    "text": "cer esto como esto en cuanto a la vez reconocer aquello como",
+    "score": 0.9892189502716064
+   },
+   {
+    "bbox": [
+     161,
+     973,
+     1744,
+     1075
+    ],
+    "text": "aquello) lo es al entero «andar con» y «habérselas con», en",
+    "score": 0.9871549606323242
+   },
+   {
+    "bbox": [
+     164,
+     1044,
+     1738,
+     1150
+    ],
+    "text": "el cual, en efecto, cada cosa es lo que es, el cual, por lo tanto,",
+    "score": 0.9988353848457336
+   },
+   {
+    "bbox": [
+     175,
+     1117,
+     1738,
+     1226
+    ],
+    "text": "«pro-duce» la cosa, esto es, deja que ella sea. No, pues,",
+    "score": 0.9974197149276733
+   },
+   {
+    "bbox": [
+     175,
+     1189,
+     1732,
+     1298
+    ],
+    "text": "que, en vez de haber un sujeto que «meramente dice»,",
+    "score": 0.9988521933555603
+   },
+   {
+    "bbox": [
+     175,
+     1259,
+     1735,
+     1374
+    ],
+    "text": "hubiese un sujeto que «se las ha»; lo que ocurre es que no",
+    "score": 0.991926372051239
+   },
+   {
+    "bbox": [
+     181,
+     1335,
+     1729,
+     1439
+    ],
+    "text": "hay en absoluto sujeto alguno; si de mí se dice que «digo»",
+    "score": 0.9914595484733582
+   },
+   {
+    "bbox": [
+     178,
+     1407,
+     1732,
+     1515
+    ],
+    "text": "en un sentido en que ello seguramente no puede decirse de",
+    "score": 0.9999778270721436
+   },
+   {
+    "bbox": [
+     181,
+     1480,
+     1732,
+     1587
+    ],
+    "text": "la higuera, no es porque el decir sea una operación mía, sino",
+    "score": 0.9988107085227966
+   },
+   {
+    "bbox": [
+     178,
+     1555,
+     1732,
+     1670
+    ],
+    "text": "porque en el que esto sea esto en cuanto lo mismo que el que",
+    "score": 0.9999868869781494
+   },
+   {
+    "bbox": [
+     178,
+     1631,
+     1732,
+     1749
+    ],
+    "text": "aquello sea aquello yo tengo un tipo de implicación que segu-",
+    "score": 0.9999307990074158
+   },
+   {
+    "bbox": [
+     178,
+     1707,
+     1735,
+     1814
+    ],
+    "text": "ramente la higuera no tiene. No es sólo que del decir se",
+    "score": 0.993611216545105
+   },
+   {
+    "bbox": [
+     184,
+     1782,
+     1735,
+     1890
+    ],
+    "text": "asuma que dice lo que es (y que el problema sea entonces el",
+    "score": 0.996858537197113
+   },
+   {
+    "bbox": [
+     190,
+     1858,
+     1735,
+     1965
+    ],
+    "text": "de cómo es entonces posible un decir erróneo, problema",
+    "score": 0.9916834235191345
+   },
+   {
+    "bbox": [
+     193,
+     1936,
+     1738,
+     2044
+    ],
+    "text": "planteado ni siquiera por la presunta obviedad de que a veces",
+    "score": 0.985734224319458
+   },
+   {
+    "bbox": [
+     196,
+     2009,
+     1738,
+     2127
+    ],
+    "text": "nos equivocamos, sino más bien porque justamente el que se",
+    "score": 0.9909985661506653
+   },
+   {
+    "bbox": [
+     201,
+     2088,
+     1738,
+     2195
+    ],
+    "text": "haga relevante la presencia misma, y no uno u otro presente,",
+    "score": 0.9998094439506531
+   },
+   {
+    "bbox": [
+     204,
+     2154,
+     1741,
+     2275
+    ],
+    "text": "comporta que ahí mismo esté la posibilidad de lo otro, del",
+    "score": 0.9996930956840515
+   },
+   {
+    "bbox": [
+     207,
+     2230,
+     1744,
+     2351
+    ],
+    "text": "ocultamiento); es, ciertamente, esto, pero es ante todo que el",
+    "score": 0.9959254860877991
+   },
+   {
+    "bbox": [
+     210,
+     2305,
+     1744,
+     2432
+    ],
+    "text": "decir mismo, el légein o el lógos, el que esto sea esto en cuanto",
+    "score": 0.9925533533096313
+   },
+   {
+    "bbox": [
+     210,
+     2376,
+     1741,
+     2517
+    ],
+    "text": "lo mismo que el que aquello sea aquello, es en primera ins-",
+    "score": 0.993606448173523
+   },
+   {
+    "bbox": [
+     216,
+     2472,
+     1277,
+     2602
+    ],
+    "text": "tancia el que haya cosas, el «ser» mismo.",
+    "score": 0.9992355704307556
+   },
+   {
+    "bbox": [
+     297,
+     2518,
+     1752,
+     2691
+    ],
+    "text": "Al mismo tipo obvio de objeción mencionado pertenece,",
+    "score": 0.9983336329460144
+   },
+   {
+    "bbox": [
+     220,
+     2580,
+     1756,
+     2786
+    ],
+    "text": "por ejemplo, el que se nos diga que, en un sentido abstracto",
+    "score": 0.9990607500076294
+   },
+   {
+    "bbox": [
+     223,
+     2659,
+     1759,
+     2868
+    ],
+    "text": "de la palabra «relato», ya, por ejemplo, la líada y la Odisea",
+    "score": 0.9938617944717407
+   }
+  ],
+  "raw": {
+   "dt_polys": [
+    [
+     [
+      861.8400268554688,
+      133.05599975585938
+     ],
+     [
+      1106.7840576171875,
+      133.05599975585938
+     ],
+     [
+      1106.7840576171875,
+      189.0
+     ],
+     [
+      861.8400268554688,
+      189.0
+     ]
+    ],
+    [
+     [
+      1626.9119873046875,
+      133.05599975585938
+     ],
+     [
+      1756.944091796875,
+      133.05599975585938
+     ],
+     [
+      1756.944091796875,
+      223.7760009765625
+     ],
+     [
+      1626.9119873046875,
+      223.7760009765625
+     ]
+    ],
+    [
+     [
+      140.61599731445312,
+      287.2799987792969
+     ],
+     [
+      1738.800048828125,
+      287.2799987792969
+     ],
+     [
+      1738.800048828125,
+      374.97601318359375
+     ],
+     [
+      140.61599731445312,
+      374.97601318359375
+     ]
+    ],
+    [
+     [
+      127.00800323486328,
+      365.9040222167969
+     ],
+     [
+      1744.8480224609375,
+      355.32000732421875
+     ],
+     [
+      1744.8480224609375,
+      453.6000061035156
+     ],
+     [
+      128.52000427246094,
+      462.6720275878906
+     ]
+    ],
+    [
+     [
+      133.05599975585938,
+      450.5760192871094
+     ],
+     [
+      1740.31201171875,
+      436.968017578125
+     ],
+     [
+      1741.8240966796875,
+      523.1520385742188
+     ],
+     [
+      134.56800842285156,
+      535.2479858398438
+     ]
+    ],
+    [
+     [
+      137.59201049804688,
+      526.176025390625
+     ],
+     [
+      1737.2880859375,
+      517.10400390625
+     ],
+     [
+      1738.800048828125,
+      604.7999877929688
+     ],
+     [
+      137.59201049804688,
+      613.8720092773438
+     ]
+    ],
+    [
+     [
+      146.66400146484375,
+      604.7999877929688
+     ],
+     [
+      1737.2880859375,
+      595.72802734375
+     ],
+     [
+      1738.800048828125,
+      683.4240112304688
+     ],
+     [
+      146.66400146484375,
+      692.4960327148438
+     ]
+    ],
+    [
+     [
+      149.68800354003906,
+      689.4720458984375
+     ],
+     [
+      1741.8240966796875,
+      680.4000244140625
+     ],
+     [
+      1741.8240966796875,
+      759.0240478515625
+     ],
+     [
+      149.68800354003906,
+      768.0960083007812
+     ]
+    ],
+    [
+     [
+      152.71200561523438,
+      765.072021484375
+     ],
+     [
+      1734.2640380859375,
+      752.9760131835938
+     ],
+     [
+      1735.7760009765625,
+      831.6000366210938
+     ],
+     [
+      154.2239990234375,
+      843.696044921875
+     ]
+    ],
+    [
+     [
+      149.68800354003906,
+      837.6480102539062
+     ],
+     [
+      1740.31201171875,
+      822.5280151367188
+     ],
+     [
+      1741.8240966796875,
+      910.2239990234375
+     ],
+     [
+      151.1999969482422,
+      926.8560180664062
+     ]
+    ],
+    [
+     [
+      158.760009765625,
+      916.2720336914062
+     ],
+     [
+      1740.31201171875,
+      901.1520385742188
+     ],
+     [
+      1741.8240966796875,
+      979.7760009765625
+     ],
+     [
+      160.27200317382812,
+      996.4080200195312
+     ]
+    ],
+    [
+     [
+      161.7840118408203,
+      988.8480224609375
+     ],
+     [
+      1743.3360595703125,
+      973.72802734375
+     ],
+     [
+      1744.8480224609375,
+      1058.4000244140625
+     ],
+     [
+      163.29600524902344,
+      1075.031982421875
+     ]
+    ],
+    [
+     [
+      164.80799865722656,
+      1061.424072265625
+     ],
+     [
+      1737.2880859375,
+      1044.7919921875
+     ],
+     [
+      1738.800048828125,
+      1134.0
+     ],
+     [
+      166.32000732421875,
+      1150.632080078125
+     ]
+    ],
+    [
+     [
+      175.39199829101562,
+      1137.0240478515625
+     ],
+     [
+      1737.2880859375,
+      1117.3680419921875
+     ],
+     [
+      1738.800048828125,
+      1206.5760498046875
+     ],
+     [
+      176.9040069580078,
+      1226.2320556640625
+     ]
+    ],
+    [
+     [
+      175.39199829101562,
+      1209.5999755859375
+     ],
+     [
+      1731.239990234375,
+      1189.944091796875
+     ],
+     [
+      1732.7520751953125,
+      1279.1519775390625
+     ],
+     [
+      176.9040069580078,
+      1298.8079833984375
+     ]
+    ],
+    [
+     [
+      175.39199829101562,
+      1285.2000732421875
+     ],
+     [
+      1734.2640380859375,
+      1259.49609375
+     ],
+     [
+      1735.7760009765625,
+      1347.1920166015625
+     ],
+     [
+      176.9040069580078,
+      1374.4080810546875
+     ]
+    ],
+    [
+     [
+      181.44000244140625,
+      1360.800048828125
+     ],
+     [
+      1728.216064453125,
+      1335.0960693359375
+     ],
+     [
+      1729.72802734375,
+      1413.7200927734375
+     ],
+     [
+      182.95201110839844,
+      1439.424072265625
+     ]
+    ],
+    [
+     [
+      178.41600036621094,
+      1439.424072265625
+     ],
+     [
+      1731.239990234375,
+      1407.6719970703125
+     ],
+     [
+      1732.7520751953125,
+      1483.2720947265625
+     ],
+     [
+      179.92800903320312,
+      1515.0240478515625
+     ]
+    ],
+    [
+     [
+      181.44000244140625,
+      1508.97607421875
+     ],
+     [
+      1731.239990234375,
+      1480.248046875
+     ],
+     [
+      1732.7520751953125,
+      1558.8720703125
+     ],
+     [
+      182.95201110839844,
+      1587.60009765625
+     ]
+    ],
+    [
+     [
+      178.41600036621094,
+      1590.6240234375
+     ],
+     [
+      1731.239990234375,
+      1555.8480224609375
+     ],
+     [
+      1732.7520751953125,
+      1634.4720458984375
+     ],
+     [
+      179.92800903320312,
+      1670.760009765625
+     ]
+    ],
+    [
+     [
+      178.41600036621094,
+      1660.176025390625
+     ],
+     [
+      1731.239990234375,
+      1631.447998046875
+     ],
+     [
+      1732.7520751953125,
+      1719.14404296875
+     ],
+     [
+      179.92800903320312,
+      1749.384033203125
+     ]
+    ],
+    [
+     [
+      178.41600036621094,
+      1738.800048828125
+     ],
+     [
+      1734.2640380859375,
+      1707.048095703125
+     ],
+     [
+      1735.7760009765625,
+      1782.6480712890625
+     ],
+     [
+      179.92800903320312,
+      1814.4000244140625
+     ]
+    ],
+    [
+     [
+      184.46400451660156,
+      1814.4000244140625
+     ],
+     [
+      1734.2640380859375,
+      1782.6480712890625
+     ],
+     [
+      1735.7760009765625,
+      1858.248046875
+     ],
+     [
+      185.9759979248047,
+      1890.0
+     ]
+    ],
+    [
+     [
+      190.5120086669922,
+      1886.97607421875
+     ],
+     [
+      1734.2640380859375,
+      1858.248046875
+     ],
+     [
+      1735.7760009765625,
+      1936.8720703125
+     ],
+     [
+      192.0240020751953,
+      1965.60009765625
+     ]
+    ],
+    [
+     [
+      193.5360107421875,
+      1968.6240234375
+     ],
+     [
+      1737.2880859375,
+      1936.8720703125
+     ],
+     [
+      1738.800048828125,
+      2012.4720458984375
+     ],
+     [
+      195.04800415039062,
+      2044.22412109375
+     ]
+    ],
+    [
+     [
+      196.5600128173828,
+      2048.760009765625
+     ],
+     [
+      1737.2880859375,
+      2009.4481201171875
+     ],
+     [
+      1738.800048828125,
+      2088.072021484375
+     ],
+     [
+      199.58399963378906,
+      2127.384033203125
+     ]
+    ],
+    [
+     [
+      201.09600830078125,
+      2119.823974609375
+     ],
+     [
+      1737.2880859375,
+      2088.072021484375
+     ],
+     [
+      1738.800048828125,
+      2163.672119140625
+     ],
+     [
+      202.60800170898438,
+      2195.424072265625
+     ]
+    ],
+    [
+     [
+      204.12001037597656,
+      2199.9599609375
+     ],
+     [
+      1740.31201171875,
+      2154.60009765625
+     ],
+     [
+      1741.8240966796875,
+      2230.199951171875
+     ],
+     [
+      205.6320037841797,
+      2275.56005859375
+     ]
+    ],
+    [
+     [
+      207.14401245117188,
+      2272.5361328125
+     ],
+     [
+      1743.3360595703125,
+      2230.199951171875
+     ],
+     [
+      1744.8480224609375,
+      2308.823974609375
+     ],
+     [
+      208.656005859375,
+      2351.16015625
+     ]
+    ],
+    [
+     [
+      210.16799926757812,
+      2354.18408203125
+     ],
+     [
+      1743.3360595703125,
+      2305.800048828125
+     ],
+     [
+      1744.8480224609375,
+      2384.424072265625
+     ],
+     [
+      211.6800079345703,
+      2432.80810546875
+     ]
+    ],
+    [
+     [
+      210.16799926757812,
+      2438.85595703125
+     ],
+     [
+      1738.800048828125,
+      2376.864013671875
+     ],
+     [
+      1741.8240966796875,
+      2455.488037109375
+     ],
+     [
+      213.19200134277344,
+      2517.47998046875
+     ]
+    ],
+    [
+     [
+      216.21600341796875,
+      2517.47998046875
+     ],
+     [
+      1273.10400390625,
+      2472.1201171875
+     ],
+     [
+      1277.6400146484375,
+      2556.7919921875
+     ],
+     [
+      219.24000549316406,
+      2602.152099609375
+     ]
+    ],
+    [
+     [
+      297.864013671875,
+      2594.592041015625
+     ],
+     [
+      1747.8720703125,
+      2518.9921875
+     ],
+     [
+      1752.4080810546875,
+      2615.760009765625
+     ],
+     [
+      303.9120178222656,
+      2691.360107421875
+     ]
+    ],
+    [
+     [
+      220.7519989013672,
+      2685.31201171875
+     ],
+     [
+      1749.384033203125,
+      2580.984130859375
+     ],
+     [
+      1756.944091796875,
+      2682.2880859375
+     ],
+     [
+      228.31201171875,
+      2786.615966796875
+     ]
+    ],
+    [
+     [
+      223.7760009765625,
+      2760.912109375
+     ],
+     [
+      1752.4080810546875,
+      2659.608154296875
+     ],
+     [
+      1759.968017578125,
+      2766.9599609375
+     ],
+     [
+      231.3360137939453,
+      2868.26416015625
+     ]
+    ]
+   ]
+  }
+ },
+ "vl": {
+  "parsing_res_list": [
+   {
+    "block_bbox": [
+     860,
+     139,
+     1109,
+     195
+    ],
+    "block_label": "header",
+    "block_content": "16. TRÁNSITO"
+   },
+   {
+    "block_bbox": [
+     1643,
+     150,
+     1746,
+     212
+    ],
+    "block_label": "number",
+    "block_content": "103"
+   },
+   {
+    "block_bbox": [
+     137,
+     287,
+     1762,
+     2599
+    ],
+    "block_label": "text",
+    "block_content": "«realidad», es inadecuado para el ámbito histórico del que nos ocupamos (incluido, por ejemplo, Platón y en cierta manera también Aristóteles). Hay que insistir, en efecto, en recordar que el poieón del poietés no es producir una representación o discurso o en general cosa alguna que pudiese concertar o no con la cosa, sino que la elección del verbo poieón y del nombre poietés tiene que ver con que en principio la referencia griega de «decir» (el ámbito implicado en el reconocer esto como esto en cuanto a la vez reconocer aquello como aquello) lo es al entero «andar con» y «habérselas con», en el cual, en efecto, cada cosa es lo que es, el cual, por lo tanto, «pro-duce» la cosa, esto es, deja que ella sea. No, pues, que, en vez de haber un sujeto que «meramente dice», hubiese un sujeto que «se las ha»; lo que ocurre es que no hay en absoluto sujeto alguno; si de mí se dice que «digo» en un sentido en que ello seguramente no puede decirse de la higuera, no es porque el decir sea una operación mía, sino porque en el que esto sea esto en cuanto lo mismo que el que aquello sea aquello yo tengo un tipo de implicación que seguramente la higuera no tiene. No es sólo que del decir se asuma que dice lo que es (y que el problema sea entonces el de cómo es entonces posible un decir erróneo, problema planteado ni siquiera por la presunta obviedad de que a veces nos equivocamos, sino más bien porque justamente el que se haga relevante la presencia misma, y no uno u otro presente, comporta que ahí mismo esté la posibilidad de lo otro, del ocultamiento); es, ciertamente, esto, pero es ante todo que el decir mismo, el légein o el lógos, el que esto sea esto en cuanto lo mismo que el que aquello sea aquello, es en primera instancia el que haya cosas, el «ser» mismo."
+   },
+   {
+    "block_bbox": [
+     219,
+     2540,
+     1759,
+     2864
+    ],
+    "block_label": "text",
+    "block_content": "Al mismo tipo obvio de objeción mencionado pertenece, por ejemplo, el que se nos diga que, en un sentido abstracto de la palabra «relato», ya, por ejemplo, la Ilíada y la Odisea"
+   }
+  ]
+ }
+}
