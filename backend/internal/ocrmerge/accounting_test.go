@@ -63,7 +63,7 @@ func TestTheAnswerFollowsTheBoxEngine(t *testing.T) {
 
 		at := 0
 		for i, given := range in.Lines {
-			if at < len(read) && read[at].Box == given.Box {
+			if at < len(read) && column(read[at].Box) == column(given.Box) {
 				line := read[at]
 				at++
 				if line.Score != given.Score {
@@ -245,14 +245,16 @@ func TestNoRenderedLineIsFarLongerThanTheRoomItsBoxHas(t *testing.T) {
 
 		// Keyed by box and not by index, because the merge may leave a line out
 		// and the answer is then no longer index for index with the input.
-		room := make(map[Box]int, len(in.Lines))
+		// Keyed by column: levelling moves the top and the bottom edge of a row,
+		// and the room a box has is what its width says.
+		room := make(map[[2]int]int, len(in.Lines))
 		for _, line := range in.Lines {
-			room[line.Box] = len([]rune(line.Text))
+			room[column(line.Box)] = len([]rune(line.Text))
 		}
 		for _, members := range groupLines(in.Lines, in.Blocks) {
 			density := blockDensity(in.Lines, members)
 			for _, index := range members {
-				room[in.Lines[index].Box] = roomIn(in.Lines[index], density)
+				room[column(in.Lines[index].Box)] = roomIn(in.Lines[index], density)
 			}
 		}
 
@@ -260,7 +262,7 @@ func TestNoRenderedLineIsFarLongerThanTheRoomItsBoxHas(t *testing.T) {
 			if line.Source != in.TextEngine {
 				continue
 			}
-			held := room[line.Box]
+			held := room[column(line.Box)]
 			if got := len([]rune(line.Text)); got > maxPieceRatio*held+pieceSlack {
 				t.Errorf("%s line %d: rendered %d runes for a box with room for %d",
 					f.Name, i, got, held)

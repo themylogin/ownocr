@@ -18,19 +18,6 @@ import (
 // engine read. Those carry Estimated and a box the filler placed, and they stand
 // between the lines they belong between. Nothing else moves.
 func Merge(in Input) Result {
-	result := Result{
-		Lines:   make([]MergedLine, len(in.Lines)),
-		Dropped: []Dropped{},
-	}
-	for i, line := range in.Lines {
-		result.Lines[i] = MergedLine{
-			Box:    line.Box,
-			Text:   line.Text,
-			Source: in.BoxEngine,
-			Score:  line.Score,
-		}
-	}
-
 	groups := groupLines(in.Lines, in.Blocks)
 
 	// The rows of every block, and the blocks whose rows are not the rows of the
@@ -55,7 +42,31 @@ func Merge(in Input) Result {
 		}
 	}
 
+	// The reference is measured once, on the boxes the box engine drew. Levelling
+	// moves the edges it reads, so measuring again after it would answer a pitch
+	// of the merge's own making.
 	ref := measure(in.Lines, rows, unusable)
+
+	// Levelling stands here, after the judgement and before the cut. The
+	// judgement reads the top edges the box engine drew, and levelling moves
+	// them; the cut, the filler and the gap boxes all read the boxes they are
+	// given, so putting it first is what makes every box of a row agree.
+	var levelled int
+	in.Lines, levelled = levelRows(in.Lines, rows, unusable, ref.pitch)
+
+	result := Result{
+		Lines:   make([]MergedLine, len(in.Lines)),
+		Dropped: []Dropped{},
+	}
+	for i, line := range in.Lines {
+		result.Lines[i] = MergedLine{
+			Box:    line.Box,
+			Text:   line.Text,
+			Source: in.BoxEngine,
+			Score:  line.Score,
+		}
+	}
+
 	fill := filler{pitch: ref.pitch}
 	plan := laid{
 		around:  map[int]*insert{},
@@ -166,6 +177,7 @@ func Merge(in Input) Result {
 
 	result.Lines = spliceIn(result.Lines, plan)
 	result.Counts = countOf(result, in.TextEngine, len(plan.drop))
+	result.Counts.Levelled = levelled
 	return result
 }
 

@@ -128,6 +128,9 @@ type Counts struct {
 	Estimated    int `json:"estimated"`
 	Discarded    int `json:"discarded"`
 	DroppedChars int `json:"droppedChars"`
+	// Levelled counts the printed rows whose boxes the merge moved onto one
+	// baseline and one height. A page that does not slope answers zero.
+	Levelled int `json:"levelled"`
 }
 
 type Result struct {

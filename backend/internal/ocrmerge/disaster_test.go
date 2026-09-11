@@ -349,16 +349,16 @@ func TestPageEightySevenKeepsTheBoxesOfItsOtherBlocks(t *testing.T) {
 	in := fixtureOf(t, "book0017page0087").input()
 	result := Merge(in)
 
-	answered := map[Box]bool{}
+	answered := map[[2]int]bool{}
 	for _, line := range result.Lines {
-		answered[line.Box] = true
+		answered[column(line.Box)] = true
 	}
 	for owner, members := range groupLines(in.Lines, in.Blocks) {
 		if owner == 1 {
 			continue
 		}
 		for _, index := range members {
-			if !answered[in.Lines[index].Box] {
+			if !answered[column(in.Lines[index].Box)] {
 				t.Errorf("block %d lost the box %v", owner, in.Lines[index].Box)
 			}
 		}
@@ -386,12 +386,12 @@ func TestTheFalselySuspectBlocksKeepEveryBox(t *testing.T) {
 
 		// Not a line for a line: page 90 holds a printed row the box engine
 		// missed, and the filler places one. Every box it did read survives.
-		answered := map[Box]bool{}
+		answered := map[[2]int]bool{}
 		for _, line := range result.Lines {
-			answered[line.Box] = true
+			answered[column(line.Box)] = true
 		}
 		for i, given := range in.Lines {
-			if !answered[given.Box] {
+			if !answered[column(given.Box)] {
 				t.Errorf("%s lost the box %v of line %d", name, given.Box, i)
 			}
 		}
@@ -424,7 +424,7 @@ func TestTheNearMissAndTheCollapseKeepEveryBox(t *testing.T) {
 			continue
 		}
 		for i, line := range read {
-			if line.Box != in.Lines[i].Box {
+			if column(line.Box) != column(in.Lines[i].Box) {
 				t.Errorf("%s read line %d carries %v, want %v",
 					name, i, line.Box, in.Lines[i].Box)
 			}
@@ -454,7 +454,7 @@ func TestPageEightyFiveReadsItsBrokenRowOnce(t *testing.T) {
 		{Box{408, 1189, 1771, 1322}, "el sentido de que la actuación de Alcibíades"},
 	}
 	for _, want := range row {
-		if got := text[want.box]; got != want.text {
+		if got := text.at(want.box); got != want.text {
 			t.Errorf("the box %v:\n got %q\nwant %q", want.box, got, want.text)
 		}
 	}
@@ -510,7 +510,7 @@ func TestPageEightyFivePlacesABoxOverTheInkItsBoxesMissed(t *testing.T) {
 
 	for _, row := range rows {
 		for at, box := range []Box{row.head, row.gap, row.tail} {
-			if got := text[box]; got != row.want[at] {
+			if got := text.at(box); got != row.want[at] {
 				t.Errorf("the box %v:\n got %q\nwant %q", box, got, row.want[at])
 			}
 		}
@@ -756,17 +756,27 @@ func indexes(n int) []int {
 
 // textByBox answers the text of every answered line, keyed by its box, so a test
 // names a box rather than a position that a placed line can shift.
-func textByBox(result Result) map[Box]string {
-	text := make(map[Box]string, len(result.Lines))
+// column answers the horizontal extent of a box. Levelling moves the top and the
+// bottom edge of a printed row and leaves its column alone, so a test that names a
+// line by its box names it by its column.
+func column(box Box) [2]int { return [2]int{box[0], box[2]} }
+
+// byColumn holds the text of every answered line under the column it covers.
+type byColumn map[[2]int]string
+
+func (b byColumn) at(box Box) string { return b[column(box)] }
+
+func textByBox(result Result) byColumn {
+	text := make(byColumn, len(result.Lines))
 	for _, line := range result.Lines {
-		text[line.Box] = line.Text
+		text[column(line.Box)] = line.Text
 	}
 	return text
 }
 
 func lineOf(result Result, box Box) *MergedLine {
 	for i, line := range result.Lines {
-		if line.Box == box {
+		if column(line.Box) == column(box) {
 			return &result.Lines[i]
 		}
 	}
