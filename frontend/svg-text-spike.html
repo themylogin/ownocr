@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ownocr SVG text layout spike</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; background: #f5f5f5; font-family: system-ui, sans-serif; }
+
+  .pages { display: flex; flex-direction: column; gap: 24px; }
+
+  .spread { display: flex; align-items: flex-start; justify-content: center; gap: 16px; }
+  .spread > * { flex: 0 0 auto; }
+  .spread .plain { display: block; object-fit: contain; background: #fff; }
+
+  .page { position: relative; background: #fff; }
+  .page img, .veil, .text { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .page img { object-fit: fill; }
+  .veil { background: #fff; opacity: 0.5; }
+  .text { fill: #000; font-family: serif; }
+  .grounds rect, .grounds path { fill: #fff; }
+
+  #panel {
+    position: fixed; top: 8px; right: 8px; z-index: 10; width: 330px;
+    background: #111; color: #eee; font: 12px/1.45 ui-monospace, monospace;
+    padding: 10px 12px; border-radius: 6px; box-shadow: 0 2px 12px rgba(0,0,0,.4);
+  }
+  #panel h2 { font-size: 12px; margin: 0 0 6px; letter-spacing: .06em; text-transform: uppercase; color: #8bd; }
+  #panel table { border-collapse: collapse; width: 100%; }
+  #panel td { padding: 1px 0; vertical-align: top; }
+  #panel td:last-child { text-align: right; color: #7f7; white-space: nowrap; }
+  #panel .warn td:last-child { color: #fc6; }
+  #panel hr { border: 0; border-top: 1px solid #333; margin: 8px 0; }
+  #panel button { font: inherit; background: #2a2a2a; color: #eee; border: 1px solid #444;
+                  border-radius: 4px; padding: 4px 8px; cursor: pointer; margin: 2px 2px 0 0; }
+  #panel button:hover { background: #383838; }
+  #panel a { color: #8bd; }
+  #panel .hint { color: #999; margin-top: 8px; }
+  #panel code { color: #fc6; }
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <h2>Build</h2>
+  <table id="build"></table>
+  <hr>
+  <h2>Since reset</h2>
+  <table id="live"></table>
+  <div>
+    <button id="reset">Reset counters</button>
+    <button id="force">Force full text layout</button>
+  </div>
+  <div class="hint">
+    <b>Ctrl+F test:</b> click <b>Reset</b>, press Ctrl+F, search
+    <code id="marker">?</code> (last page). Then read <b>max long task</b>
+    and <b>max frame gap</b>.
+  </div>
+  <div class="hint" id="variants"></div>
+</div>
+
+<div class="pages" id="pages"></div>
+
+<script>
+const LINES = [[[689,151,1149,214,"13. LA ETAPA ALCIBÍADES"],[1635,129,1737,214,"85"],[100,243,1741,406,"se lo envía y después se envía una nave a detenerlo durante el"],[112,375,261,461,"viaje;"],[231,336,1735,459,"etcétera. Incluso su figura individual está hecha a la"],[104,402,1731,538,"medida de este doble y a la vez indivisible carácter; es extre-"],[98,467,1735,617,"madamente capaz y a la vez, inseparablemente de ello, des-"],[110,574,379,676,"mesurado"],[328,556,1731,668,"o en sus pretensiones (quiere crecer, tanto en pres-"],[115,658,263,748,"tigio"],[239,629,1737,737,"como en fortuna -inseparablemente lo uno de lo"],[112,729,275,817,"otro-,"],[393,701,1737,805,"e deseos costosos, etcétera). No vale simplificar la"],[115,788,351,890,"situación"],[345,778,1741,874,"diciendo que es capaz pero no leal, porque lo"],[119,876,273,959,"cierto"],[418,843,1741,947,"e también es leal, pues sólo cambia de bando"],[121,935,328,1032,"cuando"],[342,916,1743,1020,"l suyo lo ha condenado a muerte o está tan mani-"],[114,969,1747,1116,"fiestamente a punto de hacerlo (y ello de manera poco iso-"],[127,1077,342,1181,"nómica)"],[302,1053,1751,1171,"que no podrá escapar si se descuida. Tucídides rela-"],[123,1108,1763,1264,"a diectmete el as Alcibíds n la rua de Ae,"],[137,1232,353,1324,"pero no"],[326,1230,456,1305,"en"],[408,1189,1771,1322,"el sentido de que la actuación de Alcibíades"],[129,1262,1777,1409,"mismo sea ruinosa, sino en el de que, siendo evidentemente"],[133,1338,1777,1472,"él quien mejor llevaba ciertos asuntos, y siendo esto evidente"],[133,1409,1782,1547,"para el dêmos mismo, a la vez lo «excesivo» de su condición"],[129,1492,1792,1621,"como individuo particular hace de él alguien peligroso a los"],[133,1574,1802,1694,"ojos del dêmos, el cual se ve así reiteradamente llevado a poner"],[123,1653,1812,1773,"los asuntos en manos menos capaces y, por lo tanto, a que las"],[141,1751,668,1830,"cosas se hagan peor."],[200,1804,1828,1924,"El exceso y a la vez adecuación que encontramos en la"],[147,1902,1828,1991,"figura de Alcibíades es el exceso y a la vez adecuación que"],[139,1973,1839,2077,"habíamos venido encontrando en todo cuanto tenía que ver"],[143,2052,1843,2160,"con el proceso o vuelco por el que la isonomía se autointer-"],[143,2132,1853,2242,"preta o reinterpreta como demokratía. Bajo diversos aspectos,"],[143,2203,1863,2333,"expresándose o concretándose en diversos tipos de fenóme-"],[143,2290,1865,2410,"nos, hemos encontrado siempre aquello de que el reconoci-"],[139,2370,1879,2494,"miento de cierto «lo mismo» (el que esto sea esto es lo"],[137,2449,1881,2592,"mismo que el que aquello sea aquello) uniformiza una dis-"],[133,2531,1900,2697,"tancia o espacio y, con ello, produce la indiferencia de los"],[129,2608,1910,2795,"límites; o dicho de otra manera: es la igualdad lo que dispara"],[125,2695,1914,2899,"el proceso de la ilimitada desigualdad, al hacer que la desi-"]],[[579,4,1096,114,"13. LA ETAPA ALCIBÍADES"],[235,49,1769,325,"la extrema suspicacia de los atenienses en ciertas"],[65,232,276,373,"exponer"],[272,142,1762,393,"s y el ropaje tradicional con el que esa suspicacía se"],[71,305,279,436,"cuestion"],[250,231,1752,459,"En cambio, con la «tiranía» en el sentido en que"],[77,381,266,509,"expresa."],[261,309,1746,527,"ablado de ella, y en el sentido en que lo fue en Ate-"],[75,456,246,570,"hemos"],[258,388,1749,603,"Pisístrato y sus hijos, con el significado que aquello"],[81,526,235,642,"nas la"],[192,467,1755,681,"y el papel que desempeñó, nada de lo que pueda ocurrir"],[86,603,252,713,"tuvo ye"],[81,663,872,863,"nada tiene que ver Alcibíades."],[139,697,1764,913,"La manera en que un ateniense de la época de la demo-"],[84,759,1781,1006,"kratía normalmente era designado incluye, además de su"],[261,873,1773,1034,"individual, en materia de familia solamente el"],[98,920,1787,1152,"(asismo individual) de su padre. Esta fórmula traduce (y"],[102,954,311,1064,"nombre"],[101,1002,1796,1227,"a la vez favorece) la carencia de importancia que tenía la"],[110,1078,1802,1300,"pertenencia familiar ancestral. Aun cuando el sistema de"],[120,1170,1802,1362,"designación fuese otro, poca o ninguna huella hubiera"],[117,1251,1811,1434,"podido quedar de cierto parentesco de sangre común a"],[114,1335,1814,1507,"Pericles y Alcibíades, puesto que el mismo era, para ambos,"],[111,1416,1820,1578,"solamente materno. Es, pues, significativo que, sin"],[108,1501,1823,1651,"embargo, no se haya dejado de señalar que, en efecto,"],[105,1583,1829,1726,"ambos personajes tenían ese tipo de vínculo con un anti-"],[105,1666,1835,1802,"guo linaje al cual, por cierto, sí pertenecía de pleno dere-"],[108,1750,1841,1880,"cho, por parentesco y porque la norma «democrática»"],[108,1835,1853,1953,"aún no era vigente, Clístenes, de quien varias veces hemos"],[116,1921,1859,2029,"hablado ya. La familia en cuestión es, por otra parte, un"],[119,2003,1865,2110,"caso único en la historia de Atenas. De la Athenaíon politeía"],[122,2088,1876,2192,"aristotélica, ya citada aquí, no ha llegado a nosotros el"],[128,2172,1885,2271,"comienzo, pero sí lo bastante de él para que se vea que allí"],[131,2258,1891,2352,"pasaba algo horrible, algo cuyos responsables son incluso"],[131,2343,1903,2438,"expulsados de sus tumbas, siendo la familia entera de ellos"],[128,2425,1920,2526,"condenada al destierro perpetuo; lo más notable de todo es"],[134,2523,1920,2611,"que la terrible acción cometida por los alcmeónidas (de"],[131,2594,1929,2718,"hecho con la responsabilidad del arconte Megacles, perte-"],[128,2673,1945,2810,"neciente a esa familia) consistió en que, por defender a"]],[[352,145,441,217,"90"],[982,114,1412,208,"LA COSA Y EL RELATO"],[358,346,1608,447,"tación, un cuerpo de cuatrocientos del cual"],[367,430,1608,514,"es él mismo quien ha de remitir ciertos asunt"],[1625,412,1970,535,"os a uno que él"],[364,497,1651,595,"mismo se encargará de reunir y que constará"],[1631,492,1959,601,"de cinco mil."],[367,576,1611,668,"Este último punto comporta seguramente un"],[1640,568,1956,675,"oque de ambi-"],[373,657,1596,737,"güedad, pues del decir de los «oligarcas»"],[359,698,1973,845,"parte la alegación de que nunca habían sido tantos los que de"],[367,790,1673,901,"hecho habían constituido la asamblea. En todo"],[1625,811,1964,911,"o caso, el texto"],[365,852,1967,996,"no permite pensar que durante el período de los cuatrocien-"],[368,928,1961,1068,"tos llegasen los cinco mil a constituirse ni siquiera en el sen-"],[368,997,1964,1141,"tido de que meramente se supiese quiénes eran los tales. El"],[368,1067,1961,1217,"relato de Tucídides, por otra parte, deja claro que la aproba-"],[368,1140,1955,1289,"ción de la vieja asamblea a este cambio (es decir, su propia"],[362,1218,1955,1362,"autodestitución) ocurre bajo un régimen de terror en cuya"],[362,1291,1951,1433,"producción no desempeña papel alguno el enemigo en"],[356,1369,1948,1502,"guerra (salvo, obviamente, el significado que deba atribuirse"],[356,1445,1942,1578,"al propio hecho de la guerra). Cuando los oligarcas envían"],[347,1518,1942,1654,"una embajada a la flota estacionada en Samo para presentar"],[347,1586,1939,1729,"el cambio, Tucídides dice (VIII, 86,1-7) que Alcibíades, que"],[344,1655,1936,1802,"entonces se encontraba allí, todavía exilado, hace un gran"],[344,1738,1936,1874,"servicio a la pólis en cuanto que, rechazando la fórmula de los"],[347,1814,1939,1950,"cuatrocientos, a la vez impide que la flota se vuelva contra"],[347,1885,1939,2029,"Atenas e incluso en persona contra los embajadores, a los"],[350,1968,1939,2104,"que el mismo Alcibíades despide en retorno con la recomen-"],[347,2044,1939,2186,"dación de que los cinco mil destituyan a los cuatrocientos y"],[347,2122,1936,2261,"restauren la antigua boulé, el órgano de quinientos de la demo-"],[350,2195,1936,2340,"kratía, designado por sorteo y turno y que acababa de ser"],[350,2274,1933,2416,"disuelto por los oligarcas; de hecho el texto de Tucídides"],[347,2349,1933,2505,"parece decir, ya cerca de su brusco final, que una fórmula en"],[356,2556,1921,2717,"33 Los hechos a continuación resumidos lo son de acuerdo con lo que relata"],[433,2609,1915,2786,"Tucídides. La versión que da la Athenaíon politeía aristotélica difiere en algu-"],[436,2673,674,2747,"nos puntos."]],[[302,185,411,252,"102"],[905,143,1304,231,"LA COSA Y EL RELATO"],[317,293,1899,412,"decimos que «relata» o «cuenta» y que es «en prosa»."],[314,371,1905,491,"Esto, ciertamente, no lo dice en sí misma la palabra historie,"],[317,456,1905,567,"pero ya anteriormente se había expuesto cómo esta palabra,"],[320,535,1908,633,"en virtud de lo que ella misma sí dice, expresa en cierto con-"],[323,613,1914,703,"texto lo que sí es un momento esencial en la problemática"],[323,689,1914,778,"del decir relevante39, y ahora, en el presente libro, nuestro"],[323,759,1917,857,"esfuerzo se ha centrado en cómo lo propio del decir rele-"],[317,825,1918,935,"vante se cumple en Heródoto y Tucídides en el modo de algo"],[323,898,1924,1014,"que en nuestra manera de hablar se describe como el relato"],[326,973,1924,1087,"de una guerra. La diferencia de Heródoto a Tucídides, en la"],[326,1041,1930,1168,"que hemos insistido, se traduce no sólo en que la guerra sea"],[326,1111,1927,1244,"distinta y el decir en su relación con ella lo sea igualmente,"],[329,1189,1927,1307,"sino también en que el ceñirse a la guerra misma, que en"],[334,1270,1918,1366,"Tucídides es ya inmediato, culmina en Heródoto una habi-"],[331,1345,1705,1445,"tación de la distancia y del espacio de peregrinaje4o."],[402,1413,1921,1528,"Si determinados títulos anacrónicos, que tenemos que"],[334,1496,1911,1593,"emplear sin perder de vista que lo son, se emplean en cambio"],[331,1567,1905,1663,"con carácter positivo, esto es, asumiendo como criterios los"],[329,1634,1899,1741,"significados que ciertas palabras en abstracto tienen en nues-"],[332,1707,1890,1820,"tras lenguas, entonces lo hasta aquí dicho tropieza con obje-"],[332,1779,1890,1893,"ciones tan obvias como, por ejemplo, la de que el relato en"],[335,1855,1883,1968,"cuanto género poético es en principio relato «de ficción»"],[335,1927,1880,2054,"(o, al menos, su condición permite que lo sea), mientras que"],[335,2006,1877,2127,"a Heródoto y Tucídides los valoramos (en su caso los discu-"],[335,2085,1880,2212,"timos) como autores que pretenderían relatar «lo que en"],[335,2163,1877,2287,"verdad ocurrió». La objeción es interesante porque nos"],[335,2239,1877,2366,"obliga a recordar expresamente cosas ya muchas veces dichas y"],[335,2311,1874,2447,"desarrolladas y en las cuales está implicado que un concepto"],[335,2379,1874,2534,"de «ficción», y por lo tanto un correspondiente concepto de"],[341,2641,1410,2782,"39 Cfr. mi El decir griego, ya citado, en especial capítulo 8."],[341,2701,592,2769,"40 Cfr. ibid."]],[[861,133,1106,189,"16. TRÁNSITO"],[1626,133,1756,223,"103"],[140,287,1738,374,"«realidad», es inadecuado para el ámbito histórico del que"],[127,355,1744,462,"nos ocupamos (incluido, por ejemplo, Platón y en cierta"],[133,436,1741,535,"manera también Aristóteles). Hay que insistir, en efecto, en"],[137,517,1738,613,"recordar que el poieîn del poietés no es producir una represen-"],[146,595,1738,692,"tación o discurso o en general cosa alguna que pudiese con-"],[149,680,1741,768,"certar o no con la cosa, sino que la elección del verbo poieîn y"],[152,752,1735,843,"del nombre poietés tiene que ver con que en principio la refe-"],[149,822,1741,926,"rencia griega de «decir» (el ámbito implicado en el recono-"],[158,901,1741,996,"cer esto como esto en cuanto a la vez reconocer aquello como"],[161,973,1744,1075,"aquello) lo es al entero «andar con» y «habérselas con», en"],[164,1044,1738,1150,"el cual, en efecto, cada cosa es lo que es, el cual, por lo tanto,"],[175,1117,1738,1226,"«pro-duce» la cosa, esto es, deja que ella sea. No, pues,"],[175,1189,1732,1298,"que, en vez de haber un sujeto que «meramente dice»,"],[175,1259,1735,1374,"hubiese un sujeto que «se las ha»; lo que ocurre es que no"],[181,1335,1729,1439,"hay en absoluto sujeto alguno; si de mí se dice que «digo»"],[178,1407,1732,1515,"en un sentido en que ello seguramente no puede decirse de"],[181,1480,1732,1587,"la higuera, no es porque el decir sea una operación mía, sino"],[178,1555,1732,1670,"porque en el que esto sea esto en cuanto lo mismo que el que"],[178,1631,1732,1749,"aquello sea aquello yo tengo un tipo de implicación que segu-"],[178,1707,1735,1814,"ramente la higuera no tiene. No es sólo que del decir se"],[184,1782,1735,1890,"asuma que dice lo que es (y que el problema sea entonces el"],[190,1858,1735,1965,"de cómo es entonces posible un decir erróneo, problema"],[193,1936,1738,2044,"planteado ni siquiera por la presunta obviedad de que a veces"],[196,2009,1738,2127,"nos equivocamos, sino más bien porque justamente el que se"],[201,2088,1738,2195,"haga relevante la presencia misma, y no uno u otro presente,"],[204,2154,1741,2275,"comporta que ahí mismo esté la posibilidad de lo otro, del"],[207,2230,1744,2351,"ocultamiento); es, ciertamente, esto, pero es ante todo que el"],[210,2305,1744,2432,"decir mismo, el légein o el lógos, el que esto sea esto en cuanto"],[210,2376,1741,2517,"lo mismo que el que aquello sea aquello, es en primera ins-"],[216,2472,1277,2602,"tancia el que haya cosas, el «ser» mismo."],[297,2518,1752,2691,"Al mismo tipo obvio de objeción mencionado pertenece,"],[220,2580,1756,2786,"por ejemplo, el que se nos diga que, en un sentido abstracto"],[223,2659,1759,2868,"de la palabra «relato», ya, por ejemplo, la líada y la Odisea"]],[[262,158,368,253,"II6"],[887,161,1273,233,"LA COSA Y EL RELATO"],[267,317,1880,443,"una con la citada secuencia de «géneros» y dentro de ella, a"],[273,399,1885,532,"saber, la historíe, de la que ya ha quedado claro que ni es la"],[275,481,1887,618,"«historia» ni es tampoco algo tal que pudiese ser casual el"],[275,569,1582,684,"que de su nombre deriven tanto history como story."],[355,644,1889,774,"Con todo ello, sin duda, se ha estado hablando de una"],[275,730,1887,849,"«distancia» que a la vez es todo lo contrario de tener alguna"],[278,818,1887,929,"otra parte en la que estar. Por otro lado, se ofreció también"],[278,898,1883,1004,"una manera de entender desde estas consideraciones lo espe-"],[282,980,1894,1090,"cíficamente moderno, entendiendo que la imposibilidad"],[278,1048,1900,1187,"de documentar definitivamente especial conexión alguna de"],[282,1134,1894,1260,"algo con algo es a la vez la experiencia del vínculo de todo"],[282,1216,1894,1342,"con todo, y que, por lo tanto, el inmediato sentir y vivir en la"],[282,1293,1883,1421,"soledad irremediable de cada punto es la única certeza posi-"],[286,1379,1883,1498,"ble de uno-todo, en cuanto que precisamente esa inmediatez"],[286,1459,1871,1576,"comporta distancia frente al contenido tematizable, de"],[278,1534,1867,1660,"manera que el retorno a esa inmediatez desde la tematización"],[278,1609,1865,1739,"de contenidos (la «impresión de reflexión») comporta"],[280,1695,1858,1814,"posibilidades que en su lugar se describenDentro de lo"],[280,1770,1856,1889,"que en esta línea se encuentra, es especialmente importante"],[275,1843,1858,1977,"en nuesro actual contet la relecra que allí se ecede"],[275,1924,1849,2066,"rasgo matemático-experimental (en cierta manera en con-"],[280,2006,1849,2145,"ic cn émimo, ya que etender es disancia), relectura"],[280,2088,1843,2231,"en la que la uniformidad (cualquier punto es en principio"],[282,2178,1836,2302,"igual que cualquier otro, etcétera) no interesa como posi-"],[282,2258,1834,2384,"ción, de la cual pudiesen derivar postulados, sino única-"],[282,2346,1827,2463,"mente como desvinculación y, en este sentido, como consu-"],[289,2430,770,2527,"mación de la sképsis."],[284,2699,1812,2836,"4mbé,a,dlSd,"],[375,2768,536,2838,"2008)."],[284,2812,1803,2964,"auEll Mdr"],[373,2885,538,2953,"2009)."],[289,2936,560,3013,"51 Cfr. ibid."]],[[121,78,1016,113,"HERÁCLITO - PARMÉNIDES (BASES PARA UNA LECTURA)"],[1403,86,1440,121,"37"],[123,239,1431,282,"contra de ese tipo de lectura, permítaseme hacer notar primeramente que."],[121,290,1435,333,"según la gramática del griego antiguo, un \"participio neutro singular\""],[121,343,1440,386,"afectado de artículo y sin que haya substantivo implícito, no puede en"],[121,393,1435,436,"modo alguno tener ese significado que permitiría, en el caso de tò ¿óv,"],[118,442,1433,489,"traducir por \"lo ente\". Las expresiones griegas τò καλóv, τò aγαθóv,"],[118,492,1438,541,"cuando no está implícito substantivo alguno, es decir: cuando el adjeti-"],[121,548,1438,591,"vo singular neutro, afectado de artículo, es núcleo sintáctico y semánti-"],[116,595,1440,644,"co, no significan en modo alguno \"lo bello\" y \"lo bueno\", sino que en"],[118,646,1440,694,"todo caso, si por convenio admitimos léxicamente \"bello\" y \"bueno\""],[116,697,1440,747,"como traducciones de καλó- y bγαθó- respectivamente, τò καλóv y τò"],[118,750,1440,798,"aγaθóv serían \"la belleza\" y \"el bien\", esto es: aquello en lo que con-"],[118,801,1440,848,"siste ser bello, aquello en lo que consiste ser bueno. Del mismo modo,"],[118,851,1440,899,"τò èóv no es \"lo ente\", sino el ser. Ahora bien, más allá de esta observa-"],[118,904,1440,952,"ción puramente gramatical, el problema de (o contra) esas interpretacio-"],[118,954,1440,1003,"nes que hacen de tò èóv lo verdaderamente ente en oposición a lo que"],[118,1005,1438,1056,"sólo se hace pasar (o alguien hace pasar) por ente, es el histórico proble-"],[116,1056,1440,1106,"ma de la relación entre las dos partes del poema, o entre la manifesta-"],[118,1108,1438,1157,"ción de la ληθεín y la presentación de la δóξα, o, si se prefiere, el pro-"],[118,1159,1435,1207,"blema de cuál es el papel de la parte del poema que se dedica a la δóξα."],[118,1210,1438,1257,"He dicho \"histórico problema\" porque su planteamiento en el terreno"],[118,1260,1440,1310,"filológico e histórico-filosófico ha sido fecundo, si bien la influencia que"],[116,1310,1440,1362,"esa fecundidad ha tenido sobre las exposiciones canónicas parece limi-"],[116,1362,1440,1412,"tarse a las notas bibliográficas de éstas. Una respuesta aceptable al pro-"],[118,1414,1438,1462,"blema ha de reunir la doble condición de interpretar, por una parte, la"],[115,1462,1438,1518,"contraposición aλnθεín-δóξα y, por otra parte, poner de manifiesto có-"],[115,1512,1440,1569,"mo de la interpretación dada se sigue el que tenga que haber una exposi-"],[118,1566,1440,1619,"ción de la δóξα, siendo así que la δóξα no es &ληθεíη, lo cual a primera"],[118,1616,1440,1672,"vista parece querer decir que no es verdad. Hagamos algunas anotacio-"],[115,1667,1440,1722,"nes a este último punto. Según las palabras de la diosa, \"queda\" una"],[118,1720,1440,1773,"sola δδ διζσιο, nombrada así: en B 2, 3, como  δπω στι τε καì"],[115,1768,1443,1829,"οκ στι μ εvαι; en B 6, 1-2, como στι γρ εναι, (μηδεν δ' οκ"],[118,1821,1440,1874,"στiv); en B 8, 2, simplemente como φ £στiv; sólo queda este μűθog"],[118,1871,1440,1927,"óδoño, por cuanto la diosa ha definido en varios pasajes este camino co-"],[115,1920,1443,1982,"mo el que hay que seguir, y lo ha definido en cada caso en contraposi-"],[118,1973,1440,2034,"ción siempre binaria, pero no siempre frente al mismo término contra-"],[115,2025,1440,2081,"puesto. En B 2 el término contrapuesto, la otra de las dos δδoì μoñvai"],[115,2073,1443,2137,"διζσιο de que allí se habla, es   οκ στι τε καì  χρεν στι"],[118,2127,1438,2185,"μ εÍvai. En B 6 es primeramente esto mismo, designado por la expre-"],[118,2177,1438,2235,"sión negativa que completa la designación del camino precedentemente"]],[[164,926,1359,972,"I. LA EXÉGESIS SOCRÁTICO-PLATÓNICA DEL TÍTULO"],[234,981,1357,1026,"«FILOSOFÍA». NECESIDAD DE IR MÁS ALLÁ DE ESA"],[235,1034,447,1076,"EXÉGESIS"],[225,1141,1359,1187,"La filosofia se designa a sí misma con esta palabra (φiλoσo-"],[163,1194,1360,1245,"φíα, philosophia) desde Platón, más concretamente ya desde el"],[164,1250,1360,1293,"Platón «socrático». Con la palabra misma1 está vinculada una"],[164,1304,1356,1346,"cierta exégesis también platónica (o, si se prefiere, socrático-"],[165,1355,986,1399,"platónica)², que resumimos a continuación:"],[223,1407,1357,1451,"En la medida en que algo quepa decir de los dioses, de ellos"],[163,1461,1360,1503,"cabrá decir que son sabios; frente a ellos, el hombre tiene el"],[161,1514,1358,1558,"privilegio de no-saber. Ahora bien, mientras que las piedras y"],[162,1567,1357,1611,"los árboles simplemente son lo que son, para el hombre todo"],[162,1620,1357,1664,"aquello que constituye su propio ser es posibilidad, algo que"],[160,1667,1356,1717,"puede ser asumido o no serlo, y, así, también el mencionado"],[156,1724,1355,1767,"no-saber se encuentra en tal situación: el hombre puede ignorar"],[213,1858,1362,1895,"1 φιλoσoφíα es abstracι, de φιλógoφο, tema adjetival que, a su vez, es"],[164,1899,1360,1933,"compuesto de φiλo y goφó. El adjetivo aparece ya en Heráclito, pero segura-"],[162,1939,1360,1972,"mente no con el carácter de autodesignación expresa de la filosofía misma como"],[161,1976,331,2010,"tal. Cfr. II."],[207,2014,1359,2052,"2 El resumen que se hace a renglón seguido se apoya fundamentalmente en"],[162,2054,830,2094,"elementos de la Apologia y del Symposium."],[1315,2150,1365,2196,"13"]],[[1571,239,1608,286,"si"],[182,250,1375,294,"su propio no-saber, y eso es la ignorancia pura y simple, o bien"],[1571,292,1608,335,"ot"],[183,303,1377,346,"saber que no-sabe, y eso es la filosofía, por cuanto este asumir"],[180,355,1377,400,"propiamente el «no-» es aquella peculiar manera de «pertenecer"],[1570,347,1608,390,"ur"],[1569,397,1608,442,"ni"],[179,409,1373,452,"a» que en el presente contexto designa el adjetivo (piλo o el"],[179,461,958,506,"abstracto φiλiα; se «ama» aquello que"],[936,462,1372,506,"e «no» se tiene, pero"],[1572,501,1608,548,"la"],[178,512,1372,559,"siendo este «no-tener» esencialmente distinto del «no tener» por"],[1573,556,1608,603,"(c"],[179,566,1370,612,"el cual yo no tengo todas aquellas cosas que no tengo, como,"],[180,621,1369,664,"por ejemplo, alas o antenas o un yate de recreo; por el contrario,"],[1574,612,1608,654,"«S"],[178,671,1374,719,"el «no-» del que ahora se trata es un esencial «pertenecer a» que"],[1574,662,1608,709,"(c"],[1571,715,1608,764,"pl"],[176,730,858,767,"consiste en una esencial separación"],[1572,768,1608,813,"de"],[237,778,1367,823,"Tal exégesis, que se ha hecho clásica, plantea, sin embargo,"],[1570,822,1608,865,"es"],[174,831,1369,876,"un problema que nos obliga a retroceder aún algo más en el"],[1570,874,1608,919,"ac"],[176,885,1368,928,"tiempo histórico. En efecto, no es inmediatamente comprensible"],[1571,924,1608,971,"cí"],[173,938,1367,982,"el hecho de que σopíα llegue a designar algo reservado al dios y"],[172,987,1369,1036,"de lo cual el hombre permanece separado. σoφiα es palabra"],[1571,980,1608,1025,"m"],[1571,1032,1608,1078,"le"],[171,1042,1368,1087,"atestiguada desde la más antigua literatura griega³, y la cualidad"],[1571,1082,1608,1129,"fil"],[172,1098,1366,1141,"que designa es el «entender de», el «saber» como capacidad o"],[172,1149,1364,1193,"destreza. No es ello cosa alguna reservada a los dioses, y, por"],[1572,1140,1608,1183,"ac"],[170,1204,1363,1246,"otra parte, tampoco se ha generado aún la separación de una"],[1571,1196,1608,1241,"qu"],[170,1255,1366,1298,"esfera especial como «el conocimiento» o lo «teórico» frente a"],[169,1308,1360,1350,"otras esferas del ser humano o modos de presencia de lo ente."],[1571,1324,1608,1366,"de"],[167,1360,1365,1406,"σoφó es todo el que posee un arte o habilidad: el artesano, el"],[1572,1367,1608,1406,"an"],[1570,1407,1608,1443,"a"],[167,1417,758,1457,"marinero, el poeta o el músico."],[1569,1445,1608,1485,"el"],[230,1467,1360,1507,"Esta ausencia de delimitación del «conocimiento» frente a lo"],[1570,1487,1608,1524,"en"],[171,1519,1362,1565,"«práctico», y de otras delimitaciones similares, no es meramente"],[1576,1530,1608,1569,"«p"],[166,1572,1361,1617,"una característica de las palabras goφóg y goφíα, frente a la"],[1570,1568,1608,1604,"re"],[1571,1607,1608,1643,"se"],[166,1626,1359,1669,"cual pudiese —por ejemplo— haber otras palabras en la misma"],[1568,1644,1608,1683,"tit"],[163,1678,1355,1723,"lengua que aportasen en caso necesario las delimitaciones en"],[1571,1686,1608,1723,"en"],[165,1734,1354,1774,"cuestión. No es así, sino que ese «saber» como «entender de»,"],[1573,1727,1608,1764,"ar"],[1570,1765,1608,1801,"se"],[162,1785,1355,1828,"capacidad o destreza, es el saber que la lengua griega arcaica"],[1568,1803,1608,1842,"de"],[161,1839,1354,1882,"reconoce como tal. ¿ Hará falta recordar aquí que la propia pala-"],[1570,1843,1608,1884,"co"],[162,1891,1358,1935,"bra vóoç (lo que luego sería el voű y finalmente el intellectus)"],[1568,1882,1608,1923,"SO"],[1569,1924,1608,1965,"pr"],[1571,1966,1608,2003,"da"],[1570,2040,1608,2082,"ma"],[209,2052,621,2086,"3 Homero (llíada), O 412."],[160,2146,211,2189,"14"]],[[98,227,1294,273,"y no de que haya en general cosas reconocibles como bellas,"],[99,283,1293,325,"sino de que la belleza se manifieste como tal únicamente a su"],[99,336,301,380,"propia luz."],[93,490,1038,539,"II. HΕRÁCLITO: τò σοφóν Y φιλσοφοι νδρε"],[157,600,1291,643,"En todo lo hasta aquí visto, goφóç aparece como un adjetivo"],[93,651,1291,697,"y σoφíα como el abstracto de ese adjetivo, designando ambos"],[94,707,1290,747,"una cualidad posible del hombre. Ello en el sentido siguientè: es"],[93,760,1289,802,"del hombre de quien se discute si él es o no es goφóg; la refe-"],[89,812,1291,857,"rencia que hemos registrado a «los dioses» no hace más que"],[91,866,1292,910,"confirmar esto, pues, a fin de cuentas, da por supuesto que un"],[90,919,1126,964,"dios no es algo de lo que se discuta si es σoφó o no."],[152,973,1289,1016,"Hay, sin embargo, algunos textos griegos arcaicos, impor-"],[86,1025,1286,1067,"tantes en la historia de la filosofía, que no se conforman con ese"],[91,1083,266,1121,"esquema."],[150,1127,835,1174,"Así, por una parte, Heráclito, B 32:"],[87,1179,1286,1232,"ν τò σοφν μονον λγεσ9αι ο 9λει χα 9λει Zην"],[85,1229,241,1279,"Övομα 7."],[150,1290,1285,1334,"Aquí τò σoφóv no es ni dios ni hombre alguno; la palabra"],[85,1342,1283,1386,"debe designar algo uno, único y singular; e incluso la referencia"],[84,1394,1281,1442,"a Zeus se hace de manera que excluye tajantemente que goφóg"],[83,1449,1283,1493,"designe una cualidad o atributo del dios; no se dice que Zeus sea"],[79,1499,1281,1549,"ó σoφó, sino que τò σoφóv [nótese la diferencia morfológica§]"],[81,1555,1281,1600,"puede en cierta manera ser «dicho» en cuanto que es dicho el"],[79,1608,1280,1653,"nombre de Zeus, si bien, por otra parte, no puede tò σoφóv ser"],[77,1659,262,1703,"dicho así."],[140,1712,703,1755,"Igualmente, Heráclito, B 108:"],[121,1878,1271,1915,"7 DiEls, H.: Die Fragmente der Vorsokratiker, 6. Auflage, hrsg. von W."],[79,1921,1268,1955,"Kranz, 1951 (y reimpresiones posteriores de la misma edición, en adelante"],[75,1959,1157,1993,"citado simplemente como «Diels-Kranz»), Herakl. B 32 (t. 1, pág. 159)."],[119,1996,1270,2034,"8 El llamado «neutro singular» es la forma que se emplea para el uso abso-"],[72,2039,960,2074,"luto (sin vinculación atributiva ni predicativa) del adjetivo."],[1230,2139,1281,2184,"17"]],[[410,152,485,217,"52"],[999,157,1388,215,"LA COSA Y EL RELATO"],[425,415,2025,520,"ellas con gracia (kháris), con la mayor flexibilidad o versati-"],[420,709,2028,806,"su irreductibilidad, esto es, en su ser; y también aquí aflora"],[422,783,2027,879,"el que precisamente ese reconocimiento genera un espacio"],[418,858,2025,953,"uniforme, por lo tanto un ilimitado y la tendencia reduc-"],[420,937,2024,1022,"tora; y también aquí esto, como el substraerse que es inhe-"],[417,997,2032,1104,"rente a la comparecencia o tener lugar de lo siempre ya"],[423,1086,2029,1167,"supuesto, se expresa, como ya desde el comienzo mismo del"],[420,1149,2028,1245,"presente discurso de Pericles (cfr. nuestro capítulo 4),"],[418,1221,2032,1318,"mediante la contraposición de érgon a lógos (II, 41, 2), incluso"],[420,1295,2031,1395,"empleando de nuevo cierto recurso ya antes asociado a esa"],[419,1377,2025,1461,"contraposición y que ya conocemos: en efecto, el que la"],[421,1449,2018,1533,"cuestión escapa a la determinación y tiene que ver con espa-"],[420,1521,2019,1605,"cio uniforme y con tendencia a la ilimitación se expresa"],[417,1597,2014,1678,"remitiendo de lógos a otro término, diciendo, pues, que lo"],[413,1665,2011,1757,"peculiar o atrevido de ello no es hinchazón o énfasis (kómpos,"],[417,1740,2010,1831,"ibid.) dentro del propio ámbito lógoi, sino que es lo otro, lo"],[416,1806,2010,1907,"cual, además de ser caracterizado como el ámbito érga, es"],[418,1885,2002,1981,"designado como alétheia (ibid.), tal como ya ocurría -y así lo"],[412,1956,1997,2058,"vimos— en el comienzo del mismo discurso de Pericles y pre-"],[414,2041,1995,2130,"cisamente a propósito de la cuestión de si procedía decir un"],[413,2111,1992,2207,"decir en vez de remitir todo a érga. Nuevo, en comparación"],[411,2189,1987,2278,"con la presencia anterior de esto mismo en el mismo dis-"],[408,2260,1985,2359,"curso de Pericles, es el que ahora con ello se relaciona expre-"],[400,2334,1984,2445,"samente lo que en nuestra precedente exposición ha apare-"],[446,2664,1490,2771,"cular capítulo 4 con referencia a los capítulos 1 y 2."]],[[113,203,1307,246,"otro de dos términos: el ser y el no-ser: εîvαí τε xαì oχí, o bien:"],[116,256,1310,298,"πλειν τε xαì ox εivαι. Inmediatamente después de iniciada la"],[114,310,1310,353,"exposición de la δóξα, estos términos aparecen designados como"],[118,362,1309,406,"«el fuego» (πūp, más adelante «la luz», φáo) y «la noche»"],[116,415,1311,458,"(vúξ); las breves descripciones acompañantes traducen esa con-"],[114,469,1311,512,"traposición por las de ligero-pesado, sutil-denso, etcétera, con"],[114,522,1310,564,"amplios antecedentes y ecos (que no vamos a seguir aquí) en la"],[116,572,1310,617,"Grecia arcaica. Lo que nos importa ahora es que esa dualidad,"],[115,625,1310,668,"en el modo en que aparece en esos versos de Parménides, es"],[114,678,1310,719,"dualidad de ser y no ser. ¿ De dónde sale esta condición, que la"],[115,731,1310,774,"exposición parmenídea de la δóξα se impone a sí misma, de"],[112,783,1309,829,"entender todo como el ser-uno-al-lado-de-otro de luz y noche,"],[113,837,1311,880,"de ser y no-ser, de sí y no? Si es válido lo que hemos dicho de"],[113,890,1309,935,"que la δóξα es necesaria en virtud de la ληθεiη misma, de que"],[117,945,1308,988,"«tenía que» producirse ese «parecer», etcétera, entonces al me-"],[111,996,1309,1040,"nos la mencionada condición general de la δóξα (el ser-uno-al-"],[111,1048,1308,1092,"lado-de-otro de justamente dos y precisamente esos dos térmi-"],[112,1104,1309,1147,"nos) no puede ser ajena a lo que en el poema se manifiesta como"],[113,1155,1308,1197,"el camino de la λn9εín. Arriba (especialmente capítulo ante-"],[112,1210,1307,1250,"rior) hemos mencionado dos contraposiciones binarias, en las"],[109,1260,1304,1308,"que se define este camino; la segunda es la contraposición λn-"],[112,1315,918,1357,"θεiη-δóξα, pero ¿qué pasa con la primera?"],[173,1368,1305,1411,"Empecemos por recordar que todo el despliegue de ληθεin"],[110,1420,1306,1463,"o de v εivαi que se produce en B 8, 1-49, tiene constantemente"],[110,1471,1305,1517,"el carácter de un rechazo, reforzado una y otra vez por expre-"],[109,1527,1306,1570,"siones de impedimento, prohibición o apartamiento: oδ' ¿áσσω"],[106,1581,1301,1624,"(verso 7), οτ' ναε ∆ixη χαλ.ασασα πδσιν (verso 14), πσ-"],[108,1632,1304,1677,"βεσται (νersο 21), τλε µλ' πλ.αχθησαν (νersο 28), πωσε δε"],[105,1684,1303,1729,"πστι ληθ (ibíd.), ου θμι εναι (verso 32), etcétera.. Lo"],[105,1738,1301,1782,"que hay en esta permanente forma de expresión es la perma-"],[105,1791,1303,1834,"nente escisión frente a lo no-decible no-pensable no-investiga-"],[106,1844,1302,1886,"ble. Esto, que ocurre constantemente y en cada frase, no es sino"],[106,1897,1303,1939,"el desarrollo de algo que la diosa ha formulado también de ma-"],[103,1949,1303,1994,"nera general, y precisamente como la primera de las dos contra-"],[105,2003,1302,2048,"posiciones en que se define el camino de la ληθεin. Hay dos"],[1243,2104,1311,2148,"119"]],[[232,194,1425,237,"nides lo mismo que es designado en algunos fragmentos de He-"],[230,247,966,294,"ráclito por las palabras φσι y λóγο."],[291,300,1426,344,"Si v εivαι o ληθεiη designan un abrirse (cf. 2 a 6, ambos"],[232,354,1426,396,"inclusive) del que ahora acabamos de insistir en que sólo tiene"],[229,406,1426,449,"lugar en cuanto arrancarse a un substraerse y, por lo tanto, sólo"],[229,459,1426,502,"en cuanto esencialmente entregado al substraerse, la «pareja de"],[229,514,1427,555,"contrarios» es ---decíamos— la versión de eso en el elemento del"],[230,565,1424,608,"τε xαí y el ox, vale decir: del unσ-al-lado-y-fuera-de-otro."],[232,618,1427,663,"Ahora bien, ¿por qué ha de producirse esta «versión», esta"],[233,672,1424,713,"«traducción» al elemento del τε xαì y el ox? Desde que hemos"],[231,722,1425,770,"visto que la necesidad de la δóξα ha de residir en la ληθεiη"],[231,778,1425,821,"misma, la única respuesta que del poema de Parménides puede"],[232,831,1424,874,"obtenerse a la pregunta que acabamos de formular es la si-"],[230,882,1425,927,"guiente: la caída en el ámbito del «lo uno y también lo otro»"],[232,938,1426,981,"acontece porque la ληθεíη misma se substrae; es la pertenencia"],[231,989,1425,1033,"de la ληθεin al substraerse, su propio esencial substraerse, lo"],[231,1041,1426,1087,"que hace que esa misma copertenencia de abertura y substraerse"],[230,1093,1425,1139,"haya de quedar traducida al elemento del uno-al-lado-y-fuera-de-"],[231,1150,1426,1192,"otro; la ληθεíη misma pasa inadvertida porque ella misma es su"],[229,1200,1425,1245,"propio substraerse; de otro modo no podría entenderse (y, sin"],[231,1250,1426,1299,"embargo, está en el poema) que la ληθεiη o v εvαιes interna-"],[228,1306,1424,1350,"mente rechazo, que la referencia del rechazo lo es a un no-po-"],[229,1357,1424,1403,"der-ser-dicho, no-poder-ser-investigado, permanecer oculto, y"],[232,1415,1418,1459,"que en la λη9εin está la necesidad de la δóξα. La ληθεin se"],[231,1466,1425,1509,"substrae porque ella misma, en cuanto que es internamente re-"],[231,1518,1422,1560,"chazo del permanecer-oculto, está entregada al permanecer-"],[229,1571,1422,1615,"oculto. ¿Sería entonces una pirueta pseudointerpretativa decir"],[229,1621,1424,1668,"que el substraerse de la ληθεíη, de v εvαι, y con ello la"],[228,1676,1424,1721,"necesidad de la δóξα, reside en que φúσι xρúπτεσθαι φιλεī"],[230,1730,1421,1773,"(Heráclito, B 123)? Lo sería si con ello pretendiésemos estable-"],[228,1781,1422,1826,"cer alguna comunidad fáctica de representaciones entre Parmé-"],[229,1836,1421,1879,"nides y Heráclito, algo así como que las tesis de uno hubieran"],[228,1888,1421,1933,"podido ser fácilmente asumidas por el otro en el caso de que se"],[229,1940,1421,1982,"hubiesen conocido, etcétera; pero ese tipo de comunidad nos"],[229,1997,1420,2037,"interesa poco, y lo que, en cambio, nos ocupa es entender lo que"],[227,2096,293,2140,"122"]],[[188,221,1219,292,"tematización descriptiva (por ejemplo: el estudio"],[183,269,1129,340,"«propiedades químicas», la taxonomía vegetal"],[1411,298,1608,381,"tenga una"],[179,360,1236,435,"ejemplo, «la ciencia» tiene más o menos implícita"],[1331,380,1607,469,"tiene en todo"],[183,412,1205,475,"caso) la seguridad de que todo lo que constituye"],[1336,427,1607,510,"de un animal"],[179,458,1205,523,"sería en último análisis una maraña de procesos"],[1186,456,1609,558,"fisico-químicos, y de"],[174,809,1620,920,"(aquello que es a la vez su norma, su estructura y su lenguaje) es la"],[188,882,433,921,"matemática."],[218,905,1614,1001,"La «sociología» de Comte sigue siendo una especie de «fisica» (cuyo"],[176,952,1614,1043,"carácter de tal es concebido de un modo más o menos confuso). Si una"],[176,997,1614,1089,"consideración positivista de la historia es posible, la ausencia de tal"],[176,1045,1616,1133,"consideración en Comte se hace patente en el hecho de que, cuando"],[179,1095,1614,1172,"Comte habla de algo así como la historia, emplea nociones que de"],[176,1141,1614,1214,"«positivismo» no tienen otra cosa que la banalidad que sin duda tienen:"],[179,1186,1614,1259,"el «progreso», el «perfeccionamiento» de la humanidad y «creciente"],[183,1233,1614,1304,"predominio de las tendencias más nobles de nuestra naturaleza», etc.,"],[183,1279,1614,1349,"todo ello cosas que no son en absoluto de naturaleza «positiva» y que"],[186,1338,1292,1377,"son simplemente producto de una metafísica barata."],[225,1375,1605,1427,"Sin embargo, a mediados del siglo xix, y precisamente en Alemania"],[180,1419,1611,1473,"el ideal positivista penetra en campos que, al menos en principio, no"],[186,1468,1611,1515,"son el de «la naturaleza». Es por entonces cuando G. Th. Fechner"],[183,1507,1611,1562,"funda la psicología experimental; pero lo que Fechner fundamental-"],[183,1551,1611,1608,"mente hace es establecer, sobre la base de ciertos convenios, una ma-"],[180,1596,1611,1653,"nera coherente de atribuir cantidad a las sensaciones; por lo tanto,"],[176,1635,1616,1704,"su obra se sitúa en el camino de la reducción de toda ciencia al modo"],[179,1681,1619,1748,"de objetividad regido por la matemática. Mucha más importancia"],[179,1726,1619,1793,"(desde el punto de vista de lo que ahora nos ocupa) tiene la aparición"],[183,1765,1619,1844,"de una especie de positivismo en la investigación histórica; es la lla-"],[179,1811,1622,1889,"mada «escuela histórica» (citemos a Leopold von Ranke), cuya at-"],[186,1871,684,1925,"mósfera respira Dilthey."],[222,1897,1622,1979,"El propio Dilthey pertenece en cierta manera al ámbito del positi-"],[179,1945,1622,2024,"vismo; más exactamente: pertenece sólo en la medida en que se siente"],[183,1990,1622,2072,"liberado, gracias al positivismo, de las cadenas metafísicas que hasta"],[186,2044,1487,2111,"entonces hacían imposible una verdadera ciencia histórica; así:"],[228,2102,1622,2182,"1. Dilthey rechaza toda «metafisica de la historia», entendiendo por"],[186,2151,1622,2226,"tal toda noción de un «sentido último» de la historia, no importa que"],[179,2190,1624,2277,"ese «sentido último» tenga el carácter de un «fin» o el de un proceso"],[188,2255,991,2311,"subyacente o el de cualquier otra cosa."],[222,2288,1622,2376,"2. Dilthey rechaza la aplicación a la historia de nociones suprahis-"],[182,2333,1624,2423,"tóricas. Si se admite, por ejemplo, «la naturaleza humana» como algo"],[182,2377,1628,2474,"que tiene que ser común al hombre del siglo xix, al griego arcaico y al"],[191,2496,303,2564,"432"]]];
+const PAGE_W = 2050, PAGE_H = 3050;
+const IMG = 'data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
+
+const q = new URLSearchParams(location.search);
+const CFG = {
+  pages:   Number(q.get('pages') || 1000),
+  cv:      q.get('cv') !== '0',
+  grounds: q.get('grounds') || 'rect',
+  text:    q.get('text') || 'all',
+};
+
+const GLYPH_HEIGHT = 0.78, BASELINE = 0.82;
+const half = (document.documentElement.clientWidth - 32 - 16) / 2;
+const SCALE = Math.min(1, half / PAGE_W);
+const W = Math.floor(PAGE_W * SCALE), H = Math.floor(PAGE_H * SCALE);
+
+const MARKER = 'ZQXJMARK';
+const markerPages = new Set([
+  Math.floor(CFG.pages * 0.25), Math.floor(CFG.pages * 0.5),
+  Math.floor(CFG.pages * 0.75), CFG.pages - 1,
+]);
+document.getElementById('marker').textContent = MARKER + (CFG.pages - 1);
+
+function esc(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Today's reader keeps text only for pages inside one viewport band. `near`
+// reproduces that as the baseline to compare against.
+const nearFirst = 0, nearLast = Math.ceil((window.innerHeight * 3) / H);
+
+function svgFor(pageIndex) {
+  const src = LINES[pageIndex % LINES.length];
+  let grounds = '', glyphs = '', path = '';
+
+  for (let i = 0; i < src.length; i++) {
+    const [l, t, r, b] = src[i];
+    let txt = src[i][4];
+    if (i === 0 && markerPages.has(pageIndex)) txt += ' ' + MARKER + pageIndex;
+
+    const w = r - l, h = b - t;
+    if (CFG.grounds === 'rect') {
+      grounds += '<rect x="' + l + '" y="' + t + '" width="' + w + '" height="' + h + '"/>';
+    } else if (CFG.grounds === 'path') {
+      path += 'M' + l + ' ' + t + 'H' + r + 'V' + b + 'H' + l + 'Z';
+    }
+    glyphs += '<text x="' + l + '" y="' + (t + h * BASELINE) + '" textLength="' + w +
+              '" font-size="' + (h * GLYPH_HEIGHT) + '" lengthAdjust="spacingAndGlyphs">' +
+              esc(txt) + '</text>';
+  }
+  if (CFG.grounds === 'path') grounds = '<path d="' + path + '"/>';
+
+  return '<svg class="text" viewBox="0 0 ' + PAGE_W + ' ' + PAGE_H + '" preserveAspectRatio="none" ' +
+         'xmlns="http://www.w3.org/2000/svg"><g class="grounds">' + grounds +
+         '</g><g class="glyphs">' + glyphs + '</g></svg>';
+}
+
+function spreadFor(i) {
+  const box = 'width:' + W + 'px;height:' + H + 'px';
+  const img = '<img src="' + IMG + '" alt="" width="' + PAGE_W + '" height="' + PAGE_H + '" loading="lazy"';
+  const withText = CFG.text === 'all' || (i >= nearFirst && i <= nearLast);
+
+  return '<div class="spread" data-page="' + i + '">' +
+         img + ' class="plain" style="' + box + '">' +
+         '<div class="page" style="' + box + '">' +
+         img + '>' +
+         '<div class="veil"></div>' +
+         (withText ? svgFor(i) : '') +
+         '</div></div>';
+}
+
+const t0 = performance.now();
+let html = '';
+for (let i = 0; i < CFG.pages; i++) html += spreadFor(i);
+const tBuilt = performance.now();
+
+const container = document.getElementById('pages');
+
+// Grammar is `auto? [ none | <length> ]{1,2}` -- ONE optional `auto`, then the
+// lengths. A second `auto` makes the whole declaration invalid, the browser
+// drops it, skipped pages collapse to zero height, and every page counts as
+// on-screen. That failure looks exactly like content-visibility doing nothing.
+let cisParsed = 'n/a';
+if (CFG.cv) {
+  const style = document.createElement('style');
+  style.textContent = '.spread { content-visibility: auto; contain-intrinsic-size: auto ' +
+                      (W * 2 + 16) + 'px ' + H + 'px; }';
+  document.head.appendChild(style);
+  const rule = style.sheet.cssRules[0].style;
+  cisParsed = rule.getPropertyValue('contain-intrinsic-size') ? 'yes' : 'NO - DROPPED';
+}
+container.innerHTML = html;
+const tInserted = performance.now();
+
+// Long tasks split into two buckets that can never be confused: work that
+// happened while the page loaded, and work after the last reset.
+const load = { n: 0, total: 0, max: 0 };
+const live = { n: 0, total: 0, max: 0 };
+let paintedAt = Infinity, resetAt = Infinity, maxGap = 0, last = performance.now();
+
+function bump(b, e) { b.n++; b.total += e.duration; b.max = Math.max(b.max, e.duration); }
+
+try {
+  new PerformanceObserver((list) => {
+    for (const e of list.getEntries()) {
+      if (e.startTime < paintedAt) bump(load, e);
+      else if (e.startTime >= resetAt) bump(live, e);
+    }
+  }).observe({ type: 'longtask', buffered: true });
+} catch (_) {}
+
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  const tPainted = performance.now();
+  paintedAt = tPainted; resetAt = tPainted;
+
+  const probe = container.firstElementChild;
+  const cs = probe ? getComputedStyle(probe) : null;
+  const perPage = Math.round(LINES.reduce((a, p) => a + p.length, 0) / LINES.length);
+
+  const rows = [
+    ['pages', CFG.pages],
+    ['&lt;text&gt; total', (CFG.text === 'all' ? CFG.pages : nearLast - nearFirst + 1) * perPage],
+    ['DOM elements', document.getElementsByTagName('*').length],
+    ['scroll height', Math.round(document.documentElement.scrollHeight / 1000) + 'k px'],
+    ['SEP', ''],
+    ['content-visibility', cs ? cs.getPropertyValue('content-visibility') : '?'],
+    ['intrinsic size', cs ? (cs.getPropertyValue('contain-intrinsic-size') || 'none') : '?'],
+    ['rule parsed', cisParsed],
+    ['SEP', ''],
+    ['string build', (tBuilt - t0).toFixed(0) + ' ms'],
+    ['innerHTML parse', (tInserted - tBuilt).toFixed(0) + ' ms'],
+    ['to first paint', (tPainted - tInserted).toFixed(0) + ' ms'],
+    ['TOTAL', (tPainted - t0).toFixed(0) + ' ms'],
+  ];
+  if (performance.memory) {
+    rows.push(['JS heap', (performance.memory.usedJSHeapSize / 1048576).toFixed(0) + ' MB']);
+  }
+
+  document.getElementById('build').innerHTML = rows.map(([k, v]) =>
+    k === 'SEP' ? '<tr><td colspan="2"><hr></td></tr>'
+                : '<tr' + (k === 'TOTAL' || v === 'NO - DROPPED' ? ' class="warn"' : '') +
+                  '><td>' + k + '</td><td>' + v + '</td></tr>').join('');
+
+  // The expected height with 1000 pages is over a million px. A tiny number
+  // here means the pages collapsed and every one of them counts as on-screen.
+  if (CFG.cv && document.documentElement.scrollHeight < CFG.pages * H * 0.9) {
+    document.getElementById('build').insertAdjacentHTML('afterbegin',
+      '<tr class="warn"><td colspan="2">PAGES COLLAPSED - result invalid</td></tr>');
+  }
+}));
+
+function tick(now) {
+  const gap = now - last;
+  if (gap > maxGap) maxGap = gap;
+  last = now;
+  document.getElementById('live').innerHTML =
+    '<tr><td>load blocked</td><td>' + load.total.toFixed(0) + ' ms / max ' + load.max.toFixed(0) + '</td></tr>' +
+    '<tr><td colspan="2"><hr></td></tr>' +
+    '<tr class="warn"><td>max long task</td><td>' + live.max.toFixed(0) + ' ms</td></tr>' +
+    '<tr class="warn"><td>max frame gap</td><td>' + maxGap.toFixed(0) + ' ms</td></tr>' +
+    '<tr><td>long tasks</td><td>' + live.n + '</td></tr>' +
+    '<tr><td>blocked total</td><td>' + live.total.toFixed(0) + ' ms</td></tr>';
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+document.getElementById('reset').onclick = () => {
+  live.n = live.total = live.max = 0; maxGap = 0;
+  resetAt = last = performance.now();
+};
+
+// Reading a layout value inside a skipped subtree forces that subtree to lay
+// out. This is the timeable stand-in for what find-in-page must do.
+document.getElementById('force').onclick = (e) => {
+  const t = performance.now();
+  let n = 0, sum = 0;
+  for (const el of document.querySelectorAll('.glyphs > text:first-child')) {
+    sum += el.getComputedTextLength(); n++;
+  }
+  const ms = performance.now() - t;
+  e.target.textContent = 'Forced ' + n + ' pages: ' + ms.toFixed(0) + ' ms' +
+                         (sum === 0 ? ' (len 0 — not laid out!)' : '');
+};
+
+document.getElementById('variants').innerHTML =
+  '<b>Variants:</b> ' + [
+    ['cv=0', 'no content-visibility'],
+    ['cv=1', 'content-visibility'],
+    ['grounds=path', 'merged grounds'],
+    ['grounds=none', 'no grounds'],
+    ['text=near', 'today (lazy text)'],
+    ['pages=200', '200 pages'],
+  ].map(([p, label]) => {
+    const u = new URLSearchParams(location.search);
+    u.set(p.split('=')[0], p.split('=')[1]);
+    return '<a href="?' + u + '">' + label + '</a>';
+  }).join(' &middot; ') +
+  '<br><b>Now:</b> pages=' + CFG.pages + ' cv=' + (CFG.cv ? 1 : 0) +
+  ' grounds=' + CFG.grounds + ' text=' + CFG.text;
+</script>
+</body>
+</html>

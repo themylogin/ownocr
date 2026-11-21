@@ -1,0 +1,21 @@
+services:
+  frontend:
+    ports: !override []
+    links: [backend]
+    networks:
+      default:
+      nginx:
+        aliases:
+          - ownocr
+
+networks:
+  nginx:
+    external: true
+
+volumes:
+  book_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /media/storage/.data/ownocr

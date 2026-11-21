@@ -1,0 +1,87 @@
+name: ownocr-dev-e2e
+
+services:
+  minio:
+    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
+    command: ["server", "/data"]
+    environment:
+      MINIO_ROOT_USER: ownocr
+      MINIO_ROOT_PASSWORD: ownocrsecret
+    volumes:
+      - minio_data:/data
+
+  # MinIO starts with no bucket. One shot, then it exits.
+  createbucket:
+    image: minio/mc:RELEASE.2024-10-08T09-37-26Z
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 ownocr ownocrsecret; do sleep 1; done;
+      mc mb --ignore-existing local/ownocr;
+      "
+
+  # Answers like a RunPod endpoint. It shrinks every page instead of dewarping
+  # it, so the whole path runs without a GPU.
+  fakerunpod:
+    build:
+      context: ./backend
+      target: dev
+    command: ["go", "run", "./tools/fakerunpod"]
+    environment:
+      ADDR: ":9090"
+      DEWARP_API_TOKEN: e2e-token
+      AWS_ENDPOINT_URL: http://minio:9000
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: ownocr
+      AWS_SECRET_ACCESS_KEY: ownocrsecret
+      AWS_BUCKET: ownocr
+    volumes:
+      - ./backend:/app
+      - go_modules:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    depends_on:
+      - minio
+
+  backend:
+    environment:
+      AWS_ENDPOINT_URL: http://minio:9000
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: ownocr
+      AWS_SECRET_ACCESS_KEY: ownocrsecret
+      AWS_BUCKET: ownocr
+      DEWARP_API_URL: http://fakerunpod:9090
+      DEWARP_API_TOKEN: e2e-token
+      PADDLEOCR_VL_API_URL: http://fakerunpod:9090
+      PADDLEOCR_VL_API_TOKEN: e2e-token
+      CLAUDE_API_KEY: e2e-claude-key
+      CLAUDE_API_URL: http://fakerunpod:9090
+    depends_on:
+      minio:
+        condition: service_started
+      createbucket:
+        condition: service_completed_successfully
+      fakerunpod:
+        condition: service_started
+
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.50.0-noble
+    working_dir: /e2e
+    environment:
+      E2E_BASE_URL: ${E2E_BASE_URL:-http://frontend:5173}
+      E2E_API_URL: ${E2E_API_URL:-http://backend:8080}
+      DATABASE_URL: postgres://${POSTGRES_USER:-ownocr}:${POSTGRES_PASSWORD:-ownocr}@postgres:5432/${POSTGRES_DB:-ownocr}?sslmode=disable
+      DATA_DIR: /data
+      FAKE_RUNPOD_URL: http://fakerunpod:9090
+    volumes:
+      - ./e2e:/e2e
+      - book_data:/data
+      - e2e_node_modules:/e2e/node_modules
+    depends_on:
+      - frontend
+      - backend
+    command: ["npx", "playwright", "test"]
+
+volumes:
+  e2e_node_modules:
+  minio_data:

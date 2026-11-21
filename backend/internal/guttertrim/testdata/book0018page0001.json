@@ -1,0 +1,39 @@
+{
+ "book": 18,
+ "page": 1,
+ "note": "three fragments and no body line, so nothing names the margin",
+ "width": 1595,
+ "height": 2425,
+ "cutSide": "left",
+ "model": "merged",
+ "want": null,
+ "lines": [
+  {
+   "bbox": [
+    1555,
+    575,
+    1594,
+    644
+   ],
+   "text": "F"
+  },
+  {
+   "bbox": [
+    1534,
+    691,
+    1594,
+    780
+   ],
+   "text": "二"
+  },
+  {
+   "bbox": [
+    1519,
+    2169,
+    1594,
+    2330
+   ],
+   "text": "一"
+  }
+ ]
+}

@@ -1,0 +1,555 @@
+{
+ "book": 17,
+ "page": 53,
+ "note": "twenty three fragments, the strip the detector read best",
+ "width": 2061,
+ "height": 3024,
+ "cutSide": "right",
+ "model": "merged",
+ "want": {
+  "side": "left",
+  "column": 109
+ },
+ "lines": [
+  {
+   "bbox": [
+    1704,
+    170,
+    1793,
+    241
+   ],
+   "text": "53"
+  },
+  {
+   "bbox": [
+    798,
+    189,
+    1188,
+    255
+   ],
+   "text": "8. LÓGOS Y ÉRGON, III"
+  },
+  {
+   "bbox": [
+    0,
+    311,
+    45,
+    365
+   ],
+   "text": "no"
+  },
+  {
+   "bbox": [
+    202,
+    311,
+    1787,
+    426
+   ],
+   "text": "cido como la paradoja de un decir que sería relevante en su"
+  },
+  {
+   "bbox": [
+    0,
+    374,
+    48,
+    444
+   ],
+   "text": "las"
+  },
+  {
+   "bbox": [
+    199,
+    387,
+    1791,
+    501
+   ],
+   "text": "condición misma de decir, lo cual, como ya sabemos, no es"
+  },
+  {
+   "bbox": [
+    0,
+    447,
+    39,
+    503
+   ],
+   "text": "ti-"
+  },
+  {
+   "bbox": [
+    195,
+    453,
+    1791,
+    583
+   ],
+   "text": "sino la cuestión de un decir en el que, sin embargo, de"
+  },
+  {
+   "bbox": [
+    0,
+    514,
+    39,
+    579
+   ],
+   "text": "D"
+  },
+  {
+   "bbox": [
+    195,
+    529,
+    1791,
+    656
+   ],
+   "text": "alguna manera se diría lo que en ese mismo decir tiene lugar"
+  },
+  {
+   "bbox": [
+    0,
+    589,
+    48,
+    668
+   ],
+   "text": "ee"
+  },
+  {
+   "bbox": [
+    195,
+    597,
+    1791,
+    725
+   ],
+   "text": "como lo no-dicho, lo que siempre ya ha quedado atrás. En"
+  },
+  {
+   "bbox": [
+    0,
+    668,
+    48,
+    737
+   ],
+   "text": "en"
+  },
+  {
+   "bbox": [
+    199,
+    672,
+    1791,
+    790
+   ],
+   "text": "efecto, al remitir de lógos a érgon, el discurso de Pericles remite"
+  },
+  {
+   "bbox": [
+    0,
+    740,
+    51,
+    805
+   ],
+   "text": "ra"
+  },
+  {
+   "bbox": [
+    202,
+    752,
+    1787,
+    857
+   ],
+   "text": "ahora expresamente a una presencia que ya «no necesitaría"
+  },
+  {
+   "bbox": [
+    0,
+    808,
+    48,
+    878
+   ],
+   "text": "cio"
+  },
+  {
+   "bbox": [
+    205,
+    825,
+    1787,
+    926
+   ],
+   "text": "de un Homero» (II,4I,4), en el sentido -aclara el mismo"
+  },
+  {
+   "bbox": [
+    0,
+    889,
+    51,
+    951
+   ],
+   "text": "c-"
+  },
+  {
+   "bbox": [
+    205,
+    901,
+    1787,
+    996
+   ],
+   "text": "discurso (ibid.)- de que érgon es aquello de lo cual la presencia"
+  },
+  {
+   "bbox": [
+    0,
+    960,
+    51,
+    1023
+   ],
+   "text": "le-"
+  },
+  {
+   "bbox": [
+    211,
+    973,
+    1781,
+    1064
+   ],
+   "text": "(alétheia) «golpea» (desautoriza) lo que como noción (hypó-"
+  },
+  {
+   "bbox": [
+    0,
+    1040,
+    57,
+    1105
+   ],
+   "text": "ya"
+  },
+  {
+   "bbox": [
+    208,
+    1049,
+    1778,
+    1130
+   ],
+   "text": "noia) de ello mismo pudiera estar trazado, es decir: respon"
+  },
+  {
+   "bbox": [
+    0,
+    1102,
+    54,
+    1168
+   ],
+   "text": "del"
+  },
+  {
+   "bbox": [
+    211,
+    1121,
+    1781,
+    1200
+   ],
+   "text": "diendo a esa noción (pues es, en efecto, ello), a la vez la"
+  },
+  {
+   "bbox": [
+    0,
+    1171,
+    54,
+    1244
+   ],
+   "text": "4),"
+  },
+  {
+   "bbox": [
+    216,
+    1209,
+    444,
+    1270
+   ],
+   "text": "revienta."
+  },
+  {
+   "bbox": [
+    0,
+    1253,
+    54,
+    1316
+   ],
+   "text": "lso"
+  },
+  {
+   "bbox": [
+    290,
+    1259,
+    1781,
+    1345
+   ],
+   "text": "Se plantea a continuación la cuestión de en qué caso el"
+  },
+  {
+   "bbox": [
+    0,
+    1326,
+    54,
+    1389
+   ],
+   "text": "esa"
+  },
+  {
+   "bbox": [
+    208,
+    1335,
+    1775,
+    1421
+   ],
+   "text": "lógos llega a estar a la altura de los órga; y ello se formula preci"
+  },
+  {
+   "bbox": [
+    0,
+    1392,
+    51,
+    1459
+   ],
+   "text": "la"
+  },
+  {
+   "bbox": [
+    205,
+    1407,
+    1778,
+    1486
+   ],
+   "text": "samente así, esto es: no que «las obras» estén a la altura de"
+  },
+  {
+   "bbox": [
+    0,
+    1471,
+    45,
+    1524
+   ],
+   "text": "a-"
+  },
+  {
+   "bbox": [
+    219,
+    1486,
+    1773,
+    1552
+   ],
+   "text": "«las palabras», como, tratándose de actuaciones, habría de"
+  },
+  {
+   "bbox": [
+    0,
+    1546,
+    42,
+    1602
+   ],
+   "text": "sa"
+  },
+  {
+   "bbox": [
+    202,
+    1549,
+    1778,
+    1628
+   ],
+   "text": "ser si en verdad la cuestión lo fuese de «obras» frente a"
+  },
+  {
+   "bbox": [
+    0,
+    1613,
+    42,
+    1675
+   ],
+   "text": "lo"
+  },
+  {
+   "bbox": [
+    208,
+    1625,
+    1767,
+    1701
+   ],
+   "text": "«palabras», sino que la posibilidad de la que se habla es la de"
+  },
+  {
+   "bbox": [
+    0,
+    1697,
+    34,
+    1750
+   ],
+   "text": "S.,"
+  },
+  {
+   "bbox": [
+    199,
+    1701,
+    1770,
+    1788
+   ],
+   "text": "que los lógos se anotó con respecto a los órga (II,42,2), no"
+  },
+  {
+   "bbox": [
+    0,
+    1767,
+    34,
+    1823
+   ],
+   "text": "10"
+  },
+  {
+   "bbox": [
+    196,
+    1770,
+    1764,
+    1849
+   ],
+   "text": "a la inversa. De lo que, leyendo el propio discurso de Peri"
+  },
+  {
+   "bbox": [
+    196,
+    1846,
+    1764,
+    1924
+   ],
+   "text": "cles, hemos expuesto hasta aquí parece seguirse que tal «lle"
+  },
+  {
+   "bbox": [
+    0,
+    1849,
+    34,
+    1899
+   ],
+   "text": "es"
+  },
+  {
+   "bbox": [
+    190,
+    1918,
+    1764,
+    2003
+   ],
+   "text": "gar a la altura de» ocurre cuando el lógos va a parar precisa"
+  },
+  {
+   "bbox": [
+    0,
+    1930,
+    25,
+    1968
+   ],
+   "text": "0"
+  },
+  {
+   "bbox": [
+    185,
+    1991,
+    1764,
+    2079
+   ],
+   "text": "mente en el final de todo lógos, y con ello parece tener algo"
+  },
+  {
+   "bbox": [
+    185,
+    2063,
+    1764,
+    2148
+   ],
+   "text": "que ver el hecho de que el discurso tenga lugar a propósito de"
+  },
+  {
+   "bbox": [
+    185,
+    2137,
+    1761,
+    2218
+   ],
+   "text": "unos muertos. Que, en efecto, la «riqueza», a saber, el goce"
+  },
+  {
+   "bbox": [
+    182,
+    2207,
+    1758,
+    2290
+   ],
+   "text": "de ella o la esperanza de ella, tenga el carácter que arriba,"
+  },
+  {
+   "bbox": [
+    182,
+    2283,
+    1761,
+    2363
+   ],
+   "text": "siguiendo también al Pericles de Tucídides, le atribuimos"
+  },
+  {
+   "bbox": [
+    182,
+    2355,
+    1761,
+    2441
+   ],
+   "text": "(cfr. capítulo 5) es cosa que se prueba cuando no se elude la"
+  },
+  {
+   "bbox": [
+    1784,
+    2369,
+    1977,
+    2450
+   ],
+   "text": "noo j obro g"
+  },
+  {
+   "bbox": [
+    173,
+    2434,
+    1767,
+    2514
+   ],
+   "text": "conexión que aquella uniformización tiene con el final y el"
+  },
+  {
+   "bbox": [
+    1799,
+    2450,
+    1890,
+    2503
+   ],
+   "text": "obro..."
+  },
+  {
+   "bbox": [
+    167,
+    2506,
+    1764,
+    2593
+   ],
+   "text": "no-ser. No se renuncia con ello a nada; simplemente se"
+  },
+  {
+   "bbox": [
+    163,
+    2588,
+    1761,
+    2668
+   ],
+   "text": "posee en la manera adecuada. En cuanto al hecho de que en"
+  },
+  {
+   "bbox": [
+    160,
+    2661,
+    1761,
+    2750
+   ],
+   "text": "II,42,4 el ephíesthai («desear») transmitido haya sido corre-"
+  }
+ ]
+}

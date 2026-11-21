@@ -1,0 +1,546 @@
+{
+ "book": 19,
+ "page": 51,
+ "note": "the one measured left half, with twenty fragments against its right edge",
+ "width": 1545,
+ "height": 2180,
+ "cutSide": "left",
+ "model": "v6",
+ "want": {
+  "side": "right",
+  "column": 127
+ },
+ "lines": [
+  {
+   "bbox": [
+    199,
+    113,
+    1330,
+    170
+   ],
+   "text": "o Kant. Precisamente por ello carece de sentido hacer una"
+  },
+  {
+   "bbox": [
+    199,
+    163,
+    1333,
+    218
+   ],
+   "text": "exposición de «el pensamiento de Heidegger». No podemos"
+  },
+  {
+   "bbox": [
+    195,
+    211,
+    1326,
+    263
+   ],
+   "text": "adoptar una «distancia» con respecto a él. De modo general"
+  },
+  {
+   "bbox": [
+    192,
+    258,
+    1324,
+    310
+   ],
+   "text": "negamos (y creemos que Heidegger no nos contradiría) que"
+  },
+  {
+   "bbox": [
+    195,
+    306,
+    1324,
+    360
+   ],
+   "text": "ninguna exposición de «el pensamiento de Heidegger» pue-"
+  },
+  {
+   "bbox": [
+    192,
+    354,
+    1322,
+    406
+   ],
+   "text": "de dar una verdadera idea del mismo, ni siquiera en el li-"
+  },
+  {
+   "bbox": [
+    190,
+    402,
+    1287,
+    454
+   ],
+   "text": "mitado sentido en el que pretendemos que —por ejemplo-"
+  },
+  {
+   "bbox": [
+    188,
+    449,
+    1321,
+    499
+   ],
+   "text": "nuestra exposición de Kant da efectivamente una idea del"
+  },
+  {
+   "bbox": [
+    192,
+    501,
+    611,
+    542
+   ],
+   "text": "pensamiento de Kant."
+  },
+  {
+   "bbox": [
+    234,
+    542,
+    1314,
+    595
+   ],
+   "text": "Ciertamente, el lector puede exigirnos que le proporcio-"
+  },
+  {
+   "bbox": [
+    188,
+    590,
+    1318,
+    640
+   ],
+   "text": "nemos una vía de acceso a Heidegger. Vamos a darle la"
+  },
+  {
+   "bbox": [
+    192,
+    643,
+    854,
+    683
+   ],
+   "text": "que consideramos la única posible:"
+  },
+  {
+   "bbox": [
+    232,
+    729,
+    1312,
+    781
+   ],
+   "text": "En la obra de Heidegger se pueden distinguir «épocas»,"
+  },
+  {
+   "bbox": [
+    1521,
+    742,
+    1542,
+    773
+   ],
+   "text": "1"
+  },
+  {
+   "bbox": [
+    190,
+    776,
+    1318,
+    828
+   ],
+   "text": "pero no hay «Heidegger I» y «Heidegger II». Lo que ocurre"
+  },
+  {
+   "bbox": [
+    190,
+    824,
+    1314,
+    876
+   ],
+   "text": "es que Sein und Zeit no pudo terminarse porque el «lenguaje»"
+  },
+  {
+   "bbox": [
+    190,
+    869,
+    1314,
+    922
+   ],
+   "text": "en el que había empezado a escribirse se reveló inadecuado;"
+  },
+  {
+   "bbox": [
+    1517,
+    880,
+    1544,
+    922
+   ],
+   "text": "日"
+  },
+  {
+   "bbox": [
+    188,
+    915,
+    1312,
+    967
+   ],
+   "text": "en consecuencia, Heidegger cambió de «lenguaje»; y, ade-"
+  },
+  {
+   "bbox": [
+    1515,
+    922,
+    1544,
+    964
+   ],
+   "text": "1"
+  },
+  {
+   "bbox": [
+    186,
+    960,
+    1312,
+    1012
+   ],
+   "text": "más, no cambió de una sola vez. En cierta manera, todo lo"
+  },
+  {
+   "bbox": [
+    1515,
+    962,
+    1544,
+    1012
+   ],
+   "text": "i"
+  },
+  {
+   "bbox": [
+    186,
+    1008,
+    1310,
+    1060
+   ],
+   "text": "que ha hecho Heidegger no es otra cosa que aquella conti-"
+  },
+  {
+   "bbox": [
+    1515,
+    1014,
+    1544,
+    1060
+   ],
+   "text": "t"
+  },
+  {
+   "bbox": [
+    1507,
+    1049,
+    1542,
+    1201
+   ],
+   "text": "dPP"
+  },
+  {
+   "bbox": [
+    184,
+    1054,
+    1310,
+    1106
+   ],
+   "text": "nuación de Sein und Zeit que, editorialmente hablando, no"
+  },
+  {
+   "bbox": [
+    186,
+    1100,
+    400,
+    1148
+   ],
+   "text": "tuvo lugar."
+  },
+  {
+   "bbox": [
+    225,
+    1142,
+    1301,
+    1196
+   ],
+   "text": "Si se quiere penetrar en el pensamiento de Heidegger,"
+  },
+  {
+   "bbox": [
+    184,
+    1190,
+    1303,
+    1242
+   ],
+   "text": "quizá lo más recomendable sea empezar por Sein und Zeit;"
+  },
+  {
+   "bbox": [
+    1507,
+    1190,
+    1544,
+    1249
+   ],
+   "text": "日"
+  },
+  {
+   "bbox": [
+    182,
+    1234,
+    1303,
+    1287
+   ],
+   "text": "además, esta obra tiene la ventaja de que, si no se sabe ale-"
+  },
+  {
+   "bbox": [
+    1505,
+    1240,
+    1544,
+    1294
+   ],
+   "text": "S"
+  },
+  {
+   "bbox": [
+    178,
+    1280,
+    1303,
+    1335
+   ],
+   "text": "mán, se puede (con ciertas precauciones) leerla en castella-"
+  },
+  {
+   "bbox": [
+    1507,
+    1280,
+    1544,
+    1343
+   ],
+   "text": "S"
+  },
+  {
+   "bbox": [
+    176,
+    1326,
+    1303,
+    1383
+   ],
+   "text": "no... mientras se aprende alemán; otras obras de Heidegger"
+  },
+  {
+   "bbox": [
+    174,
+    1371,
+    1305,
+    1431
+   ],
+   "text": "están también traducidas, pero, en general (hay algunas ex-"
+  },
+  {
+   "bbox": [
+    1505,
+    1375,
+    1544,
+    1430
+   ],
+   "text": "le"
+  },
+  {
+   "bbox": [
+    174,
+    1417,
+    1301,
+    1475
+   ],
+   "text": "cepciones), de este fenómeno de las traducciones de Heideg-"
+  },
+  {
+   "bbox": [
+    1505,
+    1427,
+    1544,
+    1478
+   ],
+   "text": "a"
+  },
+  {
+   "bbox": [
+    174,
+    1464,
+    1303,
+    1521
+   ],
+   "text": "ger al castellano es mejor no hablar. Debe tenerse en cuenta,"
+  },
+  {
+   "bbox": [
+    1505,
+    1469,
+    1544,
+    1523
+   ],
+   "text": "h"
+  },
+  {
+   "bbox": [
+    172,
+    1509,
+    1301,
+    1567
+   ],
+   "text": "al leer Sein und Zeit, que se trata de la tercera parte (en nú-"
+  },
+  {
+   "bbox": [
+    1505,
+    1515,
+    1544,
+    1567
+   ],
+   "text": "m"
+  },
+  {
+   "bbox": [
+    170,
+    1557,
+    1303,
+    1612
+   ],
+   "text": "mero de secciones) de una obra proyectada; y debe uno"
+  },
+  {
+   "bbox": [
+    1507,
+    1559,
+    1544,
+    1616
+   ],
+   "text": "1"
+  },
+  {
+   "bbox": [
+    170,
+    1603,
+    1303,
+    1657
+   ],
+   "text": "poner especial cuidado en no hacer uso de las resonancias"
+  },
+  {
+   "bbox": [
+    1505,
+    1605,
+    1544,
+    1664
+   ],
+   "text": "0"
+  },
+  {
+   "bbox": [
+    170,
+    1650,
+    1301,
+    1703
+   ],
+   "text": "que las palabras empleadas puedan tener en la literatura"
+  },
+  {
+   "bbox": [
+    1503,
+    1651,
+    1544,
+    1752
+   ],
+   "text": "1a目"
+  },
+  {
+   "bbox": [
+    167,
+    1693,
+    1301,
+    1750
+   ],
+   "text": "filosófica reciente; por ejemplo: Heidegger no tiene nada"
+  },
+  {
+   "bbox": [
+    165,
+    1744,
+    1298,
+    1794
+   ],
+   "text": "que ver con el existencialismo ni con la filosofía de la exis-"
+  },
+  {
+   "bbox": [
+    1503,
+    1744,
+    1544,
+    1796
+   ],
+   "text": "n"
+  },
+  {
+   "bbox": [
+    163,
+    1789,
+    1301,
+    1842
+   ],
+   "text": "tencia, e incluso la posible relación con Kierkegaard (que"
+  },
+  {
+   "bbox": [
+    1503,
+    1791,
+    1544,
+    1844
+   ],
+   "text": "si"
+  },
+  {
+   "bbox": [
+    158,
+    1834,
+    1301,
+    1888
+   ],
+   "text": "no es fundamental) debe, por el momento, dejarse entre"
+  },
+  {
+   "bbox": [
+    1503,
+    1839,
+    1544,
+    1888
+   ],
+   "text": "re"
+  },
+  {
+   "bbox": [
+    158,
+    1884,
+    372,
+    1934
+   ],
+   "text": "paréntesis."
+  },
+  {
+   "bbox": [
+    1503,
+    1886,
+    1544,
+    1934
+   ],
+   "text": "n"
+  },
+  {
+   "bbox": [
+    155,
+    1976,
+    250,
+    2027
+   ],
+   "text": "488"
+  }
+ ]
+}

@@ -1,0 +1,330 @@
+{
+ "book": 17,
+ "page": 29,
+ "note": "two fragments, the fewest that make a strip",
+ "width": 2033,
+ "height": 3024,
+ "cutSide": "right",
+ "model": "merged",
+ "want": {
+  "side": "left",
+  "column": 90
+ },
+ "lines": [
+  {
+   "bbox": [
+    1693,
+    145,
+    1785,
+    214
+   ],
+   "text": "29"
+  },
+  {
+   "bbox": [
+    839,
+    151,
+    1182,
+    214
+   ],
+   "text": "4. LÓGOS Y ÉRGON, I"
+  },
+  {
+   "bbox": [
+    228,
+    285,
+    1773,
+    374
+   ],
+   "text": "dispone a decir un decir, un lógos, para el cual ha sido comi"
+  },
+  {
+   "bbox": [
+    0,
+    290,
+    28,
+    325
+   ],
+   "text": "O"
+  },
+  {
+   "bbox": [
+    225,
+    361,
+    1773,
+    450
+   ],
+   "text": "sionado por la pólis, y empieza (II,35) exponiendo la duda"
+  },
+  {
+   "bbox": [
+    0,
+    435,
+    25,
+    476
+   ],
+   "text": "e"
+  },
+  {
+   "bbox": [
+    222,
+    436,
+    1773,
+    523
+   ],
+   "text": "de si procede decir un decir en tal ocasión. Se trata deice-de"
+  },
+  {
+   "bbox": [
+    219,
+    520,
+    1767,
+    595
+   ],
+   "text": "deloústhai ciertas tíma, esto es, de dejar aparecer cierto apare"
+  },
+  {
+   "bbox": [
+    216,
+    588,
+    1770,
+    671
+   ],
+   "text": "cer o presencia. Y aquí debe recordarse todo lo tantas veces"
+  },
+  {
+   "bbox": [
+    216,
+    668,
+    1767,
+    740
+   ],
+   "text": "dicho $ ^{11} $ sobre decir como dejar ser y como poiein, así como"
+  },
+  {
+   "bbox": [
+    213,
+    739,
+    1767,
+    816
+   ],
+   "text": "sobre la identidad básica de presencia y ser. Se trata de"
+  },
+  {
+   "bbox": [
+    213,
+    814,
+    1762,
+    892
+   ],
+   "text": "muertos (y recuérdese aquí lo también tantas veces dicho"
+  },
+  {
+   "bbox": [
+    210,
+    890,
+    1762,
+    967
+   ],
+   "text": "sobre el final como aquello en lo que por fin se constituye"
+  },
+  {
+   "bbox": [
+    210,
+    966,
+    1762,
+    1043
+   ],
+   "text": "figura, «ser...»), y el que las tíma de sean relevantemente"
+  },
+  {
+   "bbox": [
+    205,
+    1038,
+    1762,
+    1118
+   ],
+   "text": "tiene que ver con que la guerra en la que han muerto es la"
+  },
+  {
+   "bbox": [
+    210,
+    1117,
+    1759,
+    1194
+   ],
+   "text": "disputa inherente al propio problema pólis (cfr. capítulo 2,"
+  },
+  {
+   "bbox": [
+    202,
+    1194,
+    1753,
+    1267
+   ],
+   "text": "estamos en los comienzos de la guerra de el Peloponeso»);"
+  },
+  {
+   "bbox": [
+    202,
+    1268,
+    1753,
+    1345
+   ],
+   "text": "disputa y problema que responden a que pólis es la preten"
+  },
+  {
+   "bbox": [
+    196,
+    1345,
+    1753,
+    1413
+   ],
+   "text": "sión de relevancia de lo en todo caso ya supuesto. Nada"
+  },
+  {
+   "bbox": [
+    193,
+    1424,
+    1753,
+    1493
+   ],
+   "text": "nuevo, pues, aparentemente, en la duda acerca de que esto"
+  },
+  {
+   "bbox": [
+    196,
+    1502,
+    1747,
+    1569
+   ],
+   "text": "deba comparecer en un decir, en algún determinado y par"
+  },
+  {
+   "bbox": [
+    190,
+    1581,
+    1753,
+    1645
+   ],
+   "text": "ticular decir; estamos deprese-ante lo ya constatado de que"
+  },
+  {
+   "bbox": [
+    184,
+    1657,
+    1750,
+    1720
+   ],
+   "text": "lo siempre ya supuesto sólo puede comparecer en su mismo"
+  },
+  {
+   "bbox": [
+    181,
+    1729,
+    1753,
+    1799
+   ],
+   "text": "substraerse, etcetera. Y, sin embargo, por otra parte parece"
+  },
+  {
+   "bbox": [
+    181,
+    1805,
+    1750,
+    1874
+   ],
+   "text": "que sí hay un elemento nuevo, a saber, el papel que ahora"
+  },
+  {
+   "bbox": [
+    178,
+    1880,
+    1747,
+    1953
+   ],
+   "text": "tiene érgon: los muertos fueron excelentes de en érgon, no"
+  },
+  {
+   "bbox": [
+    175,
+    1959,
+    1741,
+    2032
+   ],
+   "text": "sería entonces mejor que también el dejar aparecer esa pre"
+  },
+  {
+   "bbox": [
+    170,
+    2035,
+    1744,
+    2110
+   ],
+   "text": "sencia fuese cosa de érgon?, ¿por qué hay también que decir"
+  },
+  {
+   "bbox": [
+    175,
+    2113,
+    438,
+    2169
+   ],
+   "text": "un decir?"
+  },
+  {
+   "bbox": [
+    254,
+    2186,
+    1741,
+    2261
+   ],
+   "text": "Con qué tiene que ver la duda de Pericles a este respecto,"
+  },
+  {
+   "bbox": [
+    167,
+    2261,
+    1741,
+    2337
+   ],
+   "text": "él mismo lo dice en el mismo texto: es difícil -dice- decir"
+  },
+  {
+   "bbox": [
+    164,
+    2343,
+    1741,
+    2413
+   ],
+   "text": "como corresponde en cosas en las que difícilmente se conso"
+  },
+  {
+   "bbox": [
+    161,
+    2419,
+    1747,
+    2494
+   ],
+   "text": "lida la dókesis en relación a la alétheia que en esas cosas tiene"
+  },
+  {
+   "bbox": [
+    161,
+    2503,
+    1750,
+    2579
+   ],
+   "text": "lugar. Cualquiera es muy dueño de atribuir a esta última"
+  },
+  {
+   "bbox": [
+    152,
+    2777,
+    1626,
+    2875
+   ],
+   "text": "II Cfr. en particular mis El decir griego (2006) y Muestras de Platón (2007)."
+  }
+ ]
+}

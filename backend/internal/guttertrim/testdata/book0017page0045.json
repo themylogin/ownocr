@@ -1,0 +1,492 @@
+{
+ "book": 17,
+ "page": 45,
+ "note": "eighteen fragments, the page of the report that opened this change",
+ "width": 2083,
+ "height": 3024,
+ "cutSide": "right",
+ "model": "merged",
+ "want": {
+  "side": "left",
+  "column": 122
+ },
+ "lines": [
+  {
+   "bbox": [
+    1738,
+    142,
+    1829,
+    214
+   ],
+   "text": "45"
+  },
+  {
+   "bbox": [
+    784,
+    154,
+    1309,
+    214
+   ],
+   "text": "7. LA DIFÍCIL KATESTRAMMÉNE"
+  },
+  {
+   "bbox": [
+    0,
+    273,
+    55,
+    331
+   ],
+   "text": "ar-"
+  },
+  {
+   "bbox": [
+    254,
+    285,
+    1820,
+    368
+   ],
+   "text": "taciones tan nítidas como paradójicas. Hemos encontrado ya"
+  },
+  {
+   "bbox": [
+    0,
+    343,
+    58,
+    406
+   ],
+   "text": "on"
+  },
+  {
+   "bbox": [
+    257,
+    358,
+    1814,
+    441
+   ],
+   "text": "(capítulo 1) cómo Tucídides se delimita o distancia en parti"
+  },
+  {
+   "bbox": [
+    0,
+    409,
+    61,
+    485
+   ],
+   "text": "ón"
+  },
+  {
+   "bbox": [
+    254,
+    433,
+    1817,
+    514
+   ],
+   "text": "cular con respecto a (y de esa manera reconoce su particular"
+  },
+  {
+   "bbox": [
+    0,
+    488,
+    55,
+    554
+   ],
+   "text": "uo"
+  },
+  {
+   "bbox": [
+    250,
+    503,
+    1811,
+    586
+   ],
+   "text": "relación con) unos que llama «logógrafos» (I,21,1), tradi"
+  },
+  {
+   "bbox": [
+    0,
+    563,
+    58,
+    630
+   ],
+   "text": "lás"
+  },
+  {
+   "bbox": [
+    250,
+    579,
+    1814,
+    659
+   ],
+   "text": "ción de la que, de manera cualificada, forma parte el propio"
+  },
+  {
+   "bbox": [
+    0,
+    639,
+    52,
+    703
+   ],
+   "text": "es-"
+  },
+  {
+   "bbox": [
+    247,
+    651,
+    1817,
+    730
+   ],
+   "text": "Heródoto. Sin prejuzgar sobre lo que ello pueda tener o no"
+  },
+  {
+   "bbox": [
+    0,
+    715,
+    52,
+    784
+   ],
+   "text": "o,"
+  },
+  {
+   "bbox": [
+    247,
+    724,
+    1811,
+    802
+   ],
+   "text": "tener que ver con la delimitación que allí se establece, empe"
+  },
+  {
+   "bbox": [
+    0,
+    793,
+    52,
+    857
+   ],
+   "text": "ca"
+  },
+  {
+   "bbox": [
+    241,
+    793,
+    1814,
+    881
+   ],
+   "text": "cemos ahora por reconocer la evidencia de que, en compara"
+  },
+  {
+   "bbox": [
+    244,
+    866,
+    1817,
+    954
+   ],
+   "text": "ción con Tucídides, la léksis de Heródoto está cerca del tipo"
+  },
+  {
+   "bbox": [
+    0,
+    869,
+    43,
+    925
+   ],
+   "text": "r-"
+  },
+  {
+   "bbox": [
+    0,
+    935,
+    46,
+    1008
+   ],
+   "text": "la"
+  },
+  {
+   "bbox": [
+    241,
+    941,
+    1817,
+    1029
+   ],
+   "text": "que hemos visto llamar eiroméne, y que, cualesquiera que vayan"
+  },
+  {
+   "bbox": [
+    0,
+    1017,
+    46,
+    1084
+   ],
+   "text": "os"
+  },
+  {
+   "bbox": [
+    241,
+    1017,
+    1811,
+    1096
+   ],
+   "text": "a ser las justificadas reservas que al respecto hayamos de esta"
+  },
+  {
+   "bbox": [
+    0,
+    1090,
+    40,
+    1156
+   ],
+   "text": "10"
+  },
+  {
+   "bbox": [
+    241,
+    1093,
+    1817,
+    1168
+   ],
+   "text": "blecer, el término hacia el cual Tucídides es manifiestamente"
+  },
+  {
+   "bbox": [
+    238,
+    1165,
+    1817,
+    1244
+   ],
+   "text": "un avance responde a la definición nominal que hemos"
+  },
+  {
+   "bbox": [
+    0,
+    1168,
+    43,
+    1238
+   ],
+   "text": "ta"
+  },
+  {
+   "bbox": [
+    238,
+    1241,
+    1808,
+    1316
+   ],
+   "text": "encontrado para la katestramméne. Visto esto, una primera for"
+  },
+  {
+   "bbox": [
+    0,
+    1247,
+    40,
+    1307
+   ],
+   "text": "0"
+  },
+  {
+   "bbox": [
+    238,
+    1313,
+    1808,
+    1389
+   ],
+   "text": "mulación de la paradoja es que, sin embargo, entre las ven"
+  },
+  {
+   "bbox": [
+    0,
+    1316,
+    37,
+    1375
+   ],
+   "text": "e"
+  },
+  {
+   "bbox": [
+    238,
+    1386,
+    1814,
+    1465
+   ],
+   "text": "tajas o excelencias que ello da a la prosa de Tucídides no"
+  },
+  {
+   "bbox": [
+    235,
+    1462,
+    1808,
+    1537
+   ],
+   "text": "parece encontrarse ninguna que lo sea precisamente en tér"
+  },
+  {
+   "bbox": [
+    0,
+    1477,
+    34,
+    1527
+   ],
+   "text": "e"
+  },
+  {
+   "bbox": [
+    235,
+    1540,
+    1811,
+    1602
+   ],
+   "text": "minos de agrado o comodidad del lector u oyente; el carác"
+  },
+  {
+   "bbox": [
+    0,
+    1555,
+    27,
+    1599
+   ],
+   "text": "a"
+  },
+  {
+   "bbox": [
+    232,
+    1616,
+    1814,
+    1678
+   ],
+   "text": "ter paradójico de esto reside en que no es en modo alguno"
+  },
+  {
+   "bbox": [
+    0,
+    1631,
+    27,
+    1672
+   ],
+   "text": "a"
+  },
+  {
+   "bbox": [
+    232,
+    1688,
+    1814,
+    1750
+   ],
+   "text": "que las conexiones establecidas por Aristóteles no sean en sí"
+  },
+  {
+   "bbox": [
+    229,
+    1764,
+    1817,
+    1826
+   ],
+   "text": "mismas válidas; lo son, y, si vamos al otro tipo de autores a"
+  },
+  {
+   "bbox": [
+    223,
+    1832,
+    1811,
+    1902
+   ],
+   "text": "los que (siguiendo en este caso a otros que a Tucídides)"
+  },
+  {
+   "bbox": [
+    220,
+    1905,
+    1814,
+    1977
+   ],
+   "text": "hemos llamado «logógrafos», encontraremos que, en"
+  },
+  {
+   "bbox": [
+    220,
+    1977,
+    1808,
+    2050
+   ],
+   "text": "efecto, en Lisias, por ejemplo, la katestramméne es con toda ver"
+  },
+  {
+   "bbox": [
+    216,
+    2050,
+    1808,
+    2125
+   ],
+   "text": "dad un factor de agrado y comodidad para el oyente o lector."
+  },
+  {
+   "bbox": [
+    213,
+    2122,
+    1811,
+    2198
+   ],
+   "text": "No es éste el caso en Tucídides, y buen testimonio adicional"
+  },
+  {
+   "bbox": [
+    210,
+    2198,
+    1808,
+    2277
+   ],
+   "text": "de ello es el que se hayan buscado al respecto explicaciones de"
+  },
+  {
+   "bbox": [
+    207,
+    2274,
+    1805,
+    2352
+   ],
+   "text": "un tipo bastante habitual; leemos en efecto que, tratándose,"
+  },
+  {
+   "bbox": [
+    204,
+    2352,
+    1808,
+    2431
+   ],
+   "text": "en orden cronológico, de la primera gran obra maestra de la"
+  },
+  {
+   "bbox": [
+    198,
+    2428,
+    1805,
+    2506
+   ],
+   "text": "prosa ática, nada tiene de extraño el que en cierto camino"
+  },
+  {
+   "bbox": [
+    198,
+    2500,
+    1805,
+    2587
+   ],
+   "text": "ella se mueva «todavía» de manera «trabajosa» y, en este"
+  },
+  {
+   "bbox": [
+    192,
+    2582,
+    1805,
+    2662
+   ],
+   "text": "sentido, algo «torpe»; incluso se añade a veces en la misma"
+  },
+  {
+   "bbox": [
+    182,
+    2658,
+    1805,
+    2747
+   ],
+   "text": "línea el hecho de que quizá Tucídides estuviese ausente de"
+  }
+ ]
+}

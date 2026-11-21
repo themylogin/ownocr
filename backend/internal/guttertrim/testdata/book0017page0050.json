@@ -1,0 +1,21 @@
+{
+ "book": 17,
+ "page": 50,
+ "note": "one mark against the edge, which is no column",
+ "width": 2067,
+ "height": 3024,
+ "cutSide": "left",
+ "model": "merged",
+ "want": null,
+ "lines": [
+  {
+   "bbox": [
+    2003,
+    2667,
+    2064,
+    2728
+   ],
+   "text": "C"
+  }
+ ]
+}

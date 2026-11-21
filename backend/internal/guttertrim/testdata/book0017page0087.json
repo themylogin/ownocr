@@ -1,0 +1,327 @@
+{
+ "book": 17,
+ "page": 87,
+ "note": "no strip at all: a page at an angle, whose broken rows look like one",
+ "width": 2107,
+ "height": 3024,
+ "cutSide": "right",
+ "model": "merged",
+ "want": null,
+ "lines": [
+  {
+   "bbox": [
+    579,
+    4,
+    1096,
+    114
+   ],
+   "text": "13. LA ETAPA ALCIBÍADES"
+  },
+  {
+   "bbox": [
+    83,
+    79,
+    1761,
+    174
+   ],
+   "text": "exponer la extrema suspicacia de los atenienses en ciertas"
+  },
+  {
+   "bbox": [
+    83,
+    174,
+    1761,
+    270
+   ],
+   "text": "cuestiones y el ropaje tradicional con el que esa"
+  },
+  {
+   "bbox": [
+    83,
+    270,
+    1761,
+    365
+   ],
+   "text": "suspicacia se expresa. En cambio, con la «tiranía» en el"
+  },
+  {
+   "bbox": [
+    83,
+    365,
+    1761,
+    461
+   ],
+   "text": "sentido en que hemos hablado de ella, y en el sentido en"
+  },
+  {
+   "bbox": [
+    83,
+    461,
+    1761,
+    557
+   ],
+   "text": "que lo fue en Atenas de Pisístrato y sus hijos, con el"
+  },
+  {
+   "bbox": [
+    83,
+    557,
+    1761,
+    652
+   ],
+   "text": "significado que aquello tuvo y el papel que desempeñó, nada"
+  },
+  {
+   "bbox": [
+    83,
+    652,
+    1761,
+    748
+   ],
+   "text": "de lo que pueda ocurrir en la Atenas de Tucídides tiene"
+  },
+  {
+   "bbox": [
+    93,
+    733,
+    1938,
+    869
+   ],
+   "text": "La manera en que un ateniense de la época de la�oma"
+  },
+  {
+   "bbox": [
+    83,
+    748,
+    1761,
+    844
+   ],
+   "text": "nada que ver y, desde luego, nada tiene que ver Alcibíades."
+  },
+  {
+   "bbox": [
+    84,
+    759,
+    1781,
+    1006
+   ],
+   "text": "bra tiene que ver Alcibíades. La manera de la manera que un ateniense de la época de la demoración normalmente era designado incluye, además de su nombre"
+  },
+  {
+   "bbox": [
+    261,
+    873,
+    1773,
+    1034
+   ],
+   "text": "individual, en materia de familia solamente el"
+  },
+  {
+   "bbox": [
+    98,
+    920,
+    1787,
+    1152
+   ],
+   "text": "(asimismo individual) de su padre. Esta fórmula traduce (y"
+  },
+  {
+   "bbox": [
+    102,
+    954,
+    311,
+    1064
+   ],
+   "text": "nombre"
+  },
+  {
+   "bbox": [
+    101,
+    1002,
+    1796,
+    1227
+   ],
+   "text": "a la vez favorece) la carencia de importancia que tenía la"
+  },
+  {
+   "bbox": [
+    110,
+    1078,
+    1802,
+    1300
+   ],
+   "text": "pertenencia familiar ancestral. Aun cuando el sistema de"
+  },
+  {
+   "bbox": [
+    120,
+    1170,
+    1802,
+    1362
+   ],
+   "text": "designación fuese otro, poca o ninguna huella hubiera"
+  },
+  {
+   "bbox": [
+    117,
+    1251,
+    1811,
+    1434
+   ],
+   "text": "podido quedar de cierto parentesco de sangre común a"
+  },
+  {
+   "bbox": [
+    114,
+    1335,
+    1814,
+    1507
+   ],
+   "text": "Pericles y Alcibíades, puesto que el mismo era, para ambos,"
+  },
+  {
+   "bbox": [
+    111,
+    1416,
+    1820,
+    1578
+   ],
+   "text": "solamente materno. Es, pues, significativo que, sin"
+  },
+  {
+   "bbox": [
+    108,
+    1501,
+    1823,
+    1651
+   ],
+   "text": "embargo, no se haya dejado de señalar que, en efecto,"
+  },
+  {
+   "bbox": [
+    105,
+    1583,
+    1829,
+    1726
+   ],
+   "text": "ambos personajes tenían ese tipo de vínculo con un anti"
+  },
+  {
+   "bbox": [
+    105,
+    1666,
+    1835,
+    1802
+   ],
+   "text": "guo linaje al cual, por cierto, sí pertenecía de pleno dere"
+  },
+  {
+   "bbox": [
+    108,
+    1750,
+    1841,
+    1880
+   ],
+   "text": "cho, por parentesco y porque la norma «democrática»"
+  },
+  {
+   "bbox": [
+    108,
+    1835,
+    1853,
+    1953
+   ],
+   "text": "aún no era vigente, Clístenes, de quien varias veces hemos"
+  },
+  {
+   "bbox": [
+    116,
+    1921,
+    1859,
+    2029
+   ],
+   "text": "hablado ya. La familia en cuestión es, por otra parte, un"
+  },
+  {
+   "bbox": [
+    119,
+    2003,
+    1865,
+    2110
+   ],
+   "text": "caso único en la historia de Atenas. De la Athenaeón politeía"
+  },
+  {
+   "bbox": [
+    122,
+    2088,
+    1876,
+    2192
+   ],
+   "text": "aristotélica, ya citada aquí, no ha llegado a nosotros el"
+  },
+  {
+   "bbox": [
+    128,
+    2172,
+    1885,
+    2271
+   ],
+   "text": "comienzo, pero sí lo bastante de él para que se vea que allí"
+  },
+  {
+   "bbox": [
+    131,
+    2258,
+    1891,
+    2352
+   ],
+   "text": "pasaba algo horrible, algo cuyos responsables son incluso"
+  },
+  {
+   "bbox": [
+    131,
+    2343,
+    1903,
+    2438
+   ],
+   "text": "expulsados de sus tumbas, siendo la familia entera de ellos"
+  },
+  {
+   "bbox": [
+    128,
+    2425,
+    1920,
+    2526
+   ],
+   "text": "condenada al destierro perpetuo; lo más notable de todo es"
+  },
+  {
+   "bbox": [
+    134,
+    2523,
+    1920,
+    2611
+   ],
+   "text": "que la terrible acción cometida por los alcmeónidas (de"
+  },
+  {
+   "bbox": [
+    131,
+    2594,
+    1929,
+    2718
+   ],
+   "text": "hecho con la responsabilidad del arconte Megacles, perte"
+  },
+  {
+   "bbox": [
+    128,
+    2673,
+    1945,
+    2810
+   ],
+   "text": "neciente a esa familia) consistió en que, por defender a"
+  }
+ ]
+}

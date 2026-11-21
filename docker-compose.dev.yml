@@ -1,0 +1,92 @@
+name: ownocr-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ownocr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ownocr}
+      POSTGRES_DB: ${POSTGRES_DB:-ownocr}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ownocr} -d ${POSTGRES_DB:-ownocr}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    environment:
+      ADDR: ":8080"
+      DATABASE_URL: postgres://${POSTGRES_USER:-ownocr}:${POSTGRES_PASSWORD:-ownocr}@postgres:5432/${POSTGRES_DB:-ownocr}?sslmode=disable
+      ALLOWED_ORIGINS: "*"
+      WORKERS: ${WORKERS:-4}
+      DATA_DIR: /data
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-2147483648}
+      PDF_DPI: ${PDF_DPI:-300}
+      AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL:-}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_BUCKET: ${AWS_BUCKET}
+      DEWARP_API_URL: ${DEWARP_API_URL}
+      DEWARP_API_TOKEN: ${DEWARP_API_TOKEN}
+      PADDLEOCR_VL_API_URL: ${PADDLEOCR_VL_API_URL}
+      PADDLEOCR_VL_API_TOKEN: ${PADDLEOCR_VL_API_TOKEN}
+      CLAUDE_API_KEY: ${CLAUDE_API_KEY}
+      SIDECAR_URL: ${SIDECAR_URL:-http://sidecar:8000}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+      - book_data:/data
+      - go_modules:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    depends_on:
+      postgres:
+        condition: service_healthy
+      sidecar:
+        condition: service_healthy
+
+  sidecar:
+    build:
+      context: ./sidecar
+      target: dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./sidecar:/app
+      - book_data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    environment:
+      VITE_PROXY_TARGET: http://backend:8080
+      DATA_DIR: /data
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - book_data:/data:ro
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  book_data:
+  go_modules:
+  go_build_cache:
+  frontend_node_modules:

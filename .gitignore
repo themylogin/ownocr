@@ -1,0 +1,14 @@
+.claude
+.env
+.idea/
+__pycache__/
+node_modules/
+dist/
+backend/bin/
+*.log
+*.pyc
+.DS_Store
+e2e/test-results/
+hf_token
+debug/
+ownocr.psql
