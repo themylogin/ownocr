@@ -155,7 +155,7 @@ backend. Image bytes SHALL NOT travel in the request or in the answer.
 ### Requirement: A landscape image with no gutter is cut at its middle
 
 The sidecar SHALL report the middle column for a landscape image it finds no
-gutter in. It SHALL call an image landscape when its width is at least 1.2 times
+gutter in. It SHALL call an image landscape when its width is at least 1.15 times
 its height.
 
 The two numbers SHALL both be the middle column, so the left page holds every
@@ -190,7 +190,7 @@ when the sidecar finds none.
 
 #### Scenario: An image just wide enough
 
-- **WHEN** the caller passes an image 1.2 times wider than it is tall, with no
+- **WHEN** the caller passes an image 1.15 times wider than it is tall, with no
   gutter
 - **THEN** the entry is a pair of whole numbers
 

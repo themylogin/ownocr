@@ -166,7 +166,11 @@ def test_a_found_gutter_beats_the_middle():
 
 
 def test_an_image_just_wide_enough_is_cut():
-    assert split.columns(blank(1200, 1000)) == (600, 600)
+    assert split.columns(blank(1150, 1000)) == (575, 575)
+
+
+def test_a_spread_of_narrow_pages_is_cut():
+    assert split.columns(blank(2904, 2423)) == (1452, 1452)
 
 
 def test_an_image_not_quite_wide_enough_is_whole():

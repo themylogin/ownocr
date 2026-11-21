@@ -443,11 +443,12 @@ gutter runs over, not on how strong the gutter is. Strength alone cannot decide
 it: a cover carries a strong short mark around its title and would pass.
 
 An image the sidecar finds no gutter in is cut at its middle when it is
-landscape, which means at least 1.2 times wider than it is tall. A spread is
+landscape, which means at least 1.15 times wider than it is tall. A spread is
 wider than it is tall, and its shape is evidence the gutter search does not use.
 The threshold is not `width > height`: a page photographed with a little of the
 desk on either side is wider by a few percent, and cutting that one would be
-wrong.
+wrong. It is not 1.2 either: a spread of two pages 0.6 times as wide as they are
+tall scans at 1.1985, and a flat scan of such a spread often shows no gutter.
 
 A gutter the sidecar finds always decides the cut. The middle answers only when
 it finds none. The two pages then meet at the middle column exactly, because

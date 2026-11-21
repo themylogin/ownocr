@@ -49,8 +49,10 @@ OVERLAP = 0.005
 
 # A spread is wider than it is tall. The threshold is not `width > height`: a
 # page photographed with a little of the desk on either side is wider by a few
-# percent, and cutting that one in two would be wrong.
-LANDSCAPE_RATIO = 1.2
+# percent, and cutting that one in two would be wrong. It is not 1.2 either: a
+# book whose pages are 0.6 times as wide as they are tall scans its spreads at
+# 2904 by 2423, which is 1.1985.
+LANDSCAPE_RATIO = 1.15
 
 
 class UnreadableImage(Exception):
