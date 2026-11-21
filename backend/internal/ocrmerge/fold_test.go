@@ -37,6 +37,27 @@ func TestFoldRemovesAccentsAndCase(t *testing.T) {
 	}
 }
 
+// A footnote marker reaches the merge as a superscript digit, and the box engine
+// reads the same marker as a plain digit. The two must fold together, or the
+// marker aligns against nothing and pays the gap cost of a rune one engine never
+// saw.
+func TestFoldPullsAScriptDigitOntoItsDigit(t *testing.T) {
+	same := []struct{ a, b rune }{
+		{'⁰', '0'},
+		{'¹', '1'},
+		{'³', '3'},
+		{'⁵', '5'},
+		{'⁹', '9'},
+		{'₂', '2'},
+	}
+	for _, pair := range same {
+		if fold(pair.a) != fold(pair.b) {
+			t.Errorf("fold(%q)=%q, fold(%q)=%q, want equal",
+				pair.a, fold(pair.a), pair.b, fold(pair.b))
+		}
+	}
+}
+
 func TestFoldKeepsALoneMark(t *testing.T) {
 	if fold('́') == "" {
 		t.Error("a lone combining acute folds to nothing, so it would equal every empty fold")

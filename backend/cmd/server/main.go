@@ -85,9 +85,11 @@ func run() error {
 		APIToken: cfg.Dewarp.APIToken,
 	}))
 	ocrSettings := ocr.Settings{
-		Settings: objectstore.Settings(cfg.S3),
-		APIURL:   cfg.OCR.APIURL,
-		APIToken: cfg.OCR.APIToken,
+		Settings:       objectstore.Settings(cfg.S3),
+		APIURL:         cfg.OCR.APIURL,
+		APIToken:       cfg.OCR.APIToken,
+		ClaudeAPIURL:   cfg.Claude.APIURL,
+		ClaudeAPIToken: cfg.Claude.APIToken,
 	}
 	river.AddWorker(workers, ocr.NewWorker(store, files, hub, objects, ocrSettings))
 	river.AddWorker(workers, ocr.NewRescanWorker(store, files, hub, objects, ocrSettings))

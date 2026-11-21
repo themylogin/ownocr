@@ -28,7 +28,18 @@ type Config struct {
 	S3             S3
 	Dewarp         Endpoint
 	OCR            Endpoint
+	Claude         Claude
 	SidecarURL     string
+}
+
+// Claude names the metered API the Ultra rescan reads on.
+//
+// APIURL is empty for the API the vendor runs, which is what a deployment uses.
+// An end to end run points it at a stand-in, so a test reads pages without
+// spending money.
+type Claude struct {
+	APIURL   string
+	APIToken string
 }
 
 type S3 struct {
@@ -70,6 +81,10 @@ func Load() (Config, error) {
 		OCR: Endpoint{
 			APIURL:   strings.TrimRight(e.require("PADDLEOCR_VL_API_URL"), "/"),
 			APIToken: e.require("PADDLEOCR_VL_API_TOKEN"),
+		},
+		Claude: Claude{
+			APIURL:   strings.TrimRight(e.orElse("CLAUDE_API_URL", ""), "/"),
+			APIToken: e.require("CLAUDE_API_KEY"),
 		},
 		SidecarURL: strings.TrimRight(e.orElse("SIDECAR_URL", defaultSidecarURL), "/"),
 	}

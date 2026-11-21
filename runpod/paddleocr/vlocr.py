@@ -77,6 +77,22 @@ def build_client(server_url: str, device: str = DEVICE):
     )
 
 
+def sampling_args(temperature=None, top_p=None) -> dict:
+    """The sampling the VL model runs with, for `predict`.
+
+    A value left out keeps what the pipeline picks, which is temperature 1 with
+    top_p 0. That top_p is outside the range the server accepts, so what it does
+    with it belongs to the server version, not to this code. Naming both leaves
+    nothing to the version.
+    """
+    args = {}
+    if temperature is not None:
+        args["temperature"] = float(temperature)
+    if top_p is not None:
+        args["top_p"] = float(top_p)
+    return args
+
+
 def _raw(res):
     """The pipeline result verbatim: layout boxes with scores, parsing blocks,
     model settings, page size -- whatever this version produces."""
@@ -105,19 +121,20 @@ def collect(input_path: Path):
                   if p.is_file() and p.suffix.lower() in IMAGE_EXT)
 
 
-def parse_files(client, files, out_dir, base=None, on_result=None):
+def parse_files(client, files, out_dir, base=None, on_result=None, predict_args=None):
     """PaddleOCR-VL: <name>.md (reading-order Markdown) and <name>.json (raw result)."""
     out_root = Path(out_dir)
     out_root.mkdir(parents=True, exist_ok=True)
     files = [Path(f) for f in files]
     base = Path(base) if base else (files[0].parent if files else out_root)
+    predict_args = predict_args or {}
     results = []
     for path in files:
         t0 = time.perf_counter()
         try:
             # The pipeline merges paragraphs across column breaks (its default), so a
             # block can come back with no text -- it sits in its neighbour, not lost.
-            pages = list(client.predict(str(path)))
+            pages = list(client.predict(str(path), **predict_args))
             text = "\n\n".join(p for p in (_markdown_of(r) for r in pages) if p)
             raw = [_raw(r) for r in pages]
             doc = raw[0] if len(raw) == 1 else {"pages": raw}
@@ -193,6 +210,10 @@ def main(argv=None) -> int:
                     help="Existing vLLM server /v1 URL. If omitted, one is spawned.")
     ap.add_argument("--device", default=DEVICE, help="Client device. Default: gpu:0")
     ap.add_argument("--port", type=int, default=SERVER_PORT)
+    ap.add_argument("--temperature", type=float, default=None,
+                    help="VL sampling temperature. Default: the pipeline's own.")
+    ap.add_argument("--top-p", type=float, default=None,
+                    help="VL sampling top_p. Default: the pipeline's own.")
     args = ap.parse_args(argv)
 
     src = Path(args.input)
@@ -229,7 +250,8 @@ def main(argv=None) -> int:
             wait_ready(port=int(server_url.split(":")[2].split("/")[0]))
         try:
             client = build_client(server_url, device=args.device)
-            results += parse_files(client, files, args.output, base=base, on_result=report)
+            results += parse_files(client, files, args.output, base=base, on_result=report,
+                                   predict_args=sampling_args(args.temperature, args.top_p))
         finally:
             if proc is not None:
                 proc.terminate()

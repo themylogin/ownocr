@@ -102,9 +102,14 @@ def handler(job):
         return {"error": f"unknown modes {unknown}; known: {list(KNOWN_MODES)}"}
     want_v6, want_vl = "v6" in modes, "vl" in modes
 
+    try:
+        vl_sampling = vlocr.sampling_args(inp.get("temperature"), inp.get("top_p"))
+    except (TypeError, ValueError):
+        return {"error": "'temperature' and 'top_p' must be numbers"}
+
     started = time.perf_counter()
-    log.info("job started: modes=%s bucket=%s input=%s output=%s",
-             modes, bucket, input_prefix, output_prefix)
+    log.info("job started: modes=%s sampling=%s bucket=%s input=%s output=%s",
+             modes, vl_sampling or "pipeline default", bucket, input_prefix, output_prefix)
 
     s3 = make_s3(inp)
     keys = list_inputs(s3, bucket, input_prefix)
@@ -141,7 +146,7 @@ def handler(job):
                                             on_result=progress)
         if want_vl:
             results += vlocr.parse_files(client(), paths, out_dir, base=in_dir,
-                                         on_result=progress)
+                                         on_result=progress, predict_args=vl_sampling)
         log.info("parsed %d page(s) in %.1fs", len(results), time.perf_counter() - t0)
 
         pages, failed, uploaded = [], [], 0
