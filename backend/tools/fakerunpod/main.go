@@ -1,5 +1,5 @@
 // Command fakerunpod answers like a RunPod serverless endpoint, without a GPU,
-// and like the Anthropic messages API, without spending money.
+// and like the OpenRouter chat completions API, without spending money.
 // It "dewarps" by copying every input object to the output prefix at half size,
 // and it "reads" a page by writing a markdown object that names it. Both are
 // enough to prove the server's half of the contract.
@@ -67,7 +67,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /run", api.run)
-	mux.HandleFunc("POST /v1/messages", api.readPage)
+	mux.HandleFunc("POST /v1/chat/completions", api.readPage)
 	mux.HandleFunc("GET /status/{id}", api.status)
 	mux.HandleFunc("POST /control/fail", api.controlFail)
 	mux.HandleFunc("POST /control/reset", api.controlReset)
@@ -505,22 +505,22 @@ func envOr(key, fallback string) string {
 	return fallback
 }
 
-// claudeTranscription is what the stand-in model answers for every page. Its last
+// glmTranscription is what the stand-in model answers for every page. Its last
 // two lines are the lines `pageLines` lays over every page, so the merge places
 // the answer on the boxes of that page as it would place a real transcription.
 // Its first line differs from the first line the box engine reads, so a test can
 // see which reading a page draws.
-const claudeTranscription = "a page the frontier model read\n" +
+const glmTranscription = "a page the frontier model read\n" +
 	"the text of this page\n" +
 	"the second line of this page"
 
-// readPage answers like POST /v1/messages of the Anthropic API: one text block
-// holding the transcription of the image the request carries.
+// readPage answers like POST /v1/chat/completions of the OpenRouter API: one
+// choice holding the transcription of the image the request carries.
 //
 // A request naming no image is answered with a refusal, so a test can prove the
 // worker sends the page and not an empty body.
 func (s *server) readPage(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get("x-api-key") == "" {
+	if token, ok := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer "); !ok || token == "" {
 		http.Error(w, `{"error": {"message": "no api key"}}`, http.StatusUnauthorized)
 		return
 	}
@@ -531,15 +531,17 @@ func (s *server) readPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	stop, text := "end_turn", claudeTranscription
-	if !bytes.Contains(body, []byte(`"type":"image"`)) &&
-		!bytes.Contains(body, []byte(`"type": "image"`)) {
-		stop, text = "refusal", ""
+	finish, text := "stop", glmTranscription
+	if !bytes.Contains(body, []byte(`"type":"image_url"`)) &&
+		!bytes.Contains(body, []byte(`"type": "image_url"`)) {
+		finish, text = "content_filter", ""
 	}
 
 	writeJSON(w, http.StatusOK, map[string]any{
-		"content":     []map[string]string{{"type": "text", "text": text}},
-		"stop_reason": stop,
-		"usage":       map[string]int{"input_tokens": 4784, "output_tokens": 240},
+		"choices": []map[string]any{{
+			"finish_reason": finish,
+			"message":       map[string]string{"role": "assistant", "content": text},
+		}},
+		"usage": map[string]int{"prompt_tokens": 4040, "completion_tokens": 240},
 	})
 }

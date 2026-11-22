@@ -12,12 +12,12 @@ import (
 // reads difficult pages and reports no recognition confidence. Both run on the
 // endpoint.
 //
-// ModeClaude is Claude Opus 5, which the server reads itself against a metered
+// ModeGLM is GLM-5.3 Flash, which the server reads itself against a metered
 // API. It reaches no endpoint job, so it is on no profile the endpoint sees.
 const (
-	ModeV6     = "v6"
-	ModeVL     = "vl"
-	ModeClaude = "claude"
+	ModeV6  = "v6"
+	ModeVL  = "vl"
+	ModeGLM = "glm"
 )
 
 // The stored results no engine produced. Each holds the line boxes of PP-OCRv6
@@ -25,8 +25,8 @@ const (
 // that page. A page read by both reading engines holds both, so a reader can
 // answer either. Neither ever reaches the endpoint, because no profile lists it.
 const (
-	ModelMerged       = "merged"
-	ModelClaudeMerged = "claude_merged"
+	ModelMerged    = "merged"
+	ModelGLMMerged = "glm_merged"
 )
 
 // The profiles a user picks from. A profile names the engines it runs, so Extra
@@ -38,7 +38,7 @@ const (
 const (
 	ProfileNormal = "v6"
 	ProfileExtra  = "vl"
-	ProfileUltra  = "claude"
+	ProfileUltra  = "glm"
 )
 
 var profileModes = map[string][]string{
@@ -53,7 +53,7 @@ var profileModes = map[string][]string{
 var rescanModes = map[string][]string{
 	ProfileNormal: {ModeV6},
 	ProfileExtra:  {ModeVL},
-	ProfileUltra:  {ModeClaude},
+	ProfileUltra:  {ModeGLM},
 }
 
 // ModesOf answers the engines the OCR action of a profile runs. The second

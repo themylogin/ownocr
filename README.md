@@ -583,6 +583,7 @@ backend/
   internal/config/     Environment variables
   internal/dewarp/     Dewarp worker, endpoint contract, object keys
   internal/ocr/        OCR worker, rescan worker, endpoint contract, object keys
+  internal/openrouter/ OpenRouter client the Ultra rescan reads pages with
   internal/runpod/     RunPod job client, shared by both endpoints
   internal/split/      Split worker and the sidecar client
   internal/objectstore/ S3 client wrapper
@@ -644,6 +645,8 @@ River owns its own tables and migrates itself.
 | `DEWARP_API_TOKEN` | —       | Required. RunPod API key.                   |
 | `PADDLEOCR_VL_API_URL` | —   | Required. RunPod OCR endpoint base URL.     |
 | `PADDLEOCR_VL_API_TOKEN` | — | Required. RunPod API key for that endpoint. |
+| `OPENROUTER_API_KEY` | —   | Required. OpenRouter key for the Ultra rescan. |
+| `OPENROUTER_API_URL` | `https://openrouter.ai/api` | OpenRouter base URL. Tests point it at a stand-in. |
 | `SIDECAR_URL`      | `http://sidecar:8000` | Where the split worker sends its pages. |
 
 Set `ALLOWED_ORIGINS` to your real hosts in production. `*` accepts any origin.

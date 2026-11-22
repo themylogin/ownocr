@@ -13,9 +13,9 @@ import (
 
 	"github.com/riverqueue/river"
 
-	"github.com/themylogin/ownocr/backend/internal/anthropic"
 	"github.com/themylogin/ownocr/backend/internal/books"
 	"github.com/themylogin/ownocr/backend/internal/filestore"
+	"github.com/themylogin/ownocr/backend/internal/openrouter"
 	"github.com/themylogin/ownocr/backend/internal/runpod"
 	"github.com/themylogin/ownocr/backend/internal/ws"
 )
@@ -37,7 +37,7 @@ type RescanWorker struct {
 	hub      *ws.Hub
 	objects  Objects
 	client   *runpod.Client
-	claude   *anthropic.Client
+	glm      *openrouter.Client
 	settings Settings
 }
 
@@ -49,7 +49,7 @@ func NewRescanWorker(store *books.Store, files *filestore.Store, hub *ws.Hub,
 		hub:      hub,
 		objects:  objects,
 		client:   runpod.NewClient("OCR rescan", settings.APIURL, settings.APIToken),
-		claude:   anthropic.NewClient("Claude", settings.ClaudeAPIURL, settings.ClaudeAPIToken),
+		glm:      openrouter.NewClient("OpenRouter", settings.OpenRouterAPIURL, settings.OpenRouterAPIToken),
 		settings: settings,
 	}
 }
@@ -105,7 +105,7 @@ func (w *RescanWorker) Work(ctx context.Context, job *river.Job[RescanArgs]) err
 		return w.abandon(ctx, job, err)
 	}
 
-	if mode != ModeClaude {
+	if mode != ModeGLM {
 		if err := w.objects.DeletePrefix(ctx, Prefix(book.StorageKey)); err != nil {
 			log.Error("cleanup failed", "prefix", Prefix(book.StorageKey), "error", err)
 			return w.abandon(ctx, job, err)
@@ -155,8 +155,8 @@ func (w *RescanWorker) load(ctx context.Context, bookID int64,
 // rescan reads the named pages and answers how many of them gained results.
 func (w *RescanWorker) rescan(ctx context.Context, log *slog.Logger, book books.Book,
 	pages []books.Page, mode string) (int, error) {
-	if mode == ModeClaude {
-		return w.readWithClaude(ctx, log, book, pages)
+	if mode == ModeGLM {
+		return w.readWithGLM(ctx, log, book, pages)
 	}
 
 	if err := w.objects.DeletePrefix(ctx, Prefix(book.StorageKey)); err != nil {
@@ -361,12 +361,12 @@ func (w *RescanWorker) storeLineReading(ctx context.Context, log *slog.Logger,
 	page books.Page, textBody, dataBody []byte) (bool, error) {
 	err := w.store.ReplacePageOCR(ctx, books.PageOCR{
 		PageID: page.ID, Model: ModeV6, Text: string(textBody), Data: dataBody,
-	}, []string{ModeVL, ModelMerged, ModelClaudeMerged}, RenderModels)
+	}, []string{ModeVL, ModelMerged, ModelGLMMerged}, RenderModels)
 	if err != nil {
 		return false, fmt.Errorf("page %d, %s: %w", page.PageIndex, ModeV6, err)
 	}
 
-	kept, held, err := w.store.PageOCRIn(ctx, page.ID, []string{ModeClaude})
+	kept, held, err := w.store.PageOCRIn(ctx, page.ID, []string{ModeGLM})
 	if err != nil {
 		return false, err
 	}
@@ -374,7 +374,7 @@ func (w *RescanWorker) storeLineReading(ctx context.Context, log *slog.Logger,
 		return true, nil
 	}
 
-	if _, err := w.storeClaudeReading(ctx, log, page, dataBody, kept.Text); err != nil {
+	if _, err := w.storeGLMReading(ctx, log, page, dataBody, kept.Text); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -478,16 +478,16 @@ func (w *RescanWorker) publishFinal(ctx context.Context, book books.Book) {
 	}
 }
 
-// readWithClaude reads the named pages against the metered API, in the server
+// readWithGLM reads the named pages against the metered API, in the server
 // process alone. Nothing reaches the bucket and nothing reaches the endpoint: the
 // page image is already on this disk, and the answer is text.
-func (w *RescanWorker) readWithClaude(ctx context.Context, log *slog.Logger,
+func (w *RescanWorker) readWithGLM(ctx context.Context, log *slog.Logger,
 	book books.Book, pages []books.Page) (int, error) {
 	w.progress(ctx, book, books.PhaseWaitingAI)
 
-	read, spent := 0, anthropic.Usage{}
+	read, spent := 0, openrouter.Usage{}
 	for _, page := range pages {
-		stored, usage, err := w.readPageWithClaude(ctx, log, book, page)
+		stored, usage, err := w.readPageWithGLM(ctx, log, book, page)
 		spent.InputTokens += usage.InputTokens
 		spent.OutputTokens += usage.OutputTokens
 		if err != nil {
@@ -505,40 +505,40 @@ func (w *RescanWorker) readWithClaude(ctx context.Context, log *slog.Logger,
 	return read, nil
 }
 
-// readPageWithClaude answers whether the page gained its results. A page the
+// readPageWithGLM answers whether the page gained its results. A page the
 // model would not read, or one whose answer is no transcription of it, keeps
 // every result it held: the rescan stores what it can and abandons the rest.
 //
 // It answers an error only for a failure the whole job shares, such as the API
 // refusing every request. That costs a retry of the pages already read, which is
 // the price of not reporting a rescan that read nothing as a rescan that worked.
-func (w *RescanWorker) readPageWithClaude(ctx context.Context, log *slog.Logger,
-	book books.Book, page books.Page) (bool, anthropic.Usage, error) {
+func (w *RescanWorker) readPageWithGLM(ctx context.Context, log *slog.Logger,
+	book books.Book, page books.Page) (bool, openrouter.Usage, error) {
 	mediaType, ok := mediaTypeOf(page.OriginalExt)
 	if !ok {
 		log.Warn("a page holds an image the metered API does not read",
 			"page", page.PageIndex, "ext", page.OriginalExt)
-		return false, anthropic.Usage{}, nil
+		return false, openrouter.Usage{}, nil
 	}
 
 	boxes, held, err := w.store.PageOCRIn(ctx, page.ID, []string{ModeV6})
 	if err != nil {
-		return false, anthropic.Usage{}, err
+		return false, openrouter.Usage{}, err
 	}
 	if !held {
 		log.Warn("a page holds no box result to merge with", "page", page.PageIndex)
-		return false, anthropic.Usage{}, nil
+		return false, openrouter.Usage{}, nil
 	}
 
 	local := w.files.PagePath(page.ImageKey(book.StorageKey), page.StorageKey,
 		filestore.RenditionOriginal, page.OriginalExt)
 	image, err := os.ReadFile(local)
 	if err != nil {
-		return false, anthropic.Usage{}, fmt.Errorf("page %d: %w", page.PageIndex, err)
+		return false, openrouter.Usage{}, fmt.Errorf("page %d: %w", page.PageIndex, err)
 	}
 
-	text, usage, err := w.claude.ReadPage(ctx, image, mediaType)
-	if errors.Is(err, anthropic.ErrNotRead) {
+	text, usage, err := w.glm.ReadPage(ctx, image, mediaType)
+	if errors.Is(err, openrouter.ErrNotRead) {
 		log.Warn("the metered API did not read a page", "page", page.PageIndex, "error", err)
 		return false, usage, nil
 	}
@@ -547,13 +547,13 @@ func (w *RescanWorker) readPageWithClaude(ctx context.Context, log *slog.Logger,
 		return false, usage, err
 	}
 
-	stored, err := w.storeClaudeReading(ctx, log, page, boxes.Data, text)
+	stored, err := w.storeGLMReading(ctx, log, page, boxes.Data, text)
 	return stored, usage, err
 }
 
-// storeClaudeReading stores the transcription and the merged result it makes with
+// storeGLMReading stores the transcription and the merged result it makes with
 // the stored line result of the page.
-func (w *RescanWorker) storeClaudeReading(ctx context.Context, log *slog.Logger,
+func (w *RescanWorker) storeGLMReading(ctx context.Context, log *slog.Logger,
 	page books.Page, boxData []byte, text string) (bool, error) {
 	merged, read, err := MergeOfText(boxData, text, page.Width, page.Height)
 	if err != nil {
@@ -576,27 +576,27 @@ func (w *RescanWorker) storeClaudeReading(ctx context.Context, log *slog.Logger,
 	}
 
 	err = w.store.InsertPageOCR(ctx, books.PageOCR{
-		PageID: page.ID, Model: ModeClaude, Text: text, Data: claudeData(text),
+		PageID: page.ID, Model: ModeGLM, Text: text, Data: glmData(text),
 	}, RenderModels)
 	if err != nil {
-		return false, fmt.Errorf("page %d, %s: %w", page.PageIndex, ModeClaude, err)
+		return false, fmt.Errorf("page %d, %s: %w", page.PageIndex, ModeGLM, err)
 	}
 
 	err = w.store.InsertPageOCR(ctx, books.PageOCR{
-		PageID: page.ID, Model: ModelClaudeMerged, Text: MergedText(merged), Data: mergedData,
+		PageID: page.ID, Model: ModelGLMMerged, Text: MergedText(merged), Data: mergedData,
 	}, RenderModels)
 	if err != nil {
-		return false, fmt.Errorf("page %d, %s: %w", page.PageIndex, ModelClaudeMerged, err)
+		return false, fmt.Errorf("page %d, %s: %w", page.PageIndex, ModelGLMMerged, err)
 	}
 
 	return true, nil
 }
 
-// claudeData is the full result of a reading that answers text and nothing else.
+// glmData is the full result of a reading that answers text and nothing else.
 // Every stored result carries one, so the column holds the same shape for every
 // engine.
-func claudeData(text string) []byte {
-	data, err := json.Marshal(map[string]any{"model": anthropic.Model, "text": text})
+func glmData(text string) []byte {
+	data, err := json.Marshal(map[string]any{"model": openrouter.Model, "text": text})
 	if err != nil {
 		// A string always marshals.
 		return []byte(`{}`)

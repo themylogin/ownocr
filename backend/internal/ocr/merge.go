@@ -101,7 +101,7 @@ func MergeOfText(boxData []byte, text string, width, height int) (ocrmerge.Resul
 			Text: latex.Clean(text),
 		}},
 		BoxEngine:  ModeV6,
-		TextEngine: ModeClaude,
+		TextEngine: ModeGLM,
 	})
 
 	if merged.Counts.Lines == 0 {

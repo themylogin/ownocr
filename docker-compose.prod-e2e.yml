@@ -2,16 +2,15 @@ name: ownocr-prod-e2e
 
 services:
   minio:
-    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
-    command: ["server", "/data"]
+    image: bitnamilegacy/minio:2024.10.13
     environment:
       MINIO_ROOT_USER: ownocr
       MINIO_ROOT_PASSWORD: ownocrsecret
     volumes:
-      - minio_data:/data
+      - minio_data:/bitnami/minio/data
 
   createbucket:
-    image: minio/mc:RELEASE.2024-10-08T09-37-26Z
+    image: bitnamilegacy/minio-client:2024.10.8
     depends_on:
       - minio
     entrypoint: >
@@ -49,8 +48,8 @@ services:
       DEWARP_API_TOKEN: e2e-token
       PADDLEOCR_VL_API_URL: http://fakerunpod:9090
       PADDLEOCR_VL_API_TOKEN: e2e-token
-      CLAUDE_API_KEY: e2e-claude-key
-      CLAUDE_API_URL: http://fakerunpod:9090
+      OPENROUTER_API_KEY: e2e-openrouter-key
+      OPENROUTER_API_URL: http://fakerunpod:9090
     depends_on:
       minio:
         condition: service_started

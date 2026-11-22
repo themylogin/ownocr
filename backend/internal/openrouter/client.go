@@ -1,10 +1,11 @@
-// Package anthropic reads the text of a page image with Claude Opus 5.
+// Package openrouter reads the text of a page image with GLM-5.3 Flash through
+// the OpenRouter chat completions API.
 //
 // It is hand rolled over net/http, in the shape of internal/runpod: a client
-// carrying a name, a base URL and a token. The engines the OCR endpoint runs
-// answer over one HTTP call each, and so does this, so the error and timeout
-// idiom of this system carries over and no module dependency is added.
-package anthropic
+// carrying a name, a base URL and a token. One page is one HTTP call, so the
+// error and timeout idiom of this system carries over and no module dependency is
+// added.
+package openrouter
 
 import (
 	"bytes"
@@ -20,24 +21,27 @@ import (
 )
 
 const (
-	// DefaultBaseURL is the API this reads. It is a field of the client so a test
-	// can point it at an httptest server.
-	DefaultBaseURL = "https://api.anthropic.com"
+	// DefaultBaseURL is a field of the client so a test can point it at an
+	// httptest server.
+	DefaultBaseURL = "https://openrouter.ai/api"
 
-	// Model is the reading model. Ultra exists because the endpoint engines
-	// failed the page, so nothing cheaper belongs here.
-	Model = "claude-opus-5"
+	// Model is pinned rather than the floating `~z-ai/glm-flash-latest`, because
+	// the stored result records it and an alias would make that record lie after
+	// the next release.
+	Model = "z-ai/glm-5.3-flash"
 
-	// version is the dated API contract this speaks.
-	version = "2023-06-01"
+	// effort is the lowest the model accepts: it refuses a request that turns
+	// reasoning off. At its default effort it spent all of maxTokens on reasoning
+	// for one page in two and answered no text.
+	effort = "minimal"
 
 	// maxTokens bounds one page. A dense page of this library reads as about
 	// 1500 tokens, so this leaves room for the longest page and still stops a
 	// reading that runs away.
 	maxTokens = 8192
 
-	// requestTimeout is one page. A page reads in 20 to 40 seconds, and the
-	// worker reads the pages of a rescan one after another.
+	// requestTimeout is one page. The worker reads the pages of a rescan one
+	// after another.
 	requestTimeout = 5 * time.Minute
 
 	maxErrorBody = 4096
@@ -67,7 +71,7 @@ func NewClient(name, baseURL, token string) *Client {
 	}
 }
 
-// prompt asks for the page and nothing else. Every rule in it answers a way the
+// prompt asks for the page and nothing else. Every rule in it answers a way a
 // model otherwise spoils a transcription: it wraps the text in a fence, it
 // describes the page instead of reading it, it silently modernises the
 // orthography, or it renders a Greek word in the alphabet of the surrounding
@@ -87,35 +91,41 @@ Rules:
 type request struct {
 	Model     string    `json:"model"`
 	MaxTokens int       `json:"max_tokens"`
+	Reasoning reasoning `json:"reasoning"`
 	Messages  []message `json:"messages"`
 }
 
+type reasoning struct {
+	Effort string `json:"effort"`
+}
+
 type message struct {
-	Role    string  `json:"role"`
-	Content []block `json:"content"`
+	Role    string `json:"role"`
+	Content []part `json:"content"`
 }
 
-type block struct {
-	Type   string  `json:"type"`
-	Text   string  `json:"text,omitempty"`
-	Source *source `json:"source,omitempty"`
+type part struct {
+	Type     string    `json:"type"`
+	Text     string    `json:"text,omitempty"`
+	ImageURL *imageURL `json:"image_url,omitempty"`
 }
 
-type source struct {
-	Type      string `json:"type"`
-	MediaType string `json:"media_type"`
-	Data      string `json:"data"`
+type imageURL struct {
+	URL string `json:"url"`
 }
 
 type response struct {
-	Content    []block `json:"content"`
-	StopReason string  `json:"stop_reason"`
-	Usage      struct {
-		InputTokens  int `json:"input_tokens"`
-		OutputTokens int `json:"output_tokens"`
+	Choices []struct {
+		FinishReason string `json:"finish_reason"`
+		Message      struct {
+			Content string `json:"content"`
+		} `json:"message"`
+	} `json:"choices"`
+	Usage struct {
+		PromptTokens     int `json:"prompt_tokens"`
+		CompletionTokens int `json:"completion_tokens"`
 	} `json:"usage"`
 	Error *struct {
-		Type    string `json:"type"`
 		Message string `json:"message"`
 	} `json:"error"`
 }
@@ -136,15 +146,12 @@ func (c *Client) ReadPage(ctx context.Context, image []byte,
 	body, err := json.Marshal(request{
 		Model:     Model,
 		MaxTokens: maxTokens,
+		Reasoning: reasoning{Effort: effort},
 		Messages: []message{{
 			Role: "user",
-			Content: []block{
-				// The image stands before the question, which is what the API
-				// asks for on a vision request.
-				{Type: "image", Source: &source{
-					Type:      "base64",
-					MediaType: mediaType,
-					Data:      base64.StdEncoding.EncodeToString(image),
+			Content: []part{
+				{Type: "image_url", ImageURL: &imageURL{
+					URL: "data:" + mediaType + ";base64," + base64.StdEncoding.EncodeToString(image),
 				}},
 				{Type: "text", Text: prompt},
 			},
@@ -155,32 +162,35 @@ func (c *Client) ReadPage(ctx context.Context, image []byte,
 	}
 
 	var answer response
-	if err := c.call(ctx, "/v1/messages", body, &answer); err != nil {
+	if err := c.call(ctx, "/v1/chat/completions", body, &answer); err != nil {
 		return "", Usage{}, err
 	}
 
 	usage := Usage{
-		InputTokens:  answer.Usage.InputTokens,
-		OutputTokens: answer.Usage.OutputTokens,
+		InputTokens:  answer.Usage.PromptTokens,
+		OutputTokens: answer.Usage.CompletionTokens,
 	}
 
-	switch answer.StopReason {
-	case "refusal":
+	if len(answer.Choices) == 0 {
+		reason := "no choice"
+		if answer.Error != nil {
+			reason = answer.Error.Message
+		}
+		return "", usage, fmt.Errorf("the %s API %s answered no reading: %s",
+			c.name, c.baseURL, reason)
+	}
+	choice := answer.Choices[0]
+
+	switch choice.FinishReason {
+	case "content_filter":
 		return "", usage, fmt.Errorf("%w: it refused the page", ErrNotRead)
-	case "max_tokens":
+	case "length":
 		// A transcription cut off mid-page is worse than none: it would read as
 		// a page the engine abandoned.
 		return "", usage, fmt.Errorf("%w: it ran out of room mid-page", ErrNotRead)
 	}
 
-	var text strings.Builder
-	for _, part := range answer.Content {
-		if part.Type == "text" {
-			text.WriteString(part.Text)
-		}
-	}
-
-	transcription := strings.TrimSpace(text.String())
+	transcription := strings.TrimSpace(choice.Message.Content)
 	if transcription == "" {
 		return "", usage, fmt.Errorf("%w: it answered nothing", ErrNotRead)
 	}
@@ -194,8 +204,7 @@ func (c *Client) call(ctx context.Context, path string, body []byte, out any) er
 	if err != nil {
 		return err
 	}
-	request.Header.Set("x-api-key", c.token)
-	request.Header.Set("anthropic-version", version)
+	request.Header.Set("Authorization", "Bearer "+c.token)
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := c.http.Do(request)

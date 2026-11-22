@@ -28,16 +28,16 @@ type Config struct {
 	S3             S3
 	Dewarp         Endpoint
 	OCR            Endpoint
-	Claude         Claude
+	OpenRouter     OpenRouter
 	SidecarURL     string
 }
 
-// Claude names the metered API the Ultra rescan reads on.
+// OpenRouter names the metered API the Ultra rescan reads on.
 //
 // APIURL is empty for the API the vendor runs, which is what a deployment uses.
 // An end to end run points it at a stand-in, so a test reads pages without
 // spending money.
-type Claude struct {
+type OpenRouter struct {
 	APIURL   string
 	APIToken string
 }
@@ -82,9 +82,9 @@ func Load() (Config, error) {
 			APIURL:   strings.TrimRight(e.require("PADDLEOCR_VL_API_URL"), "/"),
 			APIToken: e.require("PADDLEOCR_VL_API_TOKEN"),
 		},
-		Claude: Claude{
-			APIURL:   strings.TrimRight(e.orElse("CLAUDE_API_URL", ""), "/"),
-			APIToken: e.require("CLAUDE_API_KEY"),
+		OpenRouter: OpenRouter{
+			APIURL:   strings.TrimRight(e.orElse("OPENROUTER_API_URL", ""), "/"),
+			APIToken: e.require("OPENROUTER_API_KEY"),
 		},
 		SidecarURL: strings.TrimRight(e.orElse("SIDECAR_URL", defaultSidecarURL), "/"),
 	}

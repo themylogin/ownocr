@@ -58,7 +58,7 @@ function disagreementOf(index: number) {
 // a reader can choose that reading without paying for it again.
 function holdsUltra(index: number) {
   return (linesOf(index)?.readings ?? []).some(
-    (reading) => reading.model === 'claude_merged',
+    (reading) => reading.model === 'glm_merged',
   )
 }
 

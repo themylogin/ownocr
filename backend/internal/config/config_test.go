@@ -104,7 +104,7 @@ func setStorageEnv(t *testing.T) {
 	t.Setenv("DEWARP_API_TOKEN", "token")
 	t.Setenv("PADDLEOCR_VL_API_URL", "https://api.runpod.ai/v2/def/")
 	t.Setenv("PADDLEOCR_VL_API_TOKEN", "ocr-token")
-	t.Setenv("CLAUDE_API_KEY", "claude-key")
+	t.Setenv("OPENROUTER_API_KEY", "openrouter-key")
 }
 
 // Makes the test independent of the environment the test runner happens to hold.
@@ -114,7 +114,8 @@ func clearStorageEnv(t *testing.T) {
 	for _, name := range []string{
 		"AWS_ENDPOINT_URL", "AWS_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY",
 		"AWS_BUCKET", "DEWARP_API_URL", "DEWARP_API_TOKEN",
-		"PADDLEOCR_VL_API_URL", "PADDLEOCR_VL_API_TOKEN", "CLAUDE_API_KEY", "SIDECAR_URL",
+		"PADDLEOCR_VL_API_URL", "PADDLEOCR_VL_API_TOKEN", "OPENROUTER_API_URL", "OPENROUTER_API_KEY",
+		"SIDECAR_URL",
 	} {
 		t.Setenv(name, "")
 	}
@@ -262,7 +263,7 @@ func TestS3EndpointAndRegionStayOptional(t *testing.T) {
 // The Ultra rescan reads on a metered API, and the key is required like every
 // other credential. A server that starts without it would hold a rescan profile
 // it cannot run.
-func TestClaudeKeyIsRequired(t *testing.T) {
+func TestOpenRouterKeyIsRequired(t *testing.T) {
 	t.Setenv("DATABASE_URL", "postgres://localhost/test")
 	setStorageEnv(t)
 
@@ -270,14 +271,14 @@ func TestClaudeKeyIsRequired(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Load: %v", err)
 	}
-	if cfg.Claude.APIToken != "claude-key" {
-		t.Errorf("APIToken = %q", cfg.Claude.APIToken)
+	if cfg.OpenRouter.APIToken != "openrouter-key" {
+		t.Errorf("APIToken = %q", cfg.OpenRouter.APIToken)
 	}
 
-	t.Setenv("CLAUDE_API_KEY", "")
+	t.Setenv("OPENROUTER_API_KEY", "")
 	if _, err := Load(); err == nil {
-		t.Fatal("the server starts with no CLAUDE_API_KEY")
-	} else if !strings.Contains(err.Error(), "CLAUDE_API_KEY") {
+		t.Fatal("the server starts with no OPENROUTER_API_KEY")
+	} else if !strings.Contains(err.Error(), "OPENROUTER_API_KEY") {
 		t.Errorf("error %q does not name the missing setting", err)
 	}
 }

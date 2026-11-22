@@ -323,11 +323,15 @@ SHALL keep its command line tool.
 
 ### Requirement: The OCR action carries a model profile
 
-The system SHALL define two OCR profiles: `v6` and `vl`. For the OCR action the
-profile `v6` SHALL run the PP-OCRv6 engine alone, and the profile `vl` SHALL run
-the PaddleOCR-VL engine and the PP-OCRv6 engine together.
+The system SHALL define three OCR profiles: `v6`, `vl` and `glm`. For the OCR
+action the profile `v6` SHALL run the PP-OCRv6 engine alone, and the profile `vl`
+SHALL run the PaddleOCR-VL engine and the PP-OCRv6 engine together.
 
-A rescan names a profile from the same two, and a user picks between them in the
+The profile `glm` SHALL belong to the rescan alone. The OCR action SHALL
+refuse it, and SHALL name the reason. A whole book is read by the engines the
+endpoint runs; `glm` reads a page the endpoint already failed.
+
+A rescan names a profile from all three, and a user picks between them in the
 same words. The engines a rescan runs for a profile SHALL be those the
 `page-rescan` capability names, which are not those the OCR action runs. The OCR
 action reads a page the system holds no result for; a rescan reads a page the
@@ -368,8 +372,15 @@ results of that page, and SHALL NOT derive it from the profile.
 
 #### Scenario: The request names an unknown profile
 
-- **WHEN** a user runs the OCR action with a profile that is not `v6` or `vl`
+- **WHEN** a user runs the OCR action with a profile that is not `v6`, `vl` or
+  `glm`
 - **THEN** the system rejects the request and names the reason
+
+#### Scenario: The OCR action names the rescan profile
+
+- **WHEN** a user runs the OCR action with the profile `glm`
+- **THEN** the system rejects the request and names the reason
+- **AND** no copy exists for that book
 
 #### Scenario: A retry keeps the profile
 
@@ -480,12 +491,29 @@ the printed rows are. The `page-text-merge` capability governs all three. The
 counts of the merged result SHALL report how many lines the merge placed itself
 and how many boxes it discarded.
 
+A page SHALL hold one merged result per text engine that read it. The merged
+result of PaddleOCR-VL and the merged result of GLM-5.3 Flash SHALL be stored
+apart, so a page read by both holds both and a reader can answer either.
+
+A text engine that reports no block SHALL be merged through one block covering
+the whole page. GLM-5.3 Flash answers the text of a page and no geometry, so the
+system SHALL build that block from the stored size of the page and the text it
+answered. The merge then reads the printed rows from the PP-OCRv6 boxes alone,
+which is what it does for any block.
+
 A page that one engine alone has read SHALL hold no merged result. One engine
 leaves nothing to join. A copy whose profile names one engine therefore holds no
 merged result when its job ends.
 
 A page that loses one of its two engine results SHALL lose its merged result in
 the same step. The merged result derives from both, so it outlives neither.
+
+A reading read on a metered API SHALL survive a reading it did not come from. A
+rescan that replaces the PP-OCRv6 result of a page SHALL keep the GLM-5.3 Flash
+text of that page and SHALL write its merged result again from the new line boxes.
+That text is a reading of the page image and derives from no other result, so
+nothing about new line boxes makes it wrong — and re-reading it costs money where
+rebuilding the merge costs nothing.
 
 The merged result SHALL be derived. The system SHALL NOT change either engine
 result to write it, and SHALL be able to write it again from the two engine
@@ -532,12 +560,35 @@ than asking the endpoint for that engine again.
 - **AND** page 4 of that copy, which the rescan did not name, still holds one
   result and no merged result
 
+#### Scenario: A page read by both text engines
+
+- **WHEN** an Ultra rescan reads a page that already holds a merged PaddleOCR-VL
+  result
+- **THEN** the page holds both merged results
+- **AND** neither is built from the other
+
+#### Scenario: A page merged from text alone
+
+- **WHEN** the worker merges the text GLM-5.3 Flash answered for a page
+- **THEN** it builds one block covering the stored size of that page
+- **AND** every line of the merged result carries the box of a PP-OCRv6 line,
+  except the lines the merge places itself
+
 #### Scenario: A page loses its visual reading
 
 - **WHEN** a rescan with the profile `v6` reads page 3 of a copy, and page 3 held
   a `v6`, a `vl` and a `merged` result
 - **THEN** page 3 holds one result, named `v6`
 - **AND** page 3 holds no merged result
+
+#### Scenario: A normal rescan of a page an Ultra rescan read
+
+- **WHEN** a rescan with the profile `v6` reads a page holding a `v6`, a `vl`, a
+  `merged`, a `glm` and a `glm_merged` result
+- **THEN** the page holds the new `v6` result, the `glm` result it held, and a
+  `glm_merged` result built from that text and the new line boxes
+- **AND** it holds no `vl` result and no `merged` result
+- **AND** no request reaches the metered API
 
 #### Scenario: The engine results are untouched
 
@@ -556,6 +607,7 @@ than asking the endpoint for that engine again.
 - **WHEN** PaddleOCR-VL returns no block for a page PP-OCRv6 read as 12 lines
 - **THEN** the merged result of that page holds those 12 lines with their `v6` text
 - **AND** the copy still completes
+
 ### Requirement: The API answers the read lines of one page
 
 The system SHALL answer the read lines of one page of a book, on request by book
@@ -563,13 +615,26 @@ and page index. The answer SHALL name the model it comes from, SHALL report the
 pixel size the boxes count in, and SHALL hold one entry per line. Every entry
 SHALL hold the box of that line and the text of that line.
 
+Every entry SHALL say whether its text came from the line engine rather than from
+the engine the reading is named for. A merged reading takes the text of a line
+from its reading engine where the two engines read that line alike, and from the
+line engine where they did not, so a reader cannot otherwise tell which of the two
+is on the page. An entry of an engine result SHALL say nothing: every line of it is
+that engine's own.
+
 A box SHALL be four numbers: left, top, right, and bottom. They SHALL count in
 the pixels of the stored page image, which are the width and the height the book
 detail reports for that page.
 
-The system SHALL answer the merged result of the page when the page holds one,
-and the PP-OCRv6 result when it does not. It SHALL NOT answer the PaddleOCR-VL
-result, which reports blocks of reflowed text and no lines. It SHALL NOT rewrite
+The system SHALL answer the reading the page names, when it names one. The
+`page-reading-choice` capability governs which reading a page names.
+
+A page that names none SHALL answer the merged result when the page holds one,
+and the PP-OCRv6 result when it does not. Where a page holds more than one merged
+result, the best ranked SHALL answer.
+
+It SHALL NOT answer the PaddleOCR-VL result or the GLM-5.3 Flash result, which
+report blocks of reflowed text and no lines. It SHALL NOT rewrite
 the text of a line or reorder the lines. The order SHALL be the order the stored
 result holds.
 
@@ -608,6 +673,25 @@ does not exist.
 - **THEN** the answer names the model `merged`
 - **AND** it holds one entry per merged line, with the box and the text of that
   line
+
+#### Scenario: A page names a reading
+
+- **WHEN** a client asks for the lines of a page that names its PP-OCRv6 result,
+  and that page also holds a merged result
+- **THEN** the answer names the model of the PP-OCRv6 result
+- **AND** it holds one entry per PP-OCRv6 line
+
+#### Scenario: A merged reading whose lines came from both engines
+
+- **WHEN** a client asks for the lines of a page whose merged reading took the
+  body from PaddleOCR-VL and the footnotes from PP-OCRv6
+- **THEN** every footnote entry says its text came from the line engine
+- **AND** no entry of the body says so
+
+#### Scenario: An engine result names no line as substituted
+
+- **WHEN** a client asks for the lines of a page that answers its PP-OCRv6 result
+- **THEN** no entry says its text came from the line engine
 
 #### Scenario: A page holds one engine result
 

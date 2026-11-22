@@ -45,7 +45,7 @@ func main() {
 // carries. The box engine is the same for both.
 var merges = []struct{ Model, TextEngine string }{
 	{ocr.ModelMerged, ocr.ModeVL},
-	{ocr.ModelClaudeMerged, ocr.ModeClaude},
+	{ocr.ModelGLMMerged, ocr.ModeGLM},
 }
 
 func textEngines() []string {
@@ -279,10 +279,10 @@ func mergePage(ctx context.Context, store *books.Store, page books.Page,
 }
 
 // mergeOf merges by the shape of the text engine's result. PaddleOCR-VL reports
-// blocks with boxes, and Claude Opus 5 reports text with no geometry at all.
+// blocks with boxes, and GLM-5.3 Flash reports text with no geometry at all.
 func mergeOf(boxes, text books.PageOCR, page books.Page,
 	textEngine string) (ocrmerge.Result, error) {
-	if textEngine != ocr.ModeClaude {
+	if textEngine != ocr.ModeGLM {
 		return ocr.MergeOf(boxes.Data, text.Data)
 	}
 

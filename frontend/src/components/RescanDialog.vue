@@ -18,7 +18,7 @@ const emit = defineEmits<{ close: []; start: [profile: RescanProfile] }>()
 // because a user rescans a page the model it was read with read badly. A book read
 // with PP-OCRv6 opens on Extra; a book already read with PaddleOCR-VL opens on
 // Ultra, which is the only model left to try.
-const profile = ref<RescanProfile>(props.bookProfile === 'vl' ? 'claude' : 'vl')
+const profile = ref<RescanProfile>(props.bookProfile === 'vl' ? 'glm' : 'vl')
 
 const choices: { value: RescanProfile; title: string; engine: string; note: string }[] = [
   {
@@ -34,9 +34,9 @@ const choices: { value: RescanProfile; title: string; engine: string; note: stri
     note: 'Visual model. Use for difficult cases like polytonic Greek.',
   },
   {
-    value: 'claude',
+    value: 'glm',
     title: 'Ultra',
-    engine: 'Claude Opus 5',
+    engine: 'GLM-5.3 Flash',
     note: 'Frontier visual model. Use when even PaddleOCR-VL fails.',
   },
 ]

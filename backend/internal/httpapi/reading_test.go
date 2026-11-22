@@ -10,11 +10,11 @@ import (
 	"github.com/themylogin/ownocr/backend/internal/ocr"
 )
 
-// claudeMergedData is a merged Ultra reading: the boxes of the line reading
-// carrying the text Claude Opus 5 answered.
-const claudeMergedData = `{"lines": [
-	{"bbox": [100, 120, 300, 160], "text": "τὴν φιλοσοφίαν", "source": "claude", "score": 0.99},
-	{"bbox": [100, 180, 320, 220], "text": "the second line read again", "source": "claude", "score": 0.98}
+// glmMergedData is a merged Ultra reading: the boxes of the line reading
+// carrying the text GLM-5.3 Flash answered.
+const glmMergedData = `{"lines": [
+	{"bbox": [100, 120, 300, 160], "text": "τὴν φιλοσοφίαν", "source": "glm", "score": 0.99},
+	{"bbox": [100, 180, 320, 220], "text": "the second line read again", "source": "glm", "score": 0.98}
 ], "dropped": [], "counts": {"lines": 2, "fromText": 2, "fromBoxes": 0, "droppedChars": 0}}`
 
 func readingsByProfile(readings []readingView) map[string]readingView {
@@ -50,8 +50,8 @@ func TestThePageAnswerReportsEveryDrawableReading(t *testing.T) {
 	h.addResult(t, page.ID, ocr.ModeV6, "the first line\nthe second line", v6Data)
 	h.addResult(t, page.ID, ocr.ModeVL, "reflowed text", `{"parsing_res_list": []}`)
 	h.addResult(t, page.ID, ocr.ModelMerged, "τὴν φιλοσοφίαν", mergedData)
-	h.addResult(t, page.ID, ocr.ModeClaude, "plain text", `{"text": "plain text"}`)
-	h.addResult(t, page.ID, ocr.ModelClaudeMerged, "τὴν φιλοσοφίαν", claudeMergedData)
+	h.addResult(t, page.ID, ocr.ModeGLM, "plain text", `{"text": "plain text"}`)
+	h.addResult(t, page.ID, ocr.ModelGLMMerged, "τὴν φιλοσοφίαν", glmMergedData)
 
 	view := h.pageOCRView(t, book.ID, 1)
 
@@ -64,7 +64,7 @@ func TestThePageAnswerReportsEveryDrawableReading(t *testing.T) {
 	for profile, engine := range map[string]string{
 		"Normal": "PP-OCRv6",
 		"Extra":  "PaddleOCR-VL",
-		"Ultra":  "Claude Opus 5",
+		"Ultra":  "GLM-5.3 Flash",
 	} {
 		reading, reported := byProfile[profile]
 		if !reported {
@@ -79,7 +79,7 @@ func TestThePageAnswerReportsEveryDrawableReading(t *testing.T) {
 
 	// The raw readings hold no lines, so neither is offered.
 	for _, reading := range view.Readings {
-		if reading.Model == ocr.ModeVL || reading.Model == ocr.ModeClaude {
+		if reading.Model == ocr.ModeVL || reading.Model == ocr.ModeGLM {
 			t.Errorf("a raw reading is offered: %+v", reading)
 		}
 	}
@@ -94,10 +94,10 @@ func TestThePageAnswerReportsEveryDrawableReading(t *testing.T) {
 			answering = reading.Model
 		}
 	}
-	if answering != ocr.ModelClaudeMerged {
+	if answering != ocr.ModelGLMMerged {
 		t.Errorf("the reading that answers is %q, want the Ultra reading", answering)
 	}
-	if view.Model != ocr.ModelClaudeMerged {
+	if view.Model != ocr.ModelGLMMerged {
 		t.Errorf("the page answers the model %q", view.Model)
 	}
 }
@@ -143,11 +143,11 @@ func TestSettingAReadingThePageDoesNotHoldIsRefused(t *testing.T) {
 
 	status, body := h.send(t, http.MethodPost,
 		fmt.Sprintf("/api/books/%d/pages/1/reading", book.ID),
-		`{"model": "claude_merged"}`)
+		`{"model": "glm_merged"}`)
 	if status != http.StatusUnprocessableEntity {
 		t.Fatalf("status = %d: %s", status, body)
 	}
-	if !strings.Contains(string(body), "claude_merged") {
+	if !strings.Contains(string(body), "glm_merged") {
 		t.Errorf("the refusal %q does not name the reading", body)
 	}
 
@@ -232,9 +232,9 @@ func TestThePageAnswerAndTheBookAnswerNameOneModel(t *testing.T) {
 	book, page := h.seedRead(t)
 	h.addResult(t, page.ID, ocr.ModeV6, "the first line\nthe second line", v6Data)
 	h.addResult(t, page.ID, ocr.ModelMerged, "τὴν φιλοσοφίαν", mergedData)
-	h.addResult(t, page.ID, ocr.ModelClaudeMerged, "τὴν φιλοσοφίαν", claudeMergedData)
+	h.addResult(t, page.ID, ocr.ModelGLMMerged, "τὴν φιλοσοφίαν", glmMergedData)
 
-	for _, model := range []string{"", ocr.ModeV6, ocr.ModelMerged, ocr.ModelClaudeMerged} {
+	for _, model := range []string{"", ocr.ModeV6, ocr.ModelMerged, ocr.ModelGLMMerged} {
 		if model != "" {
 			status, body := h.send(t, http.MethodPost,
 				fmt.Sprintf("/api/books/%d/pages/1/reading", book.ID),

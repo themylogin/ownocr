@@ -35,11 +35,11 @@ type Settings struct {
 	APIURL   string
 	APIToken string
 
-	// ClaudeAPIURL and ClaudeAPIToken name the metered API the Ultra rescan
-	// reads on. The rescan worker alone uses them, and an empty URL leaves the
-	// client on the API it names for itself.
-	ClaudeAPIURL   string
-	ClaudeAPIToken string
+	// OpenRouterAPIURL and OpenRouterAPIToken name the metered API the Ultra
+	// rescan reads on. The rescan worker alone uses them, and an empty URL leaves
+	// the client on the API it names for itself.
+	OpenRouterAPIURL   string
+	OpenRouterAPIToken string
 }
 
 // Objects is the part of the object store the worker uses. A test supplies its

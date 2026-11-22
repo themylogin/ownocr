@@ -15,9 +15,9 @@ import (
 	"github.com/themylogin/ownocr/backend/internal/objectstore"
 )
 
-// claudeAPI answers like the Anthropic messages API. It hands back the text the
-// test names, so a rescan runs with no metered call.
-type claudeAPI struct {
+// glmAPI answers like the OpenRouter chat completions API. It hands back the text
+// the test names, so a rescan runs with no metered call.
+type glmAPI struct {
 	server *httptest.Server
 
 	mu       sync.Mutex
@@ -37,21 +37,21 @@ type claudeAPI struct {
 	status int
 }
 
-func newClaudeAPI(t *testing.T) *claudeAPI {
+func newGLMAPI(t *testing.T) *glmAPI {
 	t.Helper()
 
-	api := &claudeAPI{text: "the first line of this page of text"}
+	api := &glmAPI{text: "the first line of this page of text"}
 	api.server = httptest.NewServer(http.HandlerFunc(api.answer))
 	t.Cleanup(api.server.Close)
 	return api
 }
 
-func (a *claudeAPI) answer(w http.ResponseWriter, r *http.Request) {
+func (a *glmAPI) answer(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 
 	a.mu.Lock()
 	a.requests++
-	a.keys = append(a.keys, r.Header.Get("x-api-key"))
+	a.keys = append(a.keys, r.Header.Get("Authorization"))
 	a.mu.Unlock()
 
 	if a.status != 0 {
@@ -60,7 +60,8 @@ func (a *claudeAPI) answer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if a.refuse {
-		io.WriteString(w, `{"content": [], "stop_reason": "refusal", "usage": {}}`)
+		io.WriteString(w, `{"choices": [{"finish_reason": "content_filter",
+			"message": {"role": "assistant", "content": ""}}], "usage": {}}`)
 		return
 	}
 
@@ -70,19 +71,21 @@ func (a *claudeAPI) answer(w http.ResponseWriter, r *http.Request) {
 		// answer describing some other thing amounts to.
 		text = strings.Repeat("9184 7265 3810 5472 6093 ", 6)
 	}
-	if !a.narrate && !strings.Contains(string(body), "image") {
+	if !a.narrate && !strings.Contains(string(body), "image_url") {
 		text = "the request carried no image"
 	}
 
 	answer, _ := json.Marshal(map[string]any{
-		"content":     []map[string]string{{"type": "text", "text": text}},
-		"stop_reason": "end_turn",
-		"usage":       map[string]int{"input_tokens": 4784, "output_tokens": 400},
+		"choices": []map[string]any{{
+			"finish_reason": "stop",
+			"message":       map[string]string{"role": "assistant", "content": text},
+		}},
+		"usage": map[string]int{"prompt_tokens": 4040, "completion_tokens": 400},
 	})
 	w.Write(answer)
 }
 
-func (a *claudeAPI) count() int {
+func (a *glmAPI) count() int {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 	return a.requests
@@ -91,7 +94,7 @@ func (a *claudeAPI) count() int {
 // ultraHarness is the rescan harness with the fake metered API behind it.
 type ultraHarness struct {
 	*rescanHarness
-	claude *claudeAPI
+	glm *glmAPI
 }
 
 func newUltraHarness(t *testing.T) *ultraHarness {
@@ -99,7 +102,7 @@ func newUltraHarness(t *testing.T) *ultraHarness {
 
 	h := newHarness(t)
 	h.profile = ProfileNormal
-	api := newClaudeAPI(t)
+	api := newGLMAPI(t)
 
 	return &ultraHarness{
 		rescanHarness: &rescanHarness{
@@ -111,13 +114,13 @@ func newUltraHarness(t *testing.T) *ultraHarness {
 					AccessKeyID:     "key",
 					SecretAccessKey: "secret",
 				},
-				APIURL:         h.endpoint.server.URL,
-				APIToken:       "token",
-				ClaudeAPIURL:   api.server.URL,
-				ClaudeAPIToken: "claude-key",
+				APIURL:             h.endpoint.server.URL,
+				APIToken:           "token",
+				OpenRouterAPIURL:   api.server.URL,
+				OpenRouterAPIToken: "openrouter-key",
 			}),
 		},
-		claude: api,
+		glm: api,
 	}
 }
 
@@ -138,8 +141,8 @@ func TestUltraRescanReachesNoBucketAndNoEndpoint(t *testing.T) {
 	if h.endpoint.modes != nil {
 		t.Errorf("the Ultra rescan started an endpoint job asking for %v", h.endpoint.modes)
 	}
-	if h.claude.count() != 2 {
-		t.Errorf("the Ultra rescan sent %d requests, want one per named page", h.claude.count())
+	if h.glm.count() != 2 {
+		t.Errorf("the Ultra rescan sent %d requests, want one per named page", h.glm.count())
 	}
 }
 
@@ -154,7 +157,7 @@ func TestUltraRescanStoresItsResults(t *testing.T) {
 	}
 
 	models := modelsOf(t, h.rescanHarness, book, 2)
-	want := []string{ModeClaude, ModelClaudeMerged, ModeV6}
+	want := []string{ModeGLM, ModelGLMMerged, ModeV6}
 	sort.Strings(want)
 	if strings.Join(models, ",") != strings.Join(want, ",") {
 		t.Errorf("the page holds %v, want %v", models, want)
@@ -189,7 +192,7 @@ func TestUltraRescanMakesThePageAnswerItsReading(t *testing.T) {
 	if err != nil || !held {
 		t.Fatalf("PageReading: %v, held %v", err, held)
 	}
-	if answered.Model != ModelClaudeMerged {
+	if answered.Model != ModelGLMMerged {
 		t.Errorf("the page answers %q, want the merged Ultra reading", answered.Model)
 	}
 }
@@ -200,7 +203,7 @@ func TestUltraRescanLeavesAPageItCouldNotRead(t *testing.T) {
 	h := newUltraHarness(t)
 	book := h.readBook(t, 2)
 
-	h.claude.refuse = true
+	h.glm.refuse = true
 	if err := h.runRescan(book.ID, []int{1}, ProfileUltra, 1, 3); err != nil {
 		t.Fatalf("the Ultra rescan failed: %v", err)
 	}
@@ -214,7 +217,7 @@ func TestUltraRescanLeavesAPageItCouldNotRead(t *testing.T) {
 		t.Errorf("the book is %q after a refused page", reloaded.State)
 	}
 
-	h.claude.refuse = false
+	h.glm.refuse = false
 	if err := h.runRescan(book.ID, []int{2}, ProfileUltra, 1, 3); err != nil {
 		t.Fatalf("the second Ultra rescan failed: %v", err)
 	}
@@ -234,7 +237,7 @@ func TestUltraRescanRefusesAnAnswerThatIsNoTranscription(t *testing.T) {
 	book := h.readBook(t, 2)
 	h.giveThePageLongLines(t, book, 1)
 
-	h.claude.narrate = true
+	h.glm.narrate = true
 	if err := h.runRescan(book.ID, []int{1}, ProfileUltra, 1, 3); err != nil {
 		t.Fatalf("the Ultra rescan failed: %v", err)
 	}
@@ -245,7 +248,7 @@ func TestUltraRescanRefusesAnAnswerThatIsNoTranscription(t *testing.T) {
 }
 
 // The key opens the API and reaches nothing else: no stored result, no object.
-func TestTheClaudeKeyReachesTheAPIAlone(t *testing.T) {
+func TestTheOpenRouterKeyReachesTheAPIAlone(t *testing.T) {
 	h := newUltraHarness(t)
 	book := h.readBook(t, 2)
 	h.objects.puts = nil
@@ -254,18 +257,18 @@ func TestTheClaudeKeyReachesTheAPIAlone(t *testing.T) {
 		t.Fatalf("the Ultra rescan failed: %v", err)
 	}
 
-	if len(h.claude.keys) == 0 {
+	if len(h.glm.keys) == 0 {
 		t.Fatal("the API was never called")
 	}
-	for _, key := range h.claude.keys {
-		if key != "claude-key" {
+	for _, key := range h.glm.keys {
+		if key != "Bearer openrouter-key" {
 			t.Errorf("the API was opened with %q", key)
 		}
 	}
 
 	for model, held := range h.results(t, book)[1] {
-		if strings.Contains(held.Text, "claude-key") ||
-			strings.Contains(string(held.Data), "claude-key") {
+		if strings.Contains(held.Text, "openrouter-key") ||
+			strings.Contains(string(held.Data), "openrouter-key") {
 			t.Errorf("the key is stored in the %s result", model)
 		}
 	}
@@ -280,7 +283,7 @@ func TestUltraRescanFailsTheJobWhenTheAPIIsDown(t *testing.T) {
 	h := newUltraHarness(t)
 	book := h.readBook(t, 2)
 
-	h.claude.status = http.StatusUnauthorized
+	h.glm.status = http.StatusUnauthorized
 
 	err := h.runRescan(book.ID, []int{1}, ProfileUltra, 1, 3)
 	if err == nil {
@@ -314,29 +317,28 @@ func TestANormalRescanKeepsTheUltraTextAndRebuildsItsMerge(t *testing.T) {
 		t.Fatalf("the page holds %v, want five results before the normal rescan", before)
 	}
 
-	ultraText := h.results(t, book)[1][ModeClaude].Text
-	requests := h.claude.count()
+	ultraText := h.results(t, book)[1][ModeGLM].Text
+	requests := h.glm.count()
 
 	if err := h.runRescan(book.ID, []int{1}, ProfileNormal, 1, 3); err != nil {
 		t.Fatalf("the normal rescan failed: %v", err)
 	}
 
 	models := modelsOf(t, h.rescanHarness, book, 1)
-	want := []string{ModeClaude, ModelClaudeMerged, ModeV6}
+	want := []string{ModeGLM, ModelGLMMerged, ModeV6}
 	sort.Strings(want)
 	if strings.Join(models, ",") != strings.Join(want, ",") {
 		t.Errorf("the page holds %v, want %v", models, want)
 	}
 
-	if after := h.results(t, book)[1][ModeClaude].Text; after != ultraText {
+	if after := h.results(t, book)[1][ModeGLM].Text; after != ultraText {
 		t.Errorf("the transcription changed: %q", after)
 	}
-	if h.claude.count() != requests {
+	if h.glm.count() != requests {
 		t.Errorf("the normal rescan sent %d requests to the metered API",
-			h.claude.count()-requests)
+			h.glm.count()-requests)
 	}
 }
-
 
 // giveThePageLongLines replaces the line reading of one page with lines long
 // enough that the merge measures how well the two readings agree.

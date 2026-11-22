@@ -82,7 +82,7 @@ test.describe('a page menu lists the readings of its page', () => {
     const copy = await readWithV6(request)
     await rescanPages(request, copy.id, [1])
     await waitForSettled(request, copy.id)
-    await rescanPages(request, copy.id, [1], 'claude')
+    await rescanPages(request, copy.id, [1], 'glm')
     await waitForSettled(request, copy.id)
 
     await page.goto(`/books/${copy.id}/pages/1`)
@@ -91,7 +91,7 @@ test.describe('a page menu lists the readings of its page', () => {
     await page.locator('[data-page="1"]').getByTestId('ocr-overlay').click({ button: 'right' })
 
     const tops = await page.evaluate(() =>
-      ['v6', 'merged', 'claude_merged', 'rescan'].map((key) => {
+      ['v6', 'merged', 'glm_merged', 'rescan'].map((key) => {
         const element = document.querySelector(
           key === 'rescan'
             ? '[data-testid="page-context-rescan"]'
@@ -191,16 +191,16 @@ test.describe('a reader chooses which reading a page answers', () => {
 
     expect((await pageLines(request, copy.id, 1)).model).toBe('v6')
 
-    await rescanPages(request, copy.id, [1], 'claude')
+    await rescanPages(request, copy.id, [1], 'glm')
     await waitForSettled(request, copy.id)
 
     // A reader picks a reading because it is the best the page holds, so a better
     // one arriving answers the same want: the choice goes and the page answers the
     // best it holds.
-    expect((await pageLines(request, copy.id, 1)).model).toBe('claude_merged')
+    expect((await pageLines(request, copy.id, 1)).model).toBe('glm_merged')
 
     const results = await pageResults(1, copy.id)
-    expect(Object.keys(results)).toContain('claude_merged')
+    expect(Object.keys(results)).toContain('glm_merged')
 
     // And the reader can still choose the line reading again.
     await page.reload()
@@ -219,19 +219,19 @@ test.describe('an Ultra rescan reads a page on the metered API', () => {
     const copy = await readWithV6(request)
     const detail = await getBook(request, copy.id)
 
-    await rescanPages(request, copy.id, [1], 'claude')
+    await rescanPages(request, copy.id, [1], 'glm')
     const settled = await waitForSettled(request, copy.id)
 
     expect(settled.state).toBe('complete')
     expect(settled.pageCount).toBe(detail.pages.length)
 
     const results = await pageResults(1, copy.id)
-    expect(Object.keys(results).sort()).toEqual(['claude', 'claude_merged', 'v6'])
-    expect(results.claude.txt).not.toBe('')
+    expect(Object.keys(results).sort()).toEqual(['glm', 'glm_merged', 'v6'])
+    expect(results.glm.txt).not.toBe('')
 
     // The merged Ultra reading carries the boxes of the line reading.
     const drawn = await pageLines(request, copy.id, 1)
-    expect(drawn.model).toBe('claude_merged')
+    expect(drawn.model).toBe('glm_merged')
     const boxes = (await pageResults(1, copy.id)).v6.data as { lines: Array<{ bbox: number[] }> }
     expect(drawn.lines.map((line) => line.box)).toEqual(boxes.lines.map((line) => line.bbox))
 
@@ -248,8 +248,8 @@ test.describe('an Ultra rescan reads a page on the metered API', () => {
       .getByTestId('ocr-overlay')
       .click({ button: 'right' })
 
-    const ultra = page.getByTestId('page-context-reading:claude_merged')
-    await expect(ultra).toContainText('Ultra (Claude Opus 5)')
+    const ultra = page.getByTestId('page-context-reading:glm_merged')
+    await expect(ultra).toContainText('Ultra (GLM-5.3 Flash)')
     await expect(ultra.locator('.n-dropdown-option-body__prefix')).toHaveText('✓')
   })
 
@@ -269,9 +269,9 @@ test.describe('an Ultra rescan reads a page on the metered API', () => {
     await expect(page.getByTestId('rescan-dialog')).toBeVisible()
     await expect(page.getByTestId('rescan-profile-v6')).toBeVisible()
     await expect(page.getByTestId('rescan-profile-vl')).toBeVisible()
-    await expect(page.getByTestId('rescan-profile-claude')).toContainText('Ultra')
-    await expect(page.getByTestId('rescan-profile-claude')).toContainText('Claude Opus 5')
-    await expect(page.getByTestId('rescan-profile-claude')).toContainText(
+    await expect(page.getByTestId('rescan-profile-glm')).toContainText('Ultra')
+    await expect(page.getByTestId('rescan-profile-glm')).toContainText('GLM-5.3 Flash')
+    await expect(page.getByTestId('rescan-profile-glm')).toContainText(
       'Frontier visual model. Use when even PaddleOCR-VL fails.',
     )
 
@@ -296,7 +296,7 @@ test.describe('an Ultra rescan reads a page on the metered API', () => {
     await page.getByTestId('page-context-rescan').click()
     await page.getByTestId('rescan-marked').click()
 
-    await expect(page.getByTestId('rescan-profile-claude').locator('input')).toBeChecked()
+    await expect(page.getByTestId('rescan-profile-glm').locator('input')).toBeChecked()
     await expect(page.getByTestId('rescan-profile-vl').locator('input')).not.toBeChecked()
   })
 
@@ -305,16 +305,16 @@ test.describe('an Ultra rescan reads a page on the metered API', () => {
   }) => {
     const copy = await readWithV6(request)
 
-    await rescanPages(request, copy.id, [1], 'claude')
+    await rescanPages(request, copy.id, [1], 'glm')
     await waitForSettled(request, copy.id)
-    const transcription = (await pageResults(1, copy.id)).claude.txt
+    const transcription = (await pageResults(1, copy.id)).glm.txt
 
     await rescanPages(request, copy.id, [1], 'v6')
     await waitForSettled(request, copy.id)
 
     const results = await pageResults(1, copy.id)
-    expect(Object.keys(results).sort()).toEqual(['claude', 'claude_merged', 'v6'])
-    expect(results.claude.txt).toBe(transcription)
+    expect(Object.keys(results).sort()).toEqual(['glm', 'glm_merged', 'v6'])
+    expect(results.glm.txt).toBe(transcription)
   })
 })
 
@@ -485,7 +485,7 @@ test.describe('the reader reports the pages that disagree', () => {
     const copy = await readWithV6(request)
     await rescanPages(request, copy.id, [1])
     await waitForSettled(request, copy.id)
-    await rescanPages(request, copy.id, [1], 'claude')
+    await rescanPages(request, copy.id, [1], 'glm')
     await waitForSettled(request, copy.id)
     await seedAbandonedReading(copy.id, 1)
 
@@ -579,7 +579,7 @@ test.describe('the reader holds a strip naming the pages worth returning to', ()
     const copy = await readWithV6(request)
     await rescanPages(request, copy.id, [1, 2])
     await waitForSettled(request, copy.id)
-    await rescanPages(request, copy.id, [1], 'claude')
+    await rescanPages(request, copy.id, [1], 'glm')
     await waitForSettled(request, copy.id)
     await seedAbandonedReading(copy.id, 1)
 

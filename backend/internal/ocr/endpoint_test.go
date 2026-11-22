@@ -130,8 +130,8 @@ func TestRescanModesOfEveryProfile(t *testing.T) {
 	}
 
 	ultra, ok := RescanModesOf(ProfileUltra)
-	if !ok || len(ultra) != 1 || ultra[0] != ModeClaude {
-		t.Errorf("an Ultra rescan runs %v, want the claude engine alone", ultra)
+	if !ok || len(ultra) != 1 || ultra[0] != ModeGLM {
+		t.Errorf("an Ultra rescan runs %v, want the glm engine alone", ultra)
 	}
 
 	if _, ok := RescanModesOf("nonsense"); ok {

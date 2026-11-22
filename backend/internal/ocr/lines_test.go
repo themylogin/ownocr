@@ -59,7 +59,7 @@ func TestLinesOfRefusesAnUnreadableResult(t *testing.T) {
 // A page a renderer can draw holds the merged result or the v6 result, and the
 // merged result comes first.
 func TestRenderModelsPreferTheMergedResult(t *testing.T) {
-	want := []string{ModelClaudeMerged, ModelMerged, ModeV6}
+	want := []string{ModelGLMMerged, ModelMerged, ModeV6}
 	if len(RenderModels) != len(want) {
 		t.Fatalf("RenderModels holds %v, want %v", RenderModels, want)
 	}
@@ -72,7 +72,7 @@ func TestRenderModelsPreferTheMergedResult(t *testing.T) {
 }
 
 func TestRankOfOrdersTheReadingsARendererCanDraw(t *testing.T) {
-	ultra, ok := RankOf(ModelClaudeMerged)
+	ultra, ok := RankOf(ModelGLMMerged)
 	if !ok {
 		t.Fatal("the Ultra reading has no rank")
 	}
@@ -94,7 +94,7 @@ func TestRankOfOrdersTheReadingsARendererCanDraw(t *testing.T) {
 // A reading a renderer cannot draw never answers for a page, so it has no rank
 // and takes over from nothing.
 func TestRankOfRefusesAReadingWithNoLines(t *testing.T) {
-	for _, model := range []string{ModeVL, ModeClaude, "nonsense", ""} {
+	for _, model := range []string{ModeVL, ModeGLM, "nonsense", ""} {
 		if _, ok := RankOf(model); ok {
 			t.Errorf("%q carries a rank", model)
 		}

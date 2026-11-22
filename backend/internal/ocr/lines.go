@@ -9,17 +9,17 @@ import (
 
 // RenderModels names the results a renderer can draw, best first. A merged
 // result holds the boxes of PP-OCRv6 with the text of a reading engine, so it
-// wins wherever a page holds one. The raw PaddleOCR-VL and Claude results hold
+// wins wherever a page holds one. The raw PaddleOCR-VL and GLM results hold
 // blocks of reflowed text and no lines, so neither is on the list.
 //
 // It doubles as the rank a better reading takes over by, so one list is the
 // single source of "better".
-var RenderModels = []string{ModelClaudeMerged, ModelMerged, ModeV6}
+var RenderModels = []string{ModelGLMMerged, ModelMerged, ModeV6}
 
 // textEngines names, for each merged reading, the engine whose text it carries.
 var textEngines = map[string]string{
-	ModelMerged:       ModeVL,
-	ModelClaudeMerged: ModeClaude,
+	ModelMerged:    ModeVL,
+	ModelGLMMerged: ModeGLM,
 }
 
 // TextEngineOf answers the engine whose raw text a merged reading carries. The
@@ -99,9 +99,9 @@ func SubstitutedLine(model, source string) bool {
 // made it and the engine behind it. A reader chooses between readings by these
 // names and never by the name of a stored model.
 var readingNames = map[string]struct{ Profile, Engine string }{
-	ModeV6:            {"Normal", "PP-OCRv6"},
-	ModelMerged:       {"Extra", "PaddleOCR-VL"},
-	ModelClaudeMerged: {"Ultra", "Claude Opus 5"},
+	ModeV6:         {"Normal", "PP-OCRv6"},
+	ModelMerged:    {"Extra", "PaddleOCR-VL"},
+	ModelGLMMerged: {"Ultra", "GLM-5.3 Flash"},
 }
 
 // ReadingNamesOf answers the profile and the engine of a drawable reading. The

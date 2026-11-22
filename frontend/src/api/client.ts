@@ -11,7 +11,7 @@ export type OcrProfile = 'v6' | 'vl'
 
 // The profiles a rescan reads with. Ultra is one of them and the OCR action of a
 // whole book offers it not, so it is no OcrProfile.
-export type RescanProfile = OcrProfile | 'claude'
+export type RescanProfile = OcrProfile | 'glm'
 
 // The arguments an action takes. Only OCR takes any.
 export interface ActionArguments {

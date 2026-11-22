@@ -8,7 +8,7 @@ import (
 
 // ranked is the order the production caller passes: best reading first. The
 // store holds no such order of its own.
-var ranked = []string{"claude_merged", "merged", "v6"}
+var ranked = []string{"glm_merged", "merged", "v6"}
 
 func readingOf(t *testing.T, s *Store, pageID int64, models []string) string {
 	t.Helper()
@@ -175,17 +175,17 @@ func TestABetterReadingClearsTheChoiceOfAReader(t *testing.T) {
 	}
 
 	err := s.InsertPageOCR(ctx, PageOCR{
-		PageID: pageID, Model: "claude_merged", Text: "ultra text",
+		PageID: pageID, Model: "glm_merged", Text: "ultra text",
 		Data: []byte(`{"lines": []}`),
 	}, ranked)
 	if err != nil {
-		t.Fatalf("InsertPageOCR claude_merged: %v", err)
+		t.Fatalf("InsertPageOCR glm_merged: %v", err)
 	}
 
 	if _, named := namedReading(t, s, pageID); named {
 		t.Error("the page still names a reading after a better one arrived")
 	}
-	if model := readingOf(t, s, pageID, ranked); model != "claude_merged" {
+	if model := readingOf(t, s, pageID, ranked); model != "glm_merged" {
 		t.Errorf("the page answered %q, want the best reading it holds", model)
 	}
 }
@@ -195,9 +195,9 @@ func TestAWorseReadingLeavesTheChoiceOfAReader(t *testing.T) {
 	s := newTestStore(t)
 	ctx := context.Background()
 	book := create(t, s, "Read")
-	pageID := seedReadPage(t, s, book.ID, "v6", "claude_merged")
+	pageID := seedReadPage(t, s, book.ID, "v6", "glm_merged")
 
-	if err := s.SetPageReading(ctx, pageID, resultID(t, s, pageID, "claude_merged")); err != nil {
+	if err := s.SetPageReading(ctx, pageID, resultID(t, s, pageID, "glm_merged")); err != nil {
 		t.Fatalf("SetPageReading: %v", err)
 	}
 
@@ -211,7 +211,7 @@ func TestAWorseReadingLeavesTheChoiceOfAReader(t *testing.T) {
 	if _, named := namedReading(t, s, pageID); !named {
 		t.Error("a worse reading cleared the choice of a reader")
 	}
-	if model := readingOf(t, s, pageID, ranked); model != "claude_merged" {
+	if model := readingOf(t, s, pageID, ranked); model != "glm_merged" {
 		t.Errorf("the page answered %q, want the reading the reader chose", model)
 	}
 }
@@ -308,14 +308,14 @@ func TestAChoiceCannotVetoBeyondTheReadingItNamed(t *testing.T) {
 	}
 
 	err = s.InsertPageOCR(ctx, PageOCR{
-		PageID: pageID, Model: "claude_merged", Text: "ultra text",
+		PageID: pageID, Model: "glm_merged", Text: "ultra text",
 		Data: []byte(`{"lines": []}`),
 	}, ranked)
 	if err != nil {
-		t.Fatalf("InsertPageOCR claude_merged: %v", err)
+		t.Fatalf("InsertPageOCR glm_merged: %v", err)
 	}
 
-	if model := readingOf(t, s, pageID, ranked); model != "claude_merged" {
+	if model := readingOf(t, s, pageID, ranked); model != "glm_merged" {
 		t.Errorf("the page answered %q, want the Ultra reading to take over", model)
 	}
 }
@@ -353,7 +353,7 @@ func TestPageReadingsMarksTheOneThatAnswers(t *testing.T) {
 	s := newTestStore(t)
 	ctx := context.Background()
 	book := create(t, s, "Read")
-	pageID := seedReadPage(t, s, book.ID, "v6", "vl", "merged", "claude_merged")
+	pageID := seedReadPage(t, s, book.ID, "v6", "vl", "merged", "glm_merged")
 
 	readings, err := s.PageReadings(ctx, pageID, ranked)
 	if err != nil {
@@ -363,7 +363,7 @@ func TestPageReadingsMarksTheOneThatAnswers(t *testing.T) {
 	if len(readings) != 3 {
 		t.Fatalf("the page reports %d readings, want the 3 a renderer can draw", len(readings))
 	}
-	if readings[0].Model != "claude_merged" || !readings[0].Answers {
+	if readings[0].Model != "glm_merged" || !readings[0].Answers {
 		t.Errorf("the best ranked reading is %q, answers %v", readings[0].Model,
 			readings[0].Answers)
 	}

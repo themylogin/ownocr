@@ -169,7 +169,7 @@ func TestReadingTextOfTheVisualEngineHoldsEveryBlock(t *testing.T) {
 
 // An engine that answers text and no blocks wrote what it wrote.
 func TestReadingTextOfATextEngineIsItsText(t *testing.T) {
-	if got := ReadingText(ModeClaude, "the page", []byte(`{}`)); got != "the page" {
+	if got := ReadingText(ModeGLM, "the page", []byte(`{}`)); got != "the page" {
 		t.Errorf("ReadingText = %q", got)
 	}
 	if got := ReadingText(ModeV6, "the page", nil); got != "the page" {
